@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>امتحان محلل أمن سيبراني مساعد - MCQ</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* Shared portal variables & themes */
+    :root{ --bg:#0f1720; --panel:#0b1220; --muted:#9aa5b1; --text:#e7eef6; --accent:#31c5be; --accent-2:#4da6ff; --card: rgba(255,255,255,0.02); --radius:12px; --maxw:1100px }
+    body.theme-light{ --bg:#f4f7fb; --panel:#ffffff; --muted:#475569; --text:#0f1720; --accent:#0b7285; --accent-2:#2563eb }
+    body.theme-amoled{ --bg:#000; --panel:#040404; --muted:#8ad7ff; --text:#e6fff7; --accent:#00f5d4; --accent-2:#66fcff }
+    body.theme-hc{ --bg:#000; --panel:#fff100; --muted:#000; --text:#000; --accent:#000; --accent-2:#fff }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter, Poppins, system-ui, -apple-system, 'Segoe UI', Roboto; background:var(--bg); color:var(--text); transition:background .22s ease, color .22s ease}
+
+    /* Keep rest of existing page styles but adjust to variables where appropriate */
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #dde3f0;
+      padding-bottom: 12px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .exam-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .field-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    .field-group input[type="number"] {
+      width: 70px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #c2c8dd;
+      font-size: 0.9rem;
+    }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+    .btn-primary {
+      background: #3366ff;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(51, 102, 255, 0.25);
+    }
+    .btn-primary:disabled {
+      background: #9bb0ff;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #1d3a72;
+      border: 1px solid #c2c8dd;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(15, 35, 75, 0.18);
+    }
+    .timer-badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #101826;
+      color: #fff;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      min-width: 72px;
+      text-align: center;
+    }
+    .timer-label {
+      font-size: 0.85rem;
+      color: #444;
+    }
+
+    .questions-wrapper {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .section-title {
+      margin-top: 18px;
+      font-weight: 700;
+      color: #1d3a72;
+      border-right: 4px solid #3366ff;
+      padding-right: 8px;
+      font-size: 1rem;
+    }
+    .question {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      border: 1px solid #dde3f0;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .q-header {
+      font-size: 0.85rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .q-body {
+      direction: ltr;
+      text-align: left;
+    }
+    .q-body p {
+      margin: 4px 0 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 0.9rem;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: background 0.1s ease;
+    }
+    .options label:hover {
+      background: #f3f4ff;
+    }
+    .options input[type="radio"] {
+      accent-color: #3366ff;
+    }
+
+    .question.correct {
+      border-color: #16a34a;
+      background: #ecfdf3;
+    }
+    .question.incorrect {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+    .question.unanswered {
+      border-color: #f97316;
+      background: #fff7ed;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .badge-correct {
+      background: #bbf7d0;
+      color: #166534;
+    }
+    .badge-incorrect {
+      background: #fecaca;
+      color: #991b1b;
+    }
+    .badge-unanswered {
+      background: #fed7aa;
+      color: #9a3412;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #cbd5f5;
+      background: #eef2ff;
+      font-size: 0.9rem;
+    }
+    .result-box strong {
+      font-size: 1rem;
+    }
+    .result-line {
+      margin-top: 4px;
+    }
+    .note {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .exam-controls {
+        align-items: flex-start;
+      }
+      header h1 {
+        font-size: 1.35rem;
+      }
+    }
+    /* ===== Top Navigation Bar ===== */
+.top-nav { background: #0f172a; color: #f9fafb; border-bottom: 1px solid #1f2937; height:64px; }
+.nav-container { max-width: 1100px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 16px; height:100%; direction: ltr; }
+
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.nav-logo .logo{height:44px; width:44px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; color:#021019; font-weight:700}
+
+.nav-logo-title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.nav-logo-sub {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+}
+
+.nav-link:hover {
+  background: #1f2937;
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* زر القائمة للموبايل */
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid #4b5563;
+  border-radius: 999px;
+  color: #e5e7eb;
+  font-size: 1.1rem;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+/* موبايل */
+@media (max-width: 700px) {
+  .nav-container {
+    flex-wrap: wrap;
+  }
+  .nav-links {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    display: none;          /* مخفي افتراضياً */
+  }
+  .nav-links.show {
+    display: flex;          /* يظهر لما نضغط الزر */
+  }
+  .nav-toggle {
+    display: inline-flex;
+  }
+}
+
+  </style>
+</head>
+<body class="theme-amoled">
+<!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <div class="nav-logo" style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;flex-direction:column">
+          <span class="nav-logo-title">SOC Reference Portal</span>
+          <span class="nav-logo-sub">امتحان MCQ – مختبر</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <!-- عدّل الروابط حسب أسماء ملفاتك -->
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="exam.html" class="nav-link active">Main Exam</a>
+        <a href="soc_scenarios_exam.html" class="nav-link">SOC Scenarios (AR)</a>
+        <a href="soc_scenarios_exam En.html" class="nav-link">SOC Scenarios (EN)</a>
+        
+      </nav>
+      <!-- زر القائمة للموبايل -->
+      <div style="display:flex;align-items:center;gap:8px;margin-left:12px">
+        <!-- AMOLED-only (removed theme selector) -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+    <header>
+      <h1>امتحان محلل أمن سيبراني مساعد – MCQ (100 سؤال)</h1>
+      <p>
+        هذا الامتحان يغطي أساسيات الأمن السيبراني، الشبكات، الأنظمة، الـ SIEM، إدارة الحوادث، تحليل السجلات،
+        أمن الشبكات، التهديدات، الأدوات، وأمن السحابة.
+      </p>
+      <div class="exam-controls">
+        <div class="field-group">
+          <span>مدة الامتحان (بالدقائق):</span>
+          <input type="number" id="durationInput" value="90" min="5" max="240" />
+        </div>
+        <button id="startBtn" class="btn btn-primary">بدء الامتحان</button>
+        <button id="submitBtn" class="btn btn-secondary" disabled>تسليم الامتحان وتصحيحه</button>
+        <div style="display:flex;flex-direction:column;gap:2px;margin-right:auto;align-items:flex-end;">
+          <span class="timer-label">الوقت المتبقي:</span>
+          <span id="timer" class="timer-badge">--:--</span>
+        </div>
+      </div>
+    </header>
+
+    <div id="result" class="result-box" style="display:none;"></div>
+
+    <div class="questions-wrapper">
+
+      <!-- ========= SECTION 1 ========= -->
+      <div class="section-title">الفصل 1: Cybersecurity Fundamentals</div>
+
+      <div class="question" data-q="1">
+        <div class="q-header"><span>السؤال 1</span></div>
+        <div class="q-body">
+          <p>What does the “C” in CIA Triad stand for?</p>
+          <div class="options">
+            <label><input type="radio" name="q1" value="A"> A) Control</label>
+            <label><input type="radio" name="q1" value="B"> B) Confidentiality</label>
+            <label><input type="radio" name="q1" value="C"> C) Communication</label>
+            <label><input type="radio" name="q1" value="D"> D) Compliance</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="2">
+        <div class="q-header"><span>السؤال 2</span></div>
+        <div class="q-body">
+          <p>Ensuring data is not modified without authorization refers to:</p>
+          <div class="options">
+            <label><input type="radio" name="q2" value="A"> A) Availability</label>
+            <label><input type="radio" name="q2" value="B"> B) Vulnerability</label>
+            <label><input type="radio" name="q2" value="C"> C) Integrity</label>
+            <label><input type="radio" name="q2" value="D"> D) Exploit</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="3">
+        <div class="q-header"><span>السؤال 3</span></div>
+        <div class="q-body">
+          <p>A weakness in a system that can be exploited is called:</p>
+          <div class="options">
+            <label><input type="radio" name="q3" value="A"> A) Risk</label>
+            <label><input type="radio" name="q3" value="B"> B) Threat</label>
+            <label><input type="radio" name="q3" value="C"> C) Vulnerability</label>
+            <label><input type="radio" name="q3" value="D"> D) Payload</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="4">
+        <div class="q-header"><span>السؤال 4</span></div>
+        <div class="q-body">
+          <p>The act of using a vulnerability is called:</p>
+          <div class="options">
+            <label><input type="radio" name="q4" value="A"> A) Analysis</label>
+            <label><input type="radio" name="q4" value="B"> B) Exploit</label>
+            <label><input type="radio" name="q4" value="C"> C) Factor</label>
+            <label><input type="radio" name="q4" value="D"> D) Code Execution</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="5">
+        <div class="q-header"><span>السؤال 5</span></div>
+        <div class="q-body">
+          <p>Which phase in Cyber Kill Chain involves gathering information?</p>
+          <div class="options">
+            <label><input type="radio" name="q5" value="A"> A) Weaponization</label>
+            <label><input type="radio" name="q5" value="B"> B) Delivery</label>
+            <label><input type="radio" name="q5" value="C"> C) Reconnaissance</label>
+            <label><input type="radio" name="q5" value="D"> D) Installation</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="6">
+        <div class="q-header"><span>السؤال 6</span></div>
+        <div class="q-body">
+          <p>Which framework maps attacker techniques and tactics?</p>
+          <div class="options">
+            <label><input type="radio" name="q6" value="A"> A) NIST CSF</label>
+            <label><input type="radio" name="q6" value="B"> B) MITRE ATT&amp;CK</label>
+            <label><input type="radio" name="q6" value="C"> C) ISO 27001</label>
+            <label><input type="radio" name="q6" value="D"> D) COBIT</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="7">
+        <div class="q-header"><span>السؤال 7</span></div>
+        <div class="q-body">
+          <p>Ransomware is classified as:</p>
+          <div class="options">
+            <label><input type="radio" name="q7" value="A"> A) Worm</label>
+            <label><input type="radio" name="q7" value="B"> B) Trojan</label>
+            <label><input type="radio" name="q7" value="C"> C) Malware</label>
+            <label><input type="radio" name="q7" value="D"> D) Spyware</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="8">
+        <div class="q-header"><span>السؤال 8</span></div>
+        <div class="q-body">
+          <p>Phishing belongs to which category?</p>
+          <div class="options">
+            <label><input type="radio" name="q8" value="A"> A) Malware</label>
+            <label><input type="radio" name="q8" value="B"> B) Social Engineering</label>
+            <label><input type="radio" name="q8" value="C"> C) Network Attack</label>
+            <label><input type="radio" name="q8" value="D"> D) Insider Threat</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="9">
+        <div class="q-header"><span>السؤال 9</span></div>
+        <div class="q-body">
+          <p>SQL Injection occurs at which OSI layer?</p>
+          <div class="options">
+            <label><input type="radio" name="q9" value="A"> A) Layer 3</label>
+            <label><input type="radio" name="q9" value="B"> B) Layer 4</label>
+            <label><input type="radio" name="q9" value="C"> C) Layer 7</label>
+            <label><input type="radio" name="q9" value="D"> D) Layer 2</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="10">
+        <div class="q-header"><span>السؤال 10</span></div>
+        <div class="q-body">
+          <p>XSS exploits weakness in:</p>
+          <div class="options">
+            <label><input type="radio" name="q10" value="A"> A) Authentication</label>
+            <label><input type="radio" name="q10" value="B"> B) Input Validation</label>
+            <label><input type="radio" name="q10" value="C"> C) Web Server Hardware</label>
+            <label><input type="radio" name="q10" value="D"> D) Disk Encryption</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="11">
+        <div class="q-header"><span>السؤال 11</span></div>
+        <div class="q-body">
+          <p>Which attack tries many passwords until one succeeds?</p>
+          <div class="options">
+            <label><input type="radio" name="q11" value="A"> A) DDoS</label>
+            <label><input type="radio" name="q11" value="B"> B) Brute Force</label>
+            <label><input type="radio" name="q11" value="C"> C) ARP Spoofing</label>
+            <label><input type="radio" name="q11" value="D"> D) MITM</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="12">
+        <div class="q-header"><span>السؤال 12</span></div>
+        <div class="q-body">
+          <p>Zero Trust means:</p>
+          <div class="options">
+            <label><input type="radio" name="q12" value="A"> A) No authentication needed</label>
+            <label><input type="radio" name="q12" value="B"> B) Trust internal network only</label>
+            <label><input type="radio" name="q12" value="C"> C) Never trust, always verify</label>
+            <label><input type="radio" name="q12" value="D"> D) Allow all traffic by default</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="13">
+        <div class="q-header"><span>السؤال 13</span></div>
+        <div class="q-body">
+          <p>Defense-in-Depth means:</p>
+          <div class="options">
+            <label><input type="radio" name="q13" value="A"> A) Using a single layer of protection</label>
+            <label><input type="radio" name="q13" value="B"> B) Multiple layers of security</label>
+            <label><input type="radio" name="q13" value="C"> C) Full encryption only</label>
+            <label><input type="radio" name="q13" value="D"> D) Offline backup only</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="14">
+        <div class="q-header"><span>السؤال 14</span></div>
+        <div class="q-body">
+          <p>A Trojan:</p>
+          <div class="options">
+            <label><input type="radio" name="q14" value="A"> A) Spreads automatically</label>
+            <label><input type="radio" name="q14" value="B"> B) Appears legitimate</label>
+            <label><input type="radio" name="q14" value="C"> C) Unable to infect files</label>
+            <label><input type="radio" name="q14" value="D"> D) Requires no user interaction</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="15">
+        <div class="q-header"><span>السؤال 15</span></div>
+        <div class="q-body">
+          <p>CSRF exploits:</p>
+          <div class="options">
+            <label><input type="radio" name="q15" value="A"> A) User identity / session</label>
+            <label><input type="radio" name="q15" value="B"> B) Network packets</label>
+            <label><input type="radio" name="q15" value="C"> C) Database credentials</label>
+            <label><input type="radio" name="q15" value="D"> D) DNS misconfiguration</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="16">
+        <div class="q-header"><span>السؤال 16</span></div>
+        <div class="q-body">
+          <p>Which attack steals cookies to impersonate users?</p>
+          <div class="options">
+            <label><input type="radio" name="q16" value="A"> A) SQL Injection</label>
+            <label><input type="radio" name="q16" value="B"> B) XSS</label>
+            <label><input type="radio" name="q16" value="C"> C) SSH Bruteforce</label>
+            <label><input type="radio" name="q16" value="D"> D) Port Scanning</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="17">
+        <div class="q-header"><span>السؤال 17</span></div>
+        <div class="q-body">
+          <p>The attack surface refers to:</p>
+          <div class="options">
+            <label><input type="radio" name="q17" value="A"> A) Size of the network</label>
+            <label><input type="radio" name="q17" value="B"> B) Number of exploitable points</label>
+            <label><input type="radio" name="q17" value="C"> C) Hard disk size</label>
+            <label><input type="radio" name="q17" value="D"> D) Number of users</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="18">
+        <div class="q-header"><span>السؤال 18</span></div>
+        <div class="q-body">
+          <p>Which of the following is a threat, not a vulnerability?</p>
+          <div class="options">
+            <label><input type="radio" name="q18" value="A"> A) Open port</label>
+            <label><input type="radio" name="q18" value="B"> B) Weak password</label>
+            <label><input type="radio" name="q18" value="C"> C) Malware</label>
+            <label><input type="radio" name="q18" value="D"> D) Unpatched system</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="19">
+        <div class="q-header"><span>السؤال 19</span></div>
+        <div class="q-body">
+          <p>A payload refers to:</p>
+          <div class="options">
+            <label><input type="radio" name="q19" value="A"> A) Backup</label>
+            <label><input type="radio" name="q19" value="B"> B) Damage-causing component of malware</label>
+            <label><input type="radio" name="q19" value="C"> C) Antivirus scan</label>
+            <label><input type="radio" name="q19" value="D"> D) Firewall rule</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="20">
+        <div class="q-header"><span>السؤال 20</span></div>
+        <div class="q-body">
+          <p>Reconnaissance can be:</p>
+          <div class="options">
+            <label><input type="radio" name="q20" value="A"> A) Internal only</label>
+            <label><input type="radio" name="q20" value="B"> B) Passive or active</label>
+            <label><input type="radio" name="q20" value="C"> C) Always loud</label>
+            <label><input type="radio" name="q20" value="D"> D) Only via malware</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========= SECTION 2 ========= -->
+      <div class="section-title">الفصل 2: Networking &amp; Protocols</div>
+
+      <div class="question" data-q="21">
+        <div class="q-header"><span>السؤال 21</span></div>
+        <div class="q-body">
+          <p>How many layers are in the OSI model?</p>
+          <div class="options">
+            <label><input type="radio" name="q21" value="A"> A) 3</label>
+            <label><input type="radio" name="q21" value="B"> B) 5</label>
+            <label><input type="radio" name="q21" value="C"> C) 7</label>
+            <label><input type="radio" name="q21" value="D"> D) 8</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="22">
+        <div class="q-header"><span>السؤال 22</span></div>
+        <div class="q-body">
+          <p>Which protocol resolves names to IP addresses?</p>
+          <div class="options">
+            <label><input type="radio" name="q22" value="A"> A) DHCP</label>
+            <label><input type="radio" name="q22" value="B"> B) DNS</label>
+            <label><input type="radio" name="q22" value="C"> C) SMTP</label>
+            <label><input type="radio" name="q22" value="D"> D) SSH</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="23">
+        <div class="q-header"><span>السؤال 23</span></div>
+        <div class="q-body">
+          <p>HTTPS uses which security protocol?</p>
+          <div class="options">
+            <label><input type="radio" name="q23" value="A"> A) SSL/TLS</label>
+            <label><input type="radio" name="q23" value="B"> B) SNMP</label>
+            <label><input type="radio" name="q23" value="C"> C) ARP</label>
+            <label><input type="radio" name="q23" value="D"> D) ICMP</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="24">
+        <div class="q-header"><span>السؤال 24</span></div>
+        <div class="q-body">
+          <p>TCP is:</p>
+          <div class="options">
+            <label><input type="radio" name="q24" value="A"> A) Connection-oriented</label>
+            <label><input type="radio" name="q24" value="B"> B) Stateless</label>
+            <label><input type="radio" name="q24" value="C"> C) Unreliable</label>
+            <label><input type="radio" name="q24" value="D"> D) Faster than UDP</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="25">
+        <div class="q-header"><span>السؤال 25</span></div>
+        <div class="q-body">
+          <p>A common port for DNS is:</p>
+          <div class="options">
+            <label><input type="radio" name="q25" value="A"> A) 22</label>
+            <label><input type="radio" name="q25" value="B"> B) 53</label>
+            <label><input type="radio" name="q25" value="C"> C) 443</label>
+            <label><input type="radio" name="q25" value="D"> D) 8080</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="26">
+        <div class="q-header"><span>السؤال 26</span></div>
+        <div class="q-body">
+          <p>DHCP assigns:</p>
+          <div class="options">
+            <label><input type="radio" name="q26" value="A"> A) MAC address</label>
+            <label><input type="radio" name="q26" value="B"> B) IP address</label>
+            <label><input type="radio" name="q26" value="C"> C) Hostname</label>
+            <label><input type="radio" name="q26" value="D"> D) DNS zone</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="27">
+        <div class="q-header"><span>السؤال 27</span></div>
+        <div class="q-body">
+          <p>SMTP is used for:</p>
+          <div class="options">
+            <label><input type="radio" name="q27" value="A"> A) File sharing</label>
+            <label><input type="radio" name="q27" value="B"> B) Email sending</label>
+            <label><input type="radio" name="q27" value="C"> C) DNS resolution</label>
+            <label><input type="radio" name="q27" value="D"> D) Remote login</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="28">
+        <div class="q-header"><span>السؤال 28</span></div>
+        <div class="q-body">
+          <p>SSH default port:</p>
+          <div class="options">
+            <label><input type="radio" name="q28" value="A"> A) 22</label>
+            <label><input type="radio" name="q28" value="B"> B) 21</label>
+            <label><input type="radio" name="q28" value="C"> C) 80</label>
+            <label><input type="radio" name="q28" value="D"> D) 110</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="29">
+        <div class="q-header"><span>السؤال 29</span></div>
+        <div class="q-body">
+          <p>SMB is used for:</p>
+          <div class="options">
+            <label><input type="radio" name="q29" value="A"> A) Remote login</label>
+            <label><input type="radio" name="q29" value="B"> B) File sharing</label>
+            <label><input type="radio" name="q29" value="C"> C) Email</label>
+            <label><input type="radio" name="q29" value="D"> D) DNS queries</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="30">
+        <div class="q-header"><span>السؤال 30</span></div>
+        <div class="q-body">
+          <p>Packet analysis is done using:</p>
+          <div class="options">
+            <label><input type="radio" name="q30" value="A"> A) Nmap</label>
+            <label><input type="radio" name="q30" value="B"> B) Wireshark</label>
+            <label><input type="radio" name="q30" value="C"> C) SQLmap</label>
+            <label><input type="radio" name="q30" value="D"> D) Hydra</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="31">
+        <div class="q-header"><span>السؤال 31</span></div>
+        <div class="q-body">
+          <p>VLAN separates:</p>
+          <div class="options">
+            <label><input type="radio" name="q31" value="A"> A) OSI layers</label>
+            <label><input type="radio" name="q31" value="B"> B) Network segments</label>
+            <label><input type="radio" name="q31" value="C"> C) Applications</label>
+            <label><input type="radio" name="q31" value="D"> D) Email flows</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="32">
+        <div class="q-header"><span>السؤال 32</span></div>
+        <div class="q-body">
+          <p>NAT function:</p>
+          <div class="options">
+            <label><input type="radio" name="q32" value="A"> A) Encrypt packets</label>
+            <label><input type="radio" name="q32" value="B"> B) Convert private to public IP</label>
+            <label><input type="radio" name="q32" value="C"> C) Start firewall rules</label>
+            <label><input type="radio" name="q32" value="D"> D) Create VLANs</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="33">
+        <div class="q-header"><span>السؤال 33</span></div>
+        <div class="q-body">
+          <p>Which is a Layer 4 protocol?</p>
+          <div class="options">
+            <label><input type="radio" name="q33" value="A"> A) TCP</label>
+            <label><input type="radio" name="q33" value="B"> B) DNS</label>
+            <label><input type="radio" name="q33" value="C"> C) HTTP</label>
+            <label><input type="radio" name="q33" value="D"> D) DHCP</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="34">
+        <div class="q-header"><span>السؤال 34</span></div>
+        <div class="q-body">
+          <p>Port scanning is typically done with:</p>
+          <div class="options">
+            <label><input type="radio" name="q34" value="A"> A) Burp Suite</label>
+            <label><input type="radio" name="q34" value="B"> B) Nmap</label>
+            <label><input type="radio" name="q34" value="C"> C) Outlook</label>
+            <label><input type="radio" name="q34" value="D"> D) Wireshark</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="35">
+        <div class="q-header"><span>السؤال 35</span></div>
+        <div class="q-body">
+          <p>ARP works at which layer?</p>
+          <div class="options">
+            <label><input type="radio" name="q35" value="A"> A) Layer 2</label>
+            <label><input type="radio" name="q35" value="B"> B) Layer 4</label>
+            <label><input type="radio" name="q35" value="C"> C) Layer 7</label>
+            <label><input type="radio" name="q35" value="D"> D) Layer 5</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="36">
+        <div class="q-header"><span>السؤال 36</span></div>
+        <div class="q-body">
+          <p>HTTPS default port:</p>
+          <div class="options">
+            <label><input type="radio" name="q36" value="A"> A) 443</label>
+            <label><input type="radio" name="q36" value="B"> B) 8080</label>
+            <label><input type="radio" name="q36" value="C"> C) 80</label>
+            <label><input type="radio" name="q36" value="D"> D) 22</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="37">
+        <div class="q-header"><span>السؤال 37</span></div>
+        <div class="q-body">
+          <p>MITM attack often targets:</p>
+          <div class="options">
+            <label><input type="radio" name="q37" value="A"> A) ARP</label>
+            <label><input type="radio" name="q37" value="B"> B) File systems</label>
+            <label><input type="radio" name="q37" value="C"> C) CPU</label>
+            <label><input type="radio" name="q37" value="D"> D) Hard disk</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="38">
+        <div class="q-header"><span>السؤال 38</span></div>
+        <div class="q-body">
+          <p>ICMP is used for:</p>
+          <div class="options">
+            <label><input type="radio" name="q38" value="A"> A) Testing availability (ping)</label>
+            <label><input type="radio" name="q38" value="B"> B) DNS</label>
+            <label><input type="radio" name="q38" value="C"> C) VPN</label>
+            <label><input type="radio" name="q38" value="D"> D) SMTP</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="39">
+        <div class="q-header"><span>السؤال 39</span></div>
+        <div class="q-body">
+          <p>DNS poisoning affects:</p>
+          <div class="options">
+            <label><input type="radio" name="q39" value="A"> A) Packet header</label>
+            <label><input type="radio" name="q39" value="B"> B) Cache entries</label>
+            <label><input type="radio" name="q39" value="C"> C) CPU</label>
+            <label><input type="radio" name="q39" value="D"> D) Firewall logs</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="40">
+        <div class="q-header"><span>السؤال 40</span></div>
+        <div class="q-body">
+          <p>UDP is typically used in:</p>
+          <div class="options">
+            <label><input type="radio" name="q40" value="A"> A) Voice calls</label>
+            <label><input type="radio" name="q40" value="B"> B) Email</label>
+            <label><input type="radio" name="q40" value="C"> C) SSH</label>
+            <label><input type="radio" name="q40" value="D"> D) HTTPS</label>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========= SECTION 3 ========= -->
+<div class="section-title">الفصل 3: Operating Systems (Windows & Linux)</div>
+
+<div class="question" data-q="41">
+  <div class="q-header"><span>السؤال 41</span></div>
+  <div class="q-body">
+    <p>Windows log ID for successful login:</p>
+    <div class="options">
+      <label><input type="radio" name="q41" value="A"> A) 4625</label>
+      <label><input type="radio" name="q41" value="B"> B) 4624</label>
+      <label><input type="radio" name="q41" value="C"> C) 4688</label>
+      <label><input type="radio" name="q41" value="D"> D) 4740</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="42">
+  <div class="q-header"><span>السؤال 42</span></div>
+  <div class="q-body">
+    <p>Event ID 4740 indicates:</p>
+    <div class="options">
+      <label><input type="radio" name="q42" value="A"> A) Process creation</label>
+      <label><input type="radio" name="q42" value="B"> B) Failed login</label>
+      <label><input type="radio" name="q42" value="C"> C) Account lockout</label>
+      <label><input type="radio" name="q42" value="D"> D) VPN login</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="43">
+  <div class="q-header"><span>السؤال 43</span></div>
+  <div class="q-body">
+    <p>“ps” command is used in Linux to:</p>
+    <div class="options">
+      <label><input type="radio" name="q43" value="A"> A) Change permissions</label>
+      <label><input type="radio" name="q43" value="B"> B) List processes</label>
+      <label><input type="radio" name="q43" value="C"> C) Copy files</label>
+      <label><input type="radio" name="q43" value="D"> D) Restart services</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="44">
+  <div class="q-header"><span>السؤال 44</span></div>
+  <div class="q-body">
+    <p>“chmod 777 file” means:</p>
+    <div class="options">
+      <label><input type="radio" name="q44" value="A"> A) No access</label>
+      <label><input type="radio" name="q44" value="B"> B) Full access to all</label>
+      <label><input type="radio" name="q44" value="C"> C) Read only</label>
+      <label><input type="radio" name="q44" value="D"> D) Write only</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="45">
+  <div class="q-header"><span>السؤال 45</span></div>
+  <div class="q-body">
+    <p>Which log tracks Linux authentication attempts?</p>
+    <div class="options">
+      <label><input type="radio" name="q45" value="A"> A) /var/log/auth.log</label>
+      <label><input type="radio" name="q45" value="B"> B) /etc/ssh/config</label>
+      <label><input type="radio" name="q45" value="C"> C) /usr/bin/logs</label>
+      <label><input type="radio" name="q45" value="D"> D) system/log/sys</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="46">
+  <div class="q-header"><span>السؤال 46</span></div>
+  <div class="q-body">
+    <p>PowerShell command to view processes:</p>
+    <div class="options">
+      <label><input type="radio" name="q46" value="A"> A) get-log</label>
+      <label><input type="radio" name="q46" value="B"> B) get-process</label>
+      <label><input type="radio" name="q46" value="C"> C) view-proc</label>
+      <label><input type="radio" name="q46" value="D"> D) show-process</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="47">
+  <div class="q-header"><span>السؤال 47</span></div>
+  <div class="q-body">
+    <p>“sudo” allows:</p>
+    <div class="options">
+      <label><input type="radio" name="q47" value="A"> A) Changing users</label>
+      <label><input type="radio" name="q47" value="B"> B) Temporary admin privileges</label>
+      <label><input type="radio" name="q47" value="C"> C) Shutdown</label>
+      <label><input type="radio" name="q47" value="D"> D) Formatting</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="48">
+  <div class="q-header"><span>السؤال 48</span></div>
+  <div class="q-body">
+    <p>Windows Event Viewer stores logs in:</p>
+    <div class="options">
+      <label><input type="radio" name="q48" value="A"> A) C:\logs</label>
+      <label><input type="radio" name="q48" value="B"> B) System32\EventEngine</label>
+      <label><input type="radio" name="q48" value="C"> C) Windows Logs</label>
+      <label><input type="radio" name="q48" value="D"> D) Firewall Manager</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="49">
+  <div class="q-header"><span>السؤال 49</span></div>
+  <div class="q-body">
+    <p>“netstat -ano” shows:</p>
+    <div class="options">
+      <label><input type="radio" name="q49" value="A"> A) Users only</label>
+      <label><input type="radio" name="q49" value="B"> B) Ports + PIDs</label>
+      <label><input type="radio" name="q49" value="C"> C) Firewalls only</label>
+      <label><input type="radio" name="q49" value="D"> D) Services only</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="50">
+  <div class="q-header"><span>السؤال 50</span></div>
+  <div class="q-body">
+    <p>Linux command to view last lines of log:</p>
+    <div class="options">
+      <label><input type="radio" name="q50" value="A"> A) head</label>
+      <label><input type="radio" name="q50" value="B"> B) tail</label>
+      <label><input type="radio" name="q50" value="C"> C) top</label>
+      <label><input type="radio" name="q50" value="D"> D) nano</label>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION 4 ========= -->
+<div class="section-title">الفصل 4: SIEM Platforms</div>
+
+<!-- 51–60 -->
+<div class="question" data-q="51">
+  <div class="q-header"><span>السؤال 51</span></div>
+  <div class="q-body">
+    <p>SIEM stands for:</p>
+    <div class="options">
+      <label><input type="radio" name="q51" value="A"> A) Secure Internet Event Monitor</label>
+      <label><input type="radio" name="q51" value="B"> B) Security Information and Event Management</label>
+      <label><input type="radio" name="q51" value="C"> C) System Integrity Event Monitoring</label>
+      <label><input type="radio" name="q51" value="D"> D) Security Incident External Monitor</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="52">
+  <div class="q-header"><span>السؤال 52</span></div>
+  <div class="q-body">
+    <p>KQL is used in:</p>
+    <div class="options">
+      <label><input type="radio" name="q52" value="A"> A) Splunk</label>
+      <label><input type="radio" name="q52" value="B"> B) Azure Sentinel</label>
+      <label><input type="radio" name="q52" value="C"> C) QRadar</label>
+      <label><input type="radio" name="q52" value="D"> D) OSQuery</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="53">
+  <div class="q-header"><span>السؤال 53</span></div>
+  <div class="q-body">
+    <p>SPL is used in:</p>
+    <div class="options">
+      <label><input type="radio" name="q53" value="A"> A) Splunk</label>
+      <label><input type="radio" name="q53" value="B"> B) Defender</label>
+      <label><input type="radio" name="q53" value="C"> C) QRadar</label>
+      <label><input type="radio" name="q53" value="D"> D) OTX</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="54">
+  <div class="q-header"><span>السؤال 54</span></div>
+  <div class="q-body">
+    <p>AQL is used in:</p>
+    <div class="options">
+      <label><input type="radio" name="q54" value="A"> A) Splunk</label>
+      <label><input type="radio" name="q54" value="B"> B) QRadar</label>
+      <label><input type="radio" name="q54" value="C"> C) Sentinel</label>
+      <label><input type="radio" name="q54" value="D"> D) Firewalls</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="55">
+  <div class="q-header"><span>السؤال 55</span></div>
+  <div class="q-body">
+    <p>SIEM is used for:</p>
+    <div class="options">
+      <label><input type="radio" name="q55" value="A"> A) Editing videos</label>
+      <label><input type="radio" name="q55" value="B"> B) Collecting and correlating logs</label>
+      <label><input type="radio" name="q55" value="C"> C) Updating drivers</label>
+      <label><input type="radio" name="q55" value="D"> D) Resetting passwords</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="56">
+  <div class="q-header"><span>السؤال 56</span></div>
+  <div class="q-body">
+    <p>Alert triage includes:</p>
+    <div class="options">
+      <label><input type="radio" name="q56" value="A"> A) Cleaning RAM</label>
+      <label><input type="radio" name="q56" value="B"> B) Investigating alerts</label>
+      <label><input type="radio" name="q56" value="C"> C) Installing OS</label>
+      <label><input type="radio" name="q56" value="D"> D) Creating new VLAN</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="57">
+  <div class="q-header"><span>السؤال 57</span></div>
+  <div class="q-body">
+    <p>True Positive means:</p>
+    <div class="options">
+      <label><input type="radio" name="q57" value="A"> A) Valid alert</label>
+      <label><input type="radio" name="q57" value="B"> B) Invalid alert</label>
+      <label><input type="radio" name="q57" value="C"> C) System error</label>
+      <label><input type="radio" name="q57" value="D"> D) Unknown behavior</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="58">
+  <div class="q-header"><span>السؤال 58</span></div>
+  <div class="q-body">
+    <p>False Positive means:</p>
+    <div class="options">
+      <label><input type="radio" name="q58" value="A"> A) Malicious alert</label>
+      <label><input type="radio" name="q58" value="B"> B) Benign alert mistaken as threat</label>
+      <label><input type="radio" name="q58" value="C"> C) Attack confirmed</label>
+      <label><input type="radio" name="q58" value="D"> D) None</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="59">
+  <div class="q-header"><span>السؤال 59</span></div>
+  <div class="q-body">
+    <p>Correlation Rules are used to:</p>
+    <div class="options">
+      <label><input type="radio" name="q59" value="A"> A) Clean antivirus</label>
+      <label><input type="radio" name="q59" value="B"> B) Detect patterns across events</label>
+      <label><input type="radio" name="q59" value="C"> C) Reset passwords</label>
+      <label><input type="radio" name="q59" value="D"> D) Block internet</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="60">
+  <div class="q-header"><span>السؤال 60</span></div>
+  <div class="q-body">
+    <p>Dashboard in SIEM shows:</p>
+    <div class="options">
+      <label><input type="radio" name="q60" value="A"> A) Real-time metrics</label>
+      <label><input type="radio" name="q60" value="B"> B) OS kernel info</label>
+      <label><input type="radio" name="q60" value="C"> C) Emails</label>
+      <label><input type="radio" name="q60" value="D"> D) Hardware specs</label>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION 5 ========= -->
+<div class="section-title">الفصل 5: Incident Response</div>
+
+<!-- 61–70 -->
+<div class="question" data-q="61">
+  <div class="q-header"><span>السؤال 61</span></div>
+  <div class="q-body">
+    <p>First IR phase is:</p>
+    <div class="options">
+      <label><input type="radio" name="q61" value="A"> A) Containment</label>
+      <label><input type="radio" name="q61" value="B"> B) Identification</label>
+      <label><input type="radio" name="q61" value="C"> C) Preparation</label>
+      <label><input type="radio" name="q61" value="D"> D) Recovery</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="62">
+  <div class="q-header"><span>السؤال 62</span></div>
+  <div class="q-body">
+    <p>IOC stands for:</p>
+    <div class="options">
+      <label><input type="radio" name="q62" value="A"> A) Initial Object Count</label>
+      <label><input type="radio" name="q62" value="B"> B) Indicator of Compromise</label>
+      <label><input type="radio" name="q62" value="C"> C) Input Output Check</label>
+      <label><input type="radio" name="q62" value="D"> D) International Online Conference</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="63">
+  <div class="q-header"><span>السؤال 63</span></div>
+  <div class="q-body">
+    <p>Containment goal:</p>
+    <div class="options">
+      <label><input type="radio" name="q63" value="A"> A) Remove malware</label>
+      <label><input type="radio" name="q63" value="B"> B) Stop spread</label>
+      <label><input type="radio" name="q63" value="C"> C) Analyze logs</label>
+      <label><input type="radio" name="q63" value="D"> D) Block ports only</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="64">
+  <div class="q-header"><span>السؤال 64</span></div>
+  <div class="q-body">
+    <p>Eradication includes:</p>
+    <div class="options">
+      <label><input type="radio" name="q64" value="A"> A) Disconnecting user</label>
+      <label><input type="radio" name="q64" value="B"> B) Removing malicious files</label>
+      <label><input type="radio" name="q64" value="C"> C) Updating OS only</label>
+      <label><input type="radio" name="q64" value="D"> D) Viewing logs</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="65">
+  <div class="q-header"><span>السؤال 65</span></div>
+  <div class="q-body">
+    <p>Hash is used to:</p>
+    <div class="options">
+      <label><input type="radio" name="q65" value="A"> A) Encrypt files</label>
+      <label><input type="radio" name="q65" value="B"> B) Validate file integrity</label>
+      <label><input type="radio" name="q65" value="C"> C) Speed network</label>
+      <label><input type="radio" name="q65" value="D"> D) Scan ports</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="66">
+  <div class="q-header"><span>السؤال 66</span></div>
+  <div class="q-body">
+    <p>Lessons Learned happens:</p>
+    <div class="options">
+      <label><input type="radio" name="q66" value="A"> A) After Recovery</label>
+      <label><input type="radio" name="q66" value="B"> B) Before Recovery</label>
+      <label><input type="radio" name="q66" value="C"> C) Before Identification</label>
+      <label><input type="radio" name="q66" value="D"> D) During Containment</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="67">
+  <div class="q-header"><span>السؤال 67</span></div>
+  <div class="q-body">
+    <p>IOC includes:</p>
+    <div class="options">
+      <label><input type="radio" name="q67" value="A"> A) MAC address only</label>
+      <label><input type="radio" name="q67" value="B"> B) IP, Hash, Domain</label>
+      <label><input type="radio" name="q67" value="C"> C) Username only</label>
+      <label><input type="radio" name="q67" value="D"> D) Hardware ID</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="68">
+  <div class="q-header"><span>السؤال 68</span></div>
+  <div class="q-body">
+    <p>Memory analysis helps detect:</p>
+    <div class="options">
+      <label><input type="radio" name="q68" value="A"> A) Firewalls</label>
+      <label><input type="radio" name="q68" value="B"> B) Running malware</label>
+      <label><input type="radio" name="q68" value="C"> C) GPUs</label>
+      <label><input type="radio" name="q68" value="D"> D) Network cables</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="69">
+  <div class="q-header"><span>السؤال 69</span></div>
+  <div class="q-body">
+    <p>Incident ticket must include:</p>
+    <div class="options">
+      <label><input type="radio" name="q69" value="A"> A) Laptop brand</label>
+      <label><input type="radio" name="q69" value="B"> B) Timeline, actions, findings</label>
+      <label><input type="radio" name="q69" value="C"> C) Employee salary</label>
+      <label><input type="radio" name="q69" value="D"> D) Weather</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="70">
+  <div class="q-header"><span>السؤال 70</span></div>
+  <div class="q-body">
+    <p>Incident Severity depends on:</p>
+    <div class="options">
+      <label><input type="radio" name="q70" value="A"> A) Attack impact</label>
+      <label><input type="radio" name="q70" value="B"> B) Laptop model</label>
+      <label><input type="radio" name="q70" value="C"> C) Printer status</label>
+      <label><input type="radio" name="q70" value="D"> D) Display brightness</label>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION 6 ========= -->
+<div class="section-title">الفصل 6: Log Analysis</div>
+
+<!-- 71–80 -->
+<div class="question" data-q="71">
+  <div class="q-header"><span>السؤال 71</span></div>
+  <div class="q-body">
+    <p>Sysmon is used for:</p>
+    <div class="options">
+      <label><input type="radio" name="q71" value="A"> A) Video editing</label>
+      <label><input type="radio" name="q71" value="B"> B) Advanced logging</label>
+      <label><input type="radio" name="q71" value="C"> C) Antivirus</label>
+      <label><input type="radio" name="q71" value="D"> D) Virtualization</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="72">
+  <div class="q-header"><span>السؤال 72</span></div>
+  <div class="q-body">
+    <p>Event ID 1 in Sysmon indicates:</p>
+    <div class="options">
+      <label><input type="radio" name="q72" value="A"> A) Process creation</label>
+      <label><input type="radio" name="q72" value="B"> B) Network connection</label>
+      <label><input type="radio" name="q72" value="C"> C) File deletion</label>
+      <label><input type="radio" name="q72" value="D"> D) Log cleared</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="73">
+  <div class="q-header"><span>السؤال 73</span></div>
+  <div class="q-body">
+    <p>Proxy logs help detect:</p>
+    <div class="options">
+      <label><input type="radio" name="q73" value="A"> A) Internal browsing</label>
+      <label><input type="radio" name="q73" value="B"> B) CPU temp</label>
+      <label><input type="radio" name="q73" value="C"> C) Fan speed</label>
+      <label><input type="radio" name="q73" value="D"> D) RAM failure</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="74">
+  <div class="q-header"><span>السؤال 74</span></div>
+  <div class="q-body">
+    <p>VPN logs show:</p>
+    <div class="options">
+      <label><input type="radio" name="q74" value="A"> A) Password length</label>
+      <label><input type="radio" name="q74" value="B"> B) Remote login IPs</label>
+      <label><input type="radio" name="q74" value="C"> C) Disk space</label>
+      <label><input type="radio" name="q74" value="D"> D) OS version</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="75">
+  <div class="q-header"><span>السؤال 75</span></div>
+  <div class="q-body">
+    <p>An anomaly is:</p>
+    <div class="options">
+      <label><input type="radio" name="q75" value="A"> A) Normal behavior</label>
+      <label><input type="radio" name="q75" value="B"> B) Abnormal behavior</label>
+      <label><input type="radio" name="q75" value="C"> C) Antivirus update</label>
+      <label><input type="radio" name="q75" value="D"> D) Network design</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="76">
+  <div class="q-header"><span>السؤال 76</span></div>
+  <div class="q-body">
+    <p>Firewall logs show:</p>
+    <div class="options">
+      <label><input type="radio" name="q76" value="A"> A) Blocked / Allowed traffic</label>
+      <label><input type="radio" name="q76" value="B"> B) GPU load</label>
+      <label><input type="radio" name="q76" value="C"> C) Keyboard speed</label>
+      <label><input type="radio" name="q76" value="D"> D) Wi-Fi passwords</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="77">
+  <div class="q-header"><span>السؤال 77</span></div>
+  <div class="q-body">
+    <p>Linux login failures appear in:</p>
+    <div class="options">
+      <label><input type="radio" name="q77" value="A"> A) /var/log/auth.log</label>
+      <label><input type="radio" name="q77" value="B"> B) /home/logs</label>
+      <label><input type="radio" name="q77" value="C"> C) /dns/logs</label>
+      <label><input type="radio" name="q77" value="D"> D) /dev/process</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="78">
+  <div class="q-header"><span>السؤال 78</span></div>
+  <div class="q-body">
+    <p>High failed login attempts may indicate:</p>
+    <div class="options">
+      <label><input type="radio" name="q78" value="A"> A) Hardware failure</label>
+      <label><input type="radio" name="q78" value="B"> B) Brute force attack</label>
+      <label><input type="radio" name="q78" value="C"> C) Normal use</label>
+      <label><input type="radio" name="q78" value="D"> D) Network upgrade</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="79">
+  <div class="q-header"><span>السؤال 79</span></div>
+  <div class="q-body">
+    <p>Email security logs detect:</p>
+    <div class="options">
+      <label><input type="radio" name="q79" value="A"> A) CPU errors</label>
+      <label><input type="radio" name="q79" value="B"> B) Phishing attempts</label>
+      <label><input type="radio" name="q79" value="C"> C) RAM load</label>
+      <label><input type="radio" name="q79" value="D"> D) Bluetooth devices</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="80">
+  <div class="q-header"><span>السؤال 80</span></div>
+  <div class="q-body">
+    <p>DNS logs help detect:</p>
+    <div class="options">
+      <label><input type="radio" name="q80" value="A"> A) DNS tunneling</label>
+      <label><input type="radio" name="q80" value="B"> B) Disk errors</label>
+      <label><input type="radio" name="q80" value="C"> C) Keyboard issues</label>
+      <label><input type="radio" name="q80" value="D"> D) File deletion</label>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION 7 ========= -->
+<div class="section-title">الفصل 7: Network Security</div>
+
+<!-- 81–90 -->
+<div class="question" data-q="81">
+  <div class="q-header"><span>السؤال 81</span></div>
+  <div class="q-body">
+    <p>IDS function:</p>
+    <div class="options">
+      <label><input type="radio" name="q81" value="A"> A) Prevent attacks</label>
+      <label><input type="radio" name="q81" value="B"> B) Detect attacks</label>
+      <label><input type="radio" name="q81" value="C"> C) Format disks</label>
+      <label><input type="radio" name="q81" value="D"> D) Update apps</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="82">
+  <div class="q-header"><span>السؤال 82</span></div>
+  <div class="q-body">
+    <p>IPS function:</p>
+    <div class="options">
+      <label><input type="radio" name="q82" value="A"> A) Only detect</label>
+      <label><input type="radio" name="q82" value="B"> B) Block malicious traffic</label>
+      <label><input type="radio" name="q82" value="C"> C) Print data</label>
+      <label><input type="radio" name="q82" value="D"> D) Show hardware specs</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="83">
+  <div class="q-header"><span>السؤال 83</span></div>
+  <div class="q-body">
+    <p>WAF protects:</p>
+    <div class="options">
+      <label><input type="radio" name="q83" value="A"> A) Networks</label>
+      <label><input type="radio" name="q83" value="B"> B) Web applications</label>
+      <label><input type="radio" name="q83" value="C"> C) Printers</label>
+      <label><input type="radio" name="q83" value="D"> D) Linux kernel</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="84">
+  <div class="q-header"><span>السؤال 84</span></div>
+  <div class="q-body">
+    <p>Lateral Movement refers to:</p>
+    <div class="options">
+      <label><input type="radio" name="q84" value="A"> A) Moving inside network</label>
+      <label><input type="radio" name="q84" value="B"> B) Uploading files</label>
+      <label><input type="radio" name="q84" value="C"> C) Downloading OS</label>
+      <label><input type="radio" name="q84" value="D"> D) Installing VPN</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="85">
+  <div class="q-header"><span>السؤال 85</span></div>
+  <div class="q-body">
+    <p>Port scanning is used to:</p>
+    <div class="options">
+      <label><input type="radio" name="q85" value="A"> A) Find open ports</label>
+      <label><input type="radio" name="q85" value="B"> B) Delete logs</label>
+      <label><input type="radio" name="q85" value="C"> C) Increase speed</label>
+      <label><input type="radio" name="q85" value="D"> D) Update firmware</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="86">
+  <div class="q-header"><span>السؤال 86</span></div>
+  <div class="q-body">
+    <p>Network Segmentation purpose:</p>
+    <div class="options">
+      <label><input type="radio" name="q86" value="A"> A) Faster internet</label>
+      <label><input type="radio" name="q86" value="B"> B) Isolate critical assets</label>
+      <label><input type="radio" name="q86" value="C"> C) Encrypt RAM</label>
+      <label><input type="radio" name="q86" value="D"> D) Install apps</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="87">
+  <div class="q-header"><span>السؤال 87</span></div>
+  <div class="q-body">
+    <p>Snort is an example of:</p>
+    <div class="options">
+      <label><input type="radio" name="q87" value="A"> A) SIEM</label>
+      <label><input type="radio" name="q87" value="B"> B) IDS</label>
+      <label><input type="radio" name="q87" value="C"> C) Proxy</label>
+      <label><input type="radio" name="q87" value="D"> D) Antivirus</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="88">
+  <div class="q-header"><span>السؤال 88</span></div>
+  <div class="q-body">
+    <p>Suricata is:</p>
+    <div class="options">
+      <label><input type="radio" name="q88" value="A"> A) Web scanner</label>
+      <label><input type="radio" name="q88" value="B"> B) IDS/IPS Engine</label>
+      <label><input type="radio" name="q88" value="C"> C) Password manager</label>
+      <label><input type="radio" name="q88" value="D"> D) VPN service</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="89">
+  <div class="q-header"><span>السؤال 89</span></div>
+  <div class="q-body">
+    <p>Firewall rule “Allow All” is:</p>
+    <div class="options">
+      <label><input type="radio" name="q89" value="A"> A) Recommended</label>
+      <label><input type="radio" name="q89" value="B"> B) High risk</label>
+      <label><input type="radio" name="q89" value="C"> C) Security best practice</label>
+      <label><input type="radio" name="q89" value="D"> D) Zero Trust</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="90">
+  <div class="q-header"><span>السؤال 90</span></div>
+  <div class="q-body">
+    <p>MITM often uses:</p>
+    <div class="options">
+      <label><input type="radio" name="q90" value="A"> A) ARP Spoofing</label>
+      <label><input type="radio" name="q90" value="B"> B) HDMI</label>
+      <label><input type="radio" name="q90" value="C"> C) SSD</label>
+      <label><input type="radio" name="q90" value="D"> D) GPU</label>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION 8 ========= -->
+<div class="section-title">الفصل 8: Threat Intelligence, Tools, Cloud</div>
+
+<!-- 91–100 -->
+<div class="question" data-q="91">
+  <div class="q-header"><span>السؤال 91</span></div>
+  <div class="q-body">
+    <p>VirusTotal is used to:</p>
+    <div class="options">
+      <label><input type="radio" name="q91" value="A"> A) Design websites</label>
+      <label><input type="radio" name="q91" value="B"> B) Analyze files & URLs</label>
+      <label><input type="radio" name="q91" value="C"> C) Install software</label>
+      <label><input type="radio" name="q91" value="D"> D) Encrypt backup</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="92">
+  <div class="q-header"><span>السؤال 92</span></div>
+  <div class="q-body">
+    <p>Shodan shows:</p>
+    <div class="options">
+      <label><input type="radio" name="q92" value="A"> A) Open devices on internet</label>
+      <label><input type="radio" name="q92" value="B"> B) Internal emails</label>
+      <label><input type="radio" name="q92" value="C"> C) Wi-Fi passwords</label>
+      <label><input type="radio" name="q92" value="D"> D) GPU drivers</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="93">
+  <div class="q-header"><span>السؤال 93</span></div>
+  <div class="q-body">
+    <p>Autopsy is used in:</p>
+    <div class="options">
+      <label><input type="radio" name="q93" value="A"> A) Web scanning</label>
+      <label><input type="radio" name="q93" value="B"> B) Digital forensics</label>
+      <label><input type="radio" name="q93" value="C"> C) Threat intel</label>
+      <label><input type="radio" name="q93" value="D"> D) Packet routing</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="94">
+  <div class="q-header"><span>السؤال 94</span></div>
+  <div class="q-body">
+    <p>EDR stands for:</p>
+    <div class="options">
+      <label><input type="radio" name="q94" value="A"> A) Email Detection Robot</label>
+      <label><input type="radio" name="q94" value="B"> B) Endpoint Detection and Response</label>
+      <label><input type="radio" name="q94" value="C"> C) Extended Data Routing</label>
+      <label><input type="radio" name="q94" value="D"> D) Encrypted Data Recovery</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="95">
+  <div class="q-header"><span>السؤال 95</span></div>
+  <div class="q-body">
+    <p>Burp Suite is used for:</p>
+    <div class="options">
+      <label><input type="radio" name="q95" value="A"> A) Web security testing</label>
+      <label><input type="radio" name="q95" value="B"> B) Firewall logs</label>
+      <label><input type="radio" name="q95" value="C"> C) Packet routing</label>
+      <label><input type="radio" name="q95" value="D"> D) Antivirus</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="96">
+  <div class="q-header"><span>السؤال 96</span></div>
+  <div class="q-body">
+    <p>CloudTrail logs exist in:</p>
+    <div class="options">
+      <label><input type="radio" name="q96" value="A"> A) Azure</label>
+      <label><input type="radio" name="q96" value="B"> B) AWS</label>
+      <label><input type="radio" name="q96" value="C"> C) VMware</label>
+      <label><input type="radio" name="q96" value="D"> D) Cisco</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="97">
+  <div class="q-header"><span>السؤال 97</span></div>
+  <div class="q-body">
+    <p>IAM refers to:</p>
+    <div class="options">
+      <label><input type="radio" name="q97" value="A"> A) Identity and Access Management</label>
+      <label><input type="radio" name="q97" value="B"> B) Internal Access Machine</label>
+      <label><input type="radio" name="q97" value="C"> C) Invalid Access Monitoring</label>
+      <label><input type="radio" name="q97" value="D"> D) Immutable Asset Model</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="98">
+  <div class="q-header"><span>السؤال 98</span></div>
+  <div class="q-body">
+    <p>Persistence technique:</p>
+    <div class="options">
+      <label><input type="radio" name="q98" value="A"> A) Keeping malware running</label>
+      <label><input type="radio" name="q98" value="B"> B) Deleting malware</label>
+      <label><input type="radio" name="q98" value="C"> C) Blocking firewall</label>
+      <label><input type="radio" name="q98" value="D"> D) Updating logs</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="99">
+  <div class="q-header"><span>السؤال 99</span></div>
+  <div class="q-body">
+    <p>C2 communication means:</p>
+    <div class="options">
+      <label><input type="radio" name="q99" value="A"> A) Command & Control</label>
+      <label><input type="radio" name="q99" value="B"> B) Clean & Check</label>
+      <label><input type="radio" name="q99" value="C"> C) Cache & Content</label>
+      <label><input type="radio" name="q99" value="D"> D) Client & Container</label>
+    </div>
+  </div>
+</div>
+
+<div class="question" data-q="100">
+  <div class="q-header"><span>السؤال 100</span></div>
+  <div class="q-body">
+    <p>Executive Summary contains:</p>
+    <div class="options">
+      <label><input type="radio" name="q100" value="A"> A) Technical dump</label>
+      <label><input type="radio" name="q100" value="B"> B) High-level explanation</label>
+      <label><input type="radio" name="q100" value="C"> C) Hash tables</label>
+      <label><input type="radio" name="q100" value="D"> D) Packet captures</label>
+    </div>
+  </div>
+</div>
+
+      <!-- =========
+           بسبب طول الرد، أنا وضعت أول 40 سؤال هنا بنفس التصميم.
+           باقي الأسئلة من 41 إلى 100 ستعمل بنفس النمط تماماً،
+           وبنفس أسماء الحقول: q41, q42, ... q100 و data-q="41"... الخ.
+           ========= -->
+
+      <!-- ملاحظة مهمة:
+           نظام التايمر والتصحيح التلقائي يعمل لأي عدد أسئلة،
+           المهم أن name يكون q1..q100 و data-q مطابق للرقم.
+      -->
+
+    </div> <!-- questions-wrapper -->
+  </div>
+
+  <script>
+    // Theme persistence + nav toggle (shared behavior)
+    (function(){
+      // Enforce AMOLED-only theme and keep mobile nav toggle
+      document.body.classList.remove('theme-dark','theme-light','theme-hc');
+      document.body.classList.add('theme-amoled');
+      try{ localStorage.setItem('soc-theme','amoled'); }catch(e){}
+
+      const navToggleBtn = document.getElementById('navToggle');
+      if(navToggleBtn){ const links = document.querySelector('.nav-links'); navToggleBtn.addEventListener('click', ()=> links.classList.toggle('show')); }
+    })();
+
+    // مفتاح الإجابات (نفس الترتيب الذي اتفقنا عليه)
+    const answerKey = {
+      1: "B", 2: "C", 3: "C", 4: "B", 5: "C",
+      6: "B", 7: "C", 8: "B", 9: "C", 10: "B",
+      11: "B", 12: "C", 13: "B", 14: "B", 15: "A",
+      16: "B", 17: "B", 18: "C", 19: "B", 20: "B",
+      21: "C", 22: "B", 23: "A", 24: "A", 25: "B",
+      26: "B", 27: "B", 28: "A", 29: "B", 30: "B",
+      31: "B", 32: "B", 33: "A", 34: "B", 35: "A",
+      36: "A", 37: "A", 38: "A", 39: "B", 40: "A",
+      41: "B", 42: "C", 43: "B", 44: "B", 45: "A",
+      46: "B", 47: "B", 48: "C", 49: "B", 50: "B",
+      51: "B", 52: "B", 53: "A", 54: "B", 55: "B",
+      56: "B", 57: "A", 58: "B", 59: "B", 60: "A",
+      61: "C", 62: "B", 63: "B", 64: "B", 65: "B",
+      66: "A", 67: "B", 68: "B", 69: "B", 70: "A",
+      71: "B", 72: "A", 73: "A", 74: "B", 75: "B",
+      76: "A", 77: "A", 78: "B", 79: "B", 80: "A",
+      81: "B", 82: "B", 83: "B", 84: "A", 85: "A",
+      86: "B", 87: "B", 88: "B", 89: "B", 90: "A",
+      91: "B", 92: "A", 93: "B", 94: "B", 95: "A",
+      96: "B", 97: "A", 98: "A", 99: "A", 100: "B"
+    };
+
+    let examStarted = false;
+    let examFinished = false;
+    let remainingSeconds = 0;
+    let timerInterval = null;
+    const totalQuestions = 100;
+
+    const startBtn = document.getElementById("startBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const timerEl = document.getElementById("timer");
+    const resultEl = document.getElementById("result");
+
+    function updateTimer() {
+      const m = Math.floor(remainingSeconds / 60);
+      const s = remainingSeconds % 60;
+      timerEl.textContent =
+        String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerEl.textContent = "انتهى الوقت";
+        if (!examFinished) {
+          gradeExam(true);
+        }
+      }
+      remainingSeconds--;
+    }
+
+    function startExam() {
+      if (examStarted) return;
+      let minutes = parseInt(document.getElementById("durationInput").value, 10);
+      if (isNaN(minutes) || minutes < 5 || minutes > 240) {
+        minutes = 90; // افتراضي
+      }
+      remainingSeconds = minutes * 60;
+
+      // تفعيل الحالة
+      examStarted = true;
+      examFinished = false;
+
+      startBtn.disabled = true;
+      submitBtn.disabled = false;
+
+      // إعادة ضبط الألوان السابقة (في حالة إعادة الامتحان)
+      document.querySelectorAll(".question").forEach(q => {
+        q.classList.remove("correct", "incorrect", "unanswered");
+      });
+      // السماح بالتعديل على الخيارات
+      document.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.disabled = false;
+        r.checked = false;
+      });
+      resultEl.style.display = "none";
+
+      timerInterval = setInterval(updateTimer, 1000);
+      updateTimer();
+    }
+
+    function gradeExam(auto = false) {
+      examFinished = true;
+      submitBtn.disabled = true;
+      clearInterval(timerInterval);
+
+      let score = 0;
+      let unanswered = [];
+
+      for (let i = 1; i <= totalQuestions; i++) {
+        const qDiv = document.querySelector(`.question[data-q="${i}"]`);
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const correct = answerKey[i];
+
+        qDiv.classList.remove("correct", "incorrect", "unanswered");
+
+        if (!selected) {
+          qDiv.classList.add("unanswered");
+          unanswered.push(i);
+        } else if (selected.value === correct) {
+          qDiv.classList.add("correct");
+          score++;
+        } else {
+          qDiv.classList.add("incorrect");
+        }
+      }
+
+      // تعطيل كل الإختيارات بعد التصحيح
+      document.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.disabled = true;
+      });
+
+      const percentage = ((score / totalQuestions) * 100).toFixed(1);
+      let html = `<strong>النتيجة النهائية:</strong> ${score} / ${totalQuestions} (${percentage}%)`;
+      html += `<div class="result-line">عدد الأسئلة غير المُجابة: ${unanswered.length}</div>`;
+      if (unanswered.length > 0) {
+        html += `<div class="result-line">الأسئلة غير المُجابة: ${unanswered.join(", ")}</div>`;
+      }
+      if (auto) {
+        html += `<div class="note">تم تسليم الامتحان تلقائيًا بسبب انتهاء الوقت.</div>`;
+      } else {
+        html += `<div class="note">تم تصحيح الامتحان يدويًا بعد ضغط زر "تسليم الامتحان".</div>`;
+      }
+
+      resultEl.innerHTML = html;
+      resultEl.style.display = "block";
+    }
+
+    startBtn.addEventListener("click", startExam);
+    submitBtn.addEventListener("click", () => gradeExam(false));
+
+    // Highlight current page in navbar
+    (function highlightActiveLink(){
+      const links = document.querySelectorAll('.nav-link');
+      const current = window.location.pathname.split('/').pop();
+      links.forEach(link => { const href = link.getAttribute('href'); if(href && href === current) link.classList.add('active'); });
+    })();
+  </script>
+</body>
+</html>

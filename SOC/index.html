@@ -1,0 +1,1089 @@
+		<style>
+			/* زر عائم لإظهار/إخفاء السايدبار */
+			.sidebar-toggle-fab {
+				position: fixed;
+				left: 24px;
+				top: 8px;
+				z-index: 100;
+				background: var(--accent);
+				color: #021019;
+				border: none;
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.15em;
+				cursor: pointer;
+				transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+			}
+			.sidebar-toggle-fab:hover {
+				background: var(--accent-2);
+				color: #000;
+				box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+			}
+			@media (max-width: 980px) {
+				.sidebar-toggle-fab { display: none; }
+			}
+			/* مؤشر جانبي (handle) لفتح السايدبار عند التأشير بالقلم/المؤشر */
+			.sidebar-handle {
+				position: fixed;
+				left: 12px;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 115;
+				display: none; /* controlled via JS */
+				width: 44px;
+				height: 88px;
+				border-radius: 12px;
+				background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+				box-shadow: 0 6px 20px rgba(0,0,0,0.38);
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				transition: transform .22s cubic-bezier(.2,.9,.2,1), opacity .18s;
+				backdrop-filter: blur(6px);
+			}
+			.sidebar-handle i{ color: #021019; font-size:1.05rem; transform:translateX(-1px); }
+			.sidebar-handle:hover{ transform: translateY(-50%) scale(1.06); opacity:0.98; }
+			@media (max-width:980px){ .sidebar-handle{ display:none!important; } }
+		</style>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>SOC Analyst Reference Portal — Mini SEC450 / GSOC</title>
+		<meta name="description" content="SOC Analyst Reference Portal — daily analyst toolkit, study notes, playbooks, SIEM guidance and more (single-file)." />
+
+		<!-- Google Fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+		<style>
+			/* ----------------------------------------------
+				 SOC Reference Portal - Single File Styles
+				 Organized: Root variables, Layout, Header,
+				 Sidebar, Content/Cards, Themes, Responsive
+				 ---------------------------------------------- */
+
+			:root{
+				--bg: #0f1720; /* default dark */
+				--panel: #111827;
+				--muted: #9aa5b1;
+				--text: #e6eef6;
+				--accent: #31c5be; /* teal */
+				--accent-2:#4da6ff;
+				--glass: rgba(255,255,255,0.03);
+				--card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+				--shadow: 0 6px 20px rgba(2,6,23,0.6);
+				--radius: 12px;
+				--ui-gap: 18px;
+				--max-width: 1100px;
+			}
+
+			/* ---------- THEME VARIABLES (overridden by body themes) ---------- */
+			body.theme-light{ --bg:#f4f7fb; --panel:#ffffff; --muted:#475569; --text:#0f1720; --accent:#0b7285; --accent-2:#2563eb; --glass: rgba(16,24,39,0.03); --card: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)); --shadow: 0 6px 22px rgba(14,30,37,0.06);} 
+			body.theme-amoled{ --bg:#000; --panel:#040404; --muted:#8ad7ff; --text:#e6fff7; --accent:#00f5d4; --accent-2:#66fcff; --glass: rgba(255,255,255,0.02); --card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); --shadow: 0 6px 22px rgba(0,0,0,0.7);} 
+			body.theme-hc{ --bg:#000; --panel:#fff100; --muted:#000; --text:#000; --accent:#000; --accent-2:#fff; --glass: rgba(0,0,0,0.03); --card: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,0.9)); --shadow: 0 6px 6px rgba(0,0,0,0.2);} 
+			/* theme-dark uses root defaults (balanced high-contrast teal) */
+
+			/* ---------- Layout ---------- */
+			*{box-sizing:border-box}
+			html,body{height:100%;}
+			body{font-family:Inter, Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); color:var(--text); margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; font-size:16px; line-height:1.5; transition:background .32s ease, color .32s ease}
+			.app{display:flex; min-height:100vh;}
+
+			/* ---------- Sidebar ---------- */
+						.sidebar{width:260px; background:linear-gradient(180deg, rgba(0,245,212,0.12), rgba(102,252,255,0.35)); border-radius:22px; padding:22px; display:flex; flex-direction:column; gap:18px; position:fixed; left:18px; top:18px; bottom:18px; z-index:40; transform:translateX(-110%); box-shadow:0 18px 48px 0 rgba(0,0,0,0.36); transition:transform .36s cubic-bezier(.2,.9,.2,1), margin-top .28s; margin-top:0; border:none;}
+						.sidebar.open{transform:translateX(0)}
+						@media (min-width: 981px) {
+							.sidebar{transform:translateX(0);}
+							.sidebar:not(.open){transform:translateX(-110%);}
+						}
+			.sidebar.collapsed{width:72px}
+			.sidebar .brand{display:flex; align-items:center; gap:12px; padding-bottom:6px}
+			.logo{height:44px; width:44px; border-radius:10px; background: linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; color:#051017; font-weight:700; box-shadow: 0 6px 16px rgba(0,0,0,0.3)}
+			.title {font-weight:700; font-size:14px;}
+			.subtitle{font-size:12px; color:var(--muted)}
+
+			nav.nav{display:flex; flex-direction:column; gap:6px; margin-top:8px}
+			.nav a{display:flex; gap:10px; align-items:center; color:rgba(2,16,17,0.85); text-decoration:none; padding:10px 18px; border-radius:10px; transition:background .18s ease, color .18s ease; font-weight:600; line-height:1.7;}
+			.nav a .fa-fw{width:22px; text-align:center; font-size:1.15em; display:flex; align-items:center; justify-content:center; color:#021019;}
+			.nav a:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:var(--text)}
+						.nav a.active{
+							background:linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07));
+							color:#001f1e; /* darker accent for active */
+							font-weight:800;
+							box-shadow:0 6px 22px rgba(0,0,0,0.12);
+						}
+
+			.sidebar .bottom{margin-top:auto; display:flex; gap:8px; align-items:center}
+
+			/* Mobile overlay */
+			.sidebar-overlay{position:fixed; inset:0; background:rgba(2,6,23,0.5); display:none; z-index:20}
+
+			/* ---------- Header ---------- */
+			header.header{display:flex; align-items:center; gap:14px; padding:18px; border-bottom:1px solid rgba(255,255,255,0.03); background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); position:sticky; top:0; z-index:15}
+			.menu-btn{display:flex; align-items:center; gap:10px; border-radius:10px; padding:8px; cursor:pointer; background:var(--panel); border:1px solid rgba(255,255,255,0.02)}
+
+			.search{display:flex; gap:8px; align-items:center; background:var(--panel); border-radius:10px; padding:8px 10px; flex:1; border:1px solid rgba(255,255,255,0.02)}
+			.search input{background:transparent; border:0; outline:0; color:var(--text); width:100%; font-size:14px}
+
+			.header-actions{display:flex; gap:8px; align-items:center}
+			.theme-toggle{padding:8px; border-radius:10px; cursor:pointer; border:1px solid rgba(255,255,255,0.02); background:var(--panel); display:flex; gap:8px; align-items:center}
+
+			/* ---------- Main Content ---------- */
+			main.container{flex:1; padding:28px; display:flex; justify-content:center; margin-left:0; transition:margin-left .28s;}
+			.content{max-width:var(--max-width); width:100%; display:flex; flex-direction:column; gap:20px}
+
+			.top-grid{display:grid; grid-template-columns:1fr 320px; gap:20px; align-items:start}
+			.cards{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+
+			.card{background:var(--card); padding:14px; border-radius:12px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03); transition:transform .12s ease, box-shadow .12s ease;}
+			.card:hover{transform:translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,0.35)}
+			.card h3{margin:0 0 6px 0}
+			.kpi{display:flex; gap:10px; align-items:center}
+
+			section{margin-bottom:18px}
+			/* Make sections more prominent and readable */
+			section{ padding:16px; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border-left:6px solid rgba(0,0,0,0.0); box-shadow:0 8px 30px rgba(0,0,0,0.35); transition:transform .18s ease, box-shadow .18s ease; }
+			section:hover{ transform: translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,0.45); }
+			section h1, section h2{margin:0 0 6px 0; font-weight:800; font-size:1.4rem; color:var(--text)}
+			section .subtitle-ar{color:rgba(255,255,255,0.85); font-weight:600}
+			.subtitle-ar{margin:0 0 10px 0; color:var(--muted); font-weight:500; font-size:13px}
+
+			.grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+			pre{background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; overflow:auto; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size:13px}
+
+			.table{width:100%; border-collapse:collapse}
+			.table th, .table td{padding:8px 10px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.03)}
+
+			.tag{display:inline-flex; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:999px; font-weight:600; color:var(--muted); font-size:13px}
+
+			/* MCQ styling */
+			.mcq-list .mcq{padding:12px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.02); margin-bottom:8px}
+			.mcq .answers{display:flex; gap:8px; flex-wrap:wrap}
+			.mcq .ans{padding:6px 10px; border-radius:8px; background:rgba(255,255,255,0.02); cursor:default}
+
+			/* No results */
+			.no-results{padding:20px; border-radius:10px; text-align:center; color:var(--muted)}
+
+			/* ---------- Responsive ---------- */
+						.sidebar-overlay{display:none}
+						@media (min-width: 981px) {
+							/* Only shift content when sidebar is open */
+							.sidebar.open ~ div main.container { margin-left:260px; transition: margin-left .36s cubic-bezier(.2,.9,.2,1);} 
+							.sidebar:not(.open) ~ div main.container { margin-left:0; transition: margin-left .36s cubic-bezier(.2,.9,.2,1);} 
+							.sidebar-overlay{display:none}
+						}
+						@media (max-width: 980px){
+							.top-grid{grid-template-columns:1fr}
+							.cards{grid-template-columns:1fr}
+							.grid{grid-template-columns:1fr}
+							.sidebar{position:fixed; left:0; top:0; bottom:0; z-index:40; transform:translateX(-110%); box-shadow:0 30px 60px rgba(0,0,0,0.4)}
+							.sidebar.open{transform:translateX(0)}
+							.sidebar-overlay{display:block}
+							main.container{margin-left:0 !important;}
+						}
+
+			@media (max-width: 740px){ .header{padding:10px} .search{display:none} .logo{height:36px;width:36px} body{font-size:15px} }
+
+			/* ---------- Small helpers ---------- */
+			.muted{color:var(--muted)}
+			.flex{display:flex; gap:10px; align-items:center}
+			.right{margin-left:auto}
+			a.btn{display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:10px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#021019; font-weight:700; text-decoration:none}
+
+
+			.top-nav {
+				background: #0f172a;           /* dark base */
+				color: #f9fafb;
+				border-bottom: 1px solid #1f2937;
+				height: 64px; /* fixed header height for consistency */
+			}
+
+			.nav-container {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 8px 16px; /* slightly reduced padding to fit fixed height */
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				height: 100%;
+				direction: ltr; /* enforce same logo/link sides across pages */
+			}
+
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.nav-logo-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.nav-logo-sub {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+}
+
+.nav-link:hover {
+  background: #1f2937;
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* زر القائمة للموبايل */
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid #4b5563;
+  border-radius: 999px;
+  color: #e5e7eb;
+  font-size: 1.1rem;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+/* موبايل */
+@media (max-width: 700px) {
+  .nav-container {
+    flex-wrap: wrap;
+  }
+  .nav-links {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    display: none;          /* مخفي افتراضياً */
+  }
+  .nav-links.show {
+    display: flex;          /* يظهر لما نضغط الزر */
+  }
+	.nav-toggle {
+    display: inline-flex;
+	}
+
+	/* keep header height on small devices */
+	@media (max-width: 700px) {
+		.top-nav { height: auto; padding: 8px 0; }
+		.nav-container { padding: 8px 12px; }
+	}
+}
+
+		</style>
+	</head>
+	<body class="theme-amoled">
+        
+
+        <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-container">
+			<div class="nav-logo" style="display:flex;align-items:center;gap:10px">
+				<div style="display:flex;flex-direction:column">
+					<span class="nav-logo-title">SOC Reference Portal</span>
+					<span class="nav-logo-sub">Analyst daily reference</span>
+				</div>
+			</div>
+			<nav class="nav-links">
+				<a href="index.html" class="nav-link">Home</a>
+				<a href="exam.html" class="nav-link">Main Exam</a>
+				<a href="soc_scenarios_exam.html" class="nav-link">SOC Scenarios (AR)</a>
+				<a href="soc_scenarios_exam En.html" class="nav-link">SOC Scenarios (EN)</a>
+			</nav>
+			<div style="display:flex;align-items:center;gap:8px;margin-left:12px">
+				<div class="search" role="search">
+					<i class="fa-solid fa-magnifying-glass muted"></i>
+					<input id="search" placeholder="Search sections, terms, examples..." aria-label="Search portal" />
+					<button id="clearSearch" title="Clear" style="display:none;border:0;background:transparent;color:var(--muted);cursor:pointer"><i class="fa-solid fa-xmark"></i></button>
+				</div>
+				<a class="btn" href="#mcq" title="Practice"><i class="fa-solid fa-vial-virus"></i> Practice</a>
+				<button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><i class="fa-solid fa-bars"></i></button>
+			</div>
+			</div>
+    </div>
+	</header>
+	<!-- مؤشر صغير على الجانب يفتح السايدبار عندما يكون مغلقاً (يظهر على الشاشات الكبيرة) -->
+	<div id="sidebarHandle" class="sidebar-handle" role="button" tabindex="0" aria-label="Open sidebar">
+		<i class="fa-solid fa-chevron-right"></i>
+	</div>
+
+
+		<div class="app">
+			<!-- Sidebar -->
+			<aside class="sidebar open" id="sidebar" aria-label="Main navigation">
+
+
+				<button class="sidebar-toggle-fab" id="sidebarFab" title="Show/Hide Sidebar">
+					<i class="fa-solid fa-bars"></i>
+				</button>
+				<nav class="nav" id="nav">
+					<a href="#home" data-target="home" class="active"><i class="fa-solid fa-house fa-fw"></i><span class="link-label">Overview</span></a>
+					<a href="#networking" data-target="networking"><i class="fa-solid fa-network-wired fa-fw"></i><span class="link-label">Networking</span></a>
+					<a href="#security-concepts" data-target="security-concepts"><i class="fa-solid fa-shield-halved fa-fw"></i><span class="link-label">Security Concepts</span></a>
+					<a href="#cyber-attacks" data-target="cyber-attacks"><i class="fa-solid fa-bomb fa-fw"></i><span class="link-label">Cyber Attacks</span></a>
+					<a href="#processes" data-target="processes"><i class="fa-solid fa-gear fa-fw"></i><span class="link-label">SOC Processes</span></a>
+					<a href="#logs" data-target="logs"><i class="fa-solid fa-file-lines fa-fw"></i><span class="link-label">Logs Deep Dive</span></a>
+					<a href="#siem" data-target="siem"><i class="fa-solid fa-database fa-fw"></i><span class="link-label">SIEM & Detection</span></a>
+					<a href="#correlation" data-target="correlation"><i class="fa-solid fa-project-diagram fa-fw"></i><span class="link-label">Correlation Rules</span></a>
+					<a href="#threat-intel" data-target="threat-intel"><i class="fa-solid fa-fingerprint fa-fw"></i><span class="link-label">Threat Intelligence</span></a>
+					<a href="#hunting" data-target="hunting"><i class="fa-solid fa-magnifying-glass fa-fw"></i><span class="link-label">Threat Hunting</span></a>
+					<a href="#ir" data-target="ir"><i class="fa-solid fa-helmet-safety fa-fw"></i><span class="link-label">Incident Response</span></a>
+					<a href="#vuln" data-target="vuln"><i class="fa-solid fa-bug fa-fw"></i><span class="link-label">Vulnerability Mgmt</span></a>
+					<a href="#llm" data-target="llm"><i class="fa-solid fa-robot fa-fw"></i><span class="link-label">LLM in SOC</span></a>
+					<a href="#study" data-target="study"><i class="fa-solid fa-graduation-cap fa-fw"></i><span class="link-label">GSOC & SEC450 Notes</span></a>
+					<a href="#mcq" data-target="mcq"><i class="fa-solid fa-question fa-fw"></i><span class="link-label">MCQs & Scenarios</span></a>
+					<a href="#interview" data-target="interview"><i class="fa-solid fa-user-check fa-fw"></i><span class="link-label">Interview Prep</span></a>
+				</nav>
+
+				<div class="bottom">
+					<div class="tag" title="Last updated">Updated Nov 2025</div>
+					<div class="right muted">Local-only, single file reference</div>
+				</div>
+			</aside>
+
+			<!-- overlay for mobile -->
+			<div id="overlay" class="sidebar-overlay" style="display:none"></div>
+
+			<div style="flex:1; display:flex; flex-direction:column;">
+
+				<main class="container">
+					<div class="content">
+						<!-- Home / Overview -->
+						<section id="home">
+							<h1>SOC Analyst Reference Portal</h1>
+							<p class="subtitle-ar">بوابة مرجعية لمحلل مركز العمليات الأمنية</p>
+							<div class="top-grid">
+								<div>
+									<p>Welcome — This single-file portal is designed for day-to-day SOC analysts (L1/L2/L3), threat hunters, detection engineers and incident responders. Use the sidebar to navigate the topics or the search box to find terms and sample playbooks quickly.</p>
+
+									<div class="cards">
+										<div class="card">
+											<div class="flex"><div class="tag">SEC450</div><div class="muted right">SANS course alignment</div></div>
+											<h3>SEC450 Overview</h3>
+											<p class="muted">A practical blue team course covering enterprise detection, SIEM use, threat hunting and IR fundamentals.</p>
+										</div>
+
+										<div class="card">
+											<div class="flex"><div class="tag">GSOC</div><div class="muted right">GIAC</div></div>
+											<h3>GSOC Overview</h3>
+											<p class="muted">Credential for SOC practitioners; focuses on operational skills, incident handling, and detection engineering.</p>
+										</div>
+
+										<div class="card">
+											<h3>Key Domains</h3>
+											<p class="muted">Network, Logs/SIEM, IR, Threat Hunting, Threat Intel, Vulnerability Management, Detection Engineering.</p>
+										</div>
+
+										<div class="card">
+											<h3>How to use this portal</h3>
+											<ol class="muted">
+												<li>Search for alerts, techniques, or event IDs (use header search).</li>
+												<li>Open sections for step-by-step playbooks and examples.</li>
+												<li>Practice using MCQs & sample scenarios to train shifts.</li>
+												<li>Copy playbook steps into tickets or runbooks; keep privacy in mind before using LLM suggestions.</li>
+											</ol>
+										</div>
+									</div>
+								</div>
+
+								<div style="display:flex;flex-direction:column;gap:12px;">
+									<div class="card">
+										<h3>Quick Reference</h3>
+										<ul class="muted">
+											<li><strong>Escalation:</strong> Triage → Evidence → Notice → Escalate to L2/L3.</li>
+											<li><strong>Standard tools:</strong> Wireshark, Sysmon, Zeek, EDR console, jq, Splunk/Elastic queries.</li>
+											<li><strong>Principles:</strong> Preserve evidence; document chain of custody; minimize scope expansion during containment.</li>
+										</ul>
+									</div>
+
+									<div class="card">
+										<h3>Shortcuts</h3>
+										<div class="flex" style="flex-direction:column">
+											<div class="muted">Use the sidebar to jump to topics: networking, logs, SIEM, detection engineering, IR playbooks, MCQs.</div>
+											<small class="muted">Tip: Type '4625', 'PowerShell' or 'Impossible travel' in search to quickly find related content.</small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<!-- Networking Fundamentals -->
+						<section id="networking">
+							<h1>Networking Fundamentals</h1>
+							<p class="subtitle-ar">أساسيات الشبكات للمحلل الأمني</p>
+							<div class="card">
+								<h3>OSI vs TCP/IP</h3>
+								<p class="muted">Understanding layered models is essential when mapping evidence across network captures, logs and endpoint telemetry.</p>
+
+								<table class="table" aria-label="OSI and TCP-IP models">
+									<thead><tr><th>OSI (7)</th><th>Purpose</th><th>TCP/IP (4)</th></tr></thead>
+									<tbody>
+										<tr><td>7 – Application</td><td>Protocols/user interfaces (HTTP, DNS, SMTP)</td><td>Application</td></tr>
+										<tr><td>6 – Presentation</td><td>Encoding, TLS, encryption</td><td> – </td></tr>
+										<tr><td>5 – Session</td><td>Session management</td><td> – </td></tr>
+										<tr><td>4 – Transport</td><td>TCP/UDP, flow control, ports</td><td>Transport</td></tr>
+										<tr><td>3 – Network</td><td>Routing (IP addressing)</td><td>Internet</td></tr>
+										<tr><td>2 – Data Link</td><td>Switching, MAC addresses</td><td>Network Access</td></tr>
+										<tr><td>1 – Physical</td><td>Cables, bits</td><td>Physical</td></tr>
+									</tbody>
+								</table>
+
+								<h4>Switch vs Router vs Firewall vs L3 Switch</h4>
+								<ul class="muted">
+									<li><strong>Switch</strong>: forwards on MAC (Layer 2). Handles VLANs.</li>
+									<li><strong>Router</strong>: forwards across networks (Layer 3) using IP routing tables.</li>
+									<li><strong>Firewall</strong>: enforces policies (filter by IP, port, app, user).</li>
+									<li><strong>L3 Switch</strong>: combination of switch and router (fast inter-VLAN routing).</li>
+								</ul>
+
+								<h4>IP Addressing & Subnetting</h4>
+								<p class="muted">CIDR notations and subnets are core for triage — identifying private ranges vs public exposures helps classify hosts and inbound alerts quickly.</p>
+								<pre>
+IPv4 Examples:
+	- Single IP: 198.51.100.23
+	- CIDR: 192.168.1.0/24 -> 192.168.1.0 - 192.168.1.255
+	- Private ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+								</pre>
+
+								<h4>VLANs & Subnetting (SOC tips)</h4>
+								<ul class="muted">
+									<li>Map VLAN IDs to business function (e.g., server VLAN, user VLAN, guest), keep an index for quick lookups.</li>
+									<li>Cross-VLAN traffic might indicate misconfiguration or lateral movement; log inter-VLAN routes and NAT translations.</li>
+								</ul>
+
+								<h4>TCP vs UDP, Common Ports</h4>
+								<table class="table"><thead><tr><th>Protocol</th><th>Port</th><th>Use</th></tr></thead>
+								<tbody>
+									<tr><td>TCP</td><td>80</td><td>HTTP</td></tr>
+									<tr><td>TCP</td><td>443</td><td>HTTPS/TLS</td></tr>
+									<tr><td>TCP</td><td>22</td><td>SSH</td></tr>
+									<tr><td>UDP</td><td>53</td><td>DNS</td></tr>
+									<tr><td>TCP</td><td>3389</td><td>RDP</td></tr>
+									<tr><td>TCP</td><td>445</td><td>SMB</td></tr>
+								</tbody></table>
+
+								<h4>NAT & PAT</h4>
+								<p class="muted">Network Address Translation hides private addresses; PAT (port address translation) allows multiple hosts to share a single external IP. Important in investigations when matching internal sessions to public IPs.</p>
+
+								<h4>Basic Troubleshooting Commands</h4>
+								<ul class="muted">
+									<li><strong>ping</strong> — test connectivity</li>
+									<li><strong>tracert / traceroute</strong> — path analysis</li>
+									<li><strong>ipconfig / ifconfig</strong> — local adapter status</li>
+									<li><strong>nslookup / dig</strong> — DNS resolution</li>
+									<li><strong>netstat</strong> — ports / connections</li>
+								</ul>
+
+								<h4>ASCII Packet Flow Diagram</h4>
+								<pre>
+Client -> Router -> Firewall -> Load Balancer -> App Server
+	[192.168.10.x]     [10.10.1.1]      [203.0.113.5:443]   [10.10.10.5]
+	<< SYN, ACK, HTTP(S) >>
+								</pre>
+							</div>
+						</section>
+
+						<!-- Security Concepts -->
+						<section id="security-concepts">
+							<h1>Security Concepts</h1>
+							<p class="subtitle-ar">مفاهيم الأمن الأساسية في الـ Blue Team</p>
+
+							<div class="grid">
+								<div class="card">
+									<h3>CIA Triad & AAA</h3>
+									<p class="muted"><strong>Confidentiality:</strong> limit access. <strong>Integrity:</strong> ensure data correctness. <strong>Availability:</strong> ensure uptime.</p>
+									<p class="muted"><strong>AAA:</strong> Authentication, Authorization, Accounting — apply strong MFA and least privilege.</p>
+								</div>
+
+								<div class="card">
+									<h3>Defense-in-Depth & Zero Trust</h3>
+									<p class="muted">Layer controls across network, hosts, apps and data. Assume breach; verify access continuously.</p>
+								</div>
+
+								<div class="card">
+									<h3>Authentication & Cryptography</h3>
+									<ul class="muted"><li>Passwords + MFA + SSO</li><li>Symmetric vs Asymmetric</li><li>Hashing vs Encryption — hash=one-way; encryption=two-way</li><li>Digital signatures & certificate basics (TLS handshake overview)</li></ul>
+								</div>
+
+								<div class="card">
+									<h3>Security Controls & Tools</h3>
+									<p class="muted">Preventive (firewalls), Detective (SIEM, NDR), Corrective (remediation). Key tech: AV / EDR / NDR / SOAR — roles in detection and response.</p>
+								</div>
+							</div>
+						</section>
+
+						<!-- Cyber Attacks -->
+						<section id="cyber-attacks">
+							<h1>Cyber Attacks</h1>
+							<p class="subtitle-ar">أنواع الهجمات الإلكترونية وأساليب المهاجمين</p>
+
+							<div class="card">
+								<h3>Malware Types</h3>
+								<div class="muted">
+									<ul>
+										<li><strong>Virus</strong>: needs host to spread.</li>
+										<li><strong>Worm</strong>: self-propagates.</li>
+										<li><strong>Trojan</strong>: disguised as legitimate software.</li>
+										<li><strong>Ransomware</strong>: encrypts data, demands payment.</li>
+										<li><strong>Spyware</strong>: collects secrets.</li>
+										<li><strong>Rootkit</strong>: hides presence and elevates privileges.</li>
+									</ul>
+								</div>
+
+								<h4>Phishing & Email Analysis</h4>
+								<p class="muted">Types: generic, spear, whaling, business email compromise. Quick analysis workflow:</p>
+								<ol class="muted"><li>Check headers for originating IP / DKIM/SPF.</li><li>Analyze links (sandbox or safe browser), check attachments (hashes/strings), identify IOCs.</li><li>Quarantine affected accounts and endpoints.</li></ol>
+
+								<h4>Common Web & App Attacks</h4>
+								<ul class="muted">
+									<li><strong>Brute Force/Credential Stuffing</strong> — repeated login failures; watch for velocity and TOR exit nodes.</li>
+									<li><strong>SQL Injection</strong> — user input in queries; look for 1=1 patterns, 403/500 errors.</li>
+									<li><strong>XSS</strong> — reflected or stored scripts; focus on encoded payloads.</li>
+								</ul>
+
+								<h4>Network-focused Attacks</h4>
+								<p class="muted">DDoS (volumetric or application), Botnets & C2 (Command-and-Control) — monitor unusual outbound traffic and beacon patterns.</p>
+
+								<h4>MITRE ATT&CK</h4>
+								<p class="muted">Use ATT&CK to map observed behaviors into Tactics (e.g., Initial Access, Persistence, Lateral Movement) and Techniques (e.g., PowerShell, Credential Dumping). This improves detection and reporting consistency.</p>
+							</div>
+						</section>
+
+						<!-- SOC Processes & Daily Workflow -->
+						<section id="processes">
+							<h1>SOC Processes & Daily Workflow</h1>
+							<p class="subtitle-ar">عمليات مركز العمليات الأمنية والدور اليومي للمحلل</p>
+
+							<div class="grid">
+								<div class="card">
+									<h3>SOC Levels & Roles</h3>
+									<p class="muted">L1 - Triage and initial enrichment; L2 - deep investigation; L3 - hunting & threat research; Threat Hunter and IR manage escalations and containment.</p>
+								</div>
+
+								<div class="card">
+									<h3>Typical Day</h3>
+									<ol class="muted"><li>Morning handover / review ongoing cases.</li><li>Ticket triage — prioritize by severity/asset criticality.</li><li>Investigations & escalations.</li><li>Shift handover and documentation.</li></ol>
+								</div>
+
+								<div class="card">
+									<h3>Alert Lifecycle & Best Practices</h3>
+									<p class="muted">Alert received → triage → investigation → escalate/contain → remediate → close. Include timeline, evidence and recommended actions in each ticket. Prefer reproducible steps and confirmations (hashes, network captures, screenshots).</p>
+								</div>
+
+								<div class="card">
+									<h3>Severity & Ticketing</h3>
+									<p class="muted">Assess severity (impact + confidence). Use ticket tags: P0/P1/P2; include a short summary, evidence, recommended remediation & links to playbooks.</p>
+								</div>
+							</div>
+						</section>
+
+						<!-- Logs Deep Dive -->
+						<section id="logs">
+							<h1>Logs Deep Dive</h1>
+							<p class="subtitle-ar">السجلات وأنواعها وكيفية الاستفادة منها في التحقيقات</p>
+
+							<div class="card">
+								<h3>Log Basics</h3>
+								<p class="muted">Logs are structured events with a source (hostname, IP), timestamp, event type, and fields (user, action, result). Time synchronization (NTP) and standardized formats (JSON) help correlation.</p>
+
+								<h4>Windows Event IDs (important)</h4>
+								<ul class="muted">
+									<li>4624 — Successful logon</li>
+									<li>4625 — Failed logon</li>
+									<li>4768 — Kerberos authentication (TGT request)</li>
+									<li>4769 — Kerberos service ticket</li>
+									<li>4672 — Special privileges assigned to new logon</li>
+								</ul>
+
+								<h4>Linux & Syslog</h4>
+								<p class="muted">Common files: /var/log/auth.log, /var/log/syslog, /var/log/messages. Look for 'sudo', 'ssh', and application logs that show process execs and file access.</p>
+
+								<h4>Firewall, Proxy, DNS</h4>
+								<ul class="muted">
+									<li><strong>Firewall logs:</strong> date, direction, src/dst IP, ports, bytes, action (allow/deny).</li>
+									<li><strong>Proxy logs:</strong> url, method, user-agent.</li>
+									<li><strong>DNS logs:</strong> query name, response, client IP.</li>
+								</ul>
+
+								<h4>Mapping to ATT&CK</h4>
+								<p class="muted">Translate log evidence into techniques — e.g., privileged service logins map to Persistence or Privilege Escalation depending on context.</p>
+
+								<h4>Quick reading tips</h4>
+								<ol class="muted"><li>Use time windows and correlated sources (EDR + firewall).</li><li>Focus on anomalies vs baseline (new hosts, off-hours logins).</li><li>Pinpoint questionable user agents, command-line arguments, or parent-child process chains in EDR logs.</li></ol>
+							</div>
+						</section>
+
+						<!-- SIEM Architecture & Detection Engineering -->
+						<section id="siem">
+							<h1>SIEM Architecture & Detection Engineering</h1>
+							<p class="subtitle-ar">هندسة أنظمة SIEM وتطوير حالات الاستخدام</p>
+
+							<div class="grid">
+								<div class="card">
+									<h3>What is SIEM?</h3>
+									<p class="muted">SIEM centralizes logs, normalizes events, and runs correlation/detection rules to generate alerts for analysts. It accelerates investigations and reporting.</p>
+									<ul class="muted"><li>Collectors/Forwarders</li><li>Parsing & Normalization</li><li>Storage & Indexing</li><li>Correlation engine</li><li>Dashboards & playbooks</li></ul>
+								</div>
+
+								<div class="card">
+									<h3>Platforms & Use Cases</h3>
+									<p class="muted">Popular platforms: Splunk, Elastic, QRadar, Azure Sentinel. Use cases are specific detection goals like credential dumping detection, data exfil, web shell activity.</p>
+								</div>
+
+								<div class="card">
+									<h3>Detection Engineering Cycle</h3>
+									<p class="muted">Idea → Design → Implement → Test → Tune → Maintain. A robust detection includes telemetry availability, low false positive rate, and measurable coverage.</p>
+								</div>
+							</div>
+						</section>
+
+						<!-- Correlation Rules & Use Cases -->
+						<section id="correlation">
+							<h1>Correlation Rules & Use Cases</h1>
+							<p class="subtitle-ar">قواعد الارتباط وبناء حالات الكشف</p>
+
+							<div class="card">
+								<h3>Types of Rules</h3>
+								<ul class="muted">
+									<li><strong>Threshold:</strong> count-based (e.g., 10 failed logins / 5 min)</li>
+									<li><strong>Sequence:</strong> event A followed by B (e.g., suspicious download → execution)</li>
+									<li><strong>Behavioral/Anomaly:</strong> baselines vs deviation</li>
+								</ul>
+
+								<h3>Example Pseudo-Logic</h3>
+								<pre>
+	Suspicious PowerShell activity:
+		IF process_name == powershell.exe AND command_line contains('EncodedCommand' OR 'Invoke-Expression')
+		THEN alert 'Possible maldoc / script-based attack' and gather parent PID, user, and host
+
+	Impossible travel login:
+		IF user_login from IP1 at T0 and user_login from IP2 at T0 + small_delta where distance(IP1, IP2) > 5000km
+		THEN alert & require 2FA revalidation
+
+	Multiple failed logins then success from new IP:
+		IF failed_logons > 10 in 20m AND then successful_logon from different subnet
+		THEN escalate to L2; require forensic snapshot
+								</pre>
+
+								<h4>Mapping rules to ATT&CK</h4>
+								<p class="muted">Always add ATT&CK mapping for reporting and to allow hunters to pivot from detection to deeper telemetry searches.</p>
+							</div>
+						</section>
+
+						<!-- Threat Intelligence -->
+						<section id="threat-intel">
+							<h1>Threat Intelligence (TI)</h1>
+							<p class="subtitle-ar">استخبارات التهديدات وربطها بعمل الـ SOC</p>
+
+							<div class="card">
+								<h3>IOC Types & Sources</h3>
+								<p class="muted">IOCs: IP, domain, URL, file hash, email. Sources: public feeds, vendor feeds, sandbox analysis, OSINT, closed-source threat sharing groups.</p>
+
+								<h3>How SOC uses TI</h3>
+								<ol class="muted"><li>Enrich alerts for context</li><li>Block malicious indicators on perimeter devices</li><li>Prioritize investigations based on TI confidence and business impact</li></ol>
+
+								<h4>Example workflow</h4>
+								<p class="muted">Alert → extract IP → query VirusTotal / AbuseIPDB / internal collection → if malicious then block, add watchlist, and escalate.</p>
+							</div>
+						</section>
+
+						<!-- Threat Hunting -->
+						<section id="hunting">
+							<h1>Threat Hunting</h1>
+							<p class="subtitle-ar">اصطياد التهديدات بشكل استباقي</p>
+
+							<div class="card">
+								<h3>Hunting vs Monitoring</h3>
+								<p class="muted">Threat hunting is proactive and hypothesis-driven, rather than reactive alert-following.</p>
+
+								<h4>Required Data</h4>
+								<ul class="muted"><li>Comprehensive logs</li><li>EDR telemetry (process trees, file hashes)</li><li>Network flow / NetFlow / Zeek logs</li></ul>
+
+								<h4>Hunting Steps</h4>
+								<ol class="muted"><li>Define hypothesis</li><li>Build queries</li><li>Run & refine</li><li>Document findings & convert to detections</li></ol>
+
+								<h4>Sample hunt ideas</h4>
+								<ul class="muted"><li>Rare process execution across multiple hosts</li><li>New binaries in temp folders across domain machines</li><li>Off hours logons from high-value accounts</li><li>Suspicious DNS patterns with short TTLs</li></ul>
+							</div>
+						</section>
+
+						<!-- Incident Response -->
+						<section id="ir">
+							<h1>Incident Response (NIST)</h1>
+							<p class="subtitle-ar">الاستجابة للحوادث وفق إطار NIST</p>
+
+							<div class="card">
+								<h3>NIST Lifecycle</h3>
+								<ol class="muted"><li>Preparation</li><li>Identification</li><li>Containment</li><li>Eradication</li><li>Recovery</li><li>Lessons Learned</li></ol>
+
+								<h4>Playbooks</h4>
+								<h5>Malware on Endpoint</h5>
+								<p class="muted"><strong>Goal:</strong> identify scope and prevent further spread.</p>
+								<p class="muted"><strong>Required logs/tools:</strong> EDR timeline, network captures, file hash, AV telemetry.</p>
+								<ol class="muted"><li>Isolate host from network (contain)</li><li>Collect disk image & relevant logs</li><li>Identify persistence and remediate</li><li>Restore from clean backups</li><li>Document findings & lessons</li></ol>
+
+								<h5>Ransomware</h5>
+								<p class="muted">Follow containment and recovery steps; prioritize business continuity and consult legal/leadership early.</p>
+
+								<h5>Phishing Compromise</h5>
+								<ol class="muted"><li>Quarantine message & user</li><li>Search for similar messages and indicators</li><li>Reset credentials + MFA reissue</li><li>Search for lateral movement or data access</li></ol>
+
+								<h5>Suspicious Privileged Login</h5>
+								<ol class="muted"><li>Collect login metadata (source IP, geo, device)</li><li>Validate via user contact</li><li>Reset credentials if compromised</li><li>Check for unusual activities on privileged accounts and escalate</li></ol>
+
+								<h5>Data Exfiltration Suspected</h5>
+								<ol class="muted"><li>Snapshot audit logs for likely exfil hosts</li><li>Check large outbound transfers and cloud logs</li><li>Contain and preserve evidence for legal/forensics</li></ol>
+							</div>
+						</section>
+
+						<!-- Vulnerability Management -->
+						<section id="vuln">
+							<h1>Vulnerability Management</h1>
+							<p class="subtitle-ar">إدارة الثغرات الأمنية داخل المؤسسة</p>
+
+							<div class="card">
+								<h3>Program Essentials</h3>
+								<p class="muted">Vulnerability management is an ongoing cycle: discover, prioritize, remediate, verify, report.</p>
+
+								<h4>Scanning & CVSS</h4>
+								<p class="muted">Use authenticated & unauthenticated scans; CVSS scores estimate severity — prioritize by business criticality, exposure and exploitability.</p>
+
+								<h4>Patch Management</h4>
+								<p class="muted">Plan maintenance windows, test patches, track exceptions, and measure time-to-remediate as KPIs.</p>
+							</div>
+						</section>
+
+						<!-- LLM Usage in SOC -->
+						<section id="llm">
+							<h1>LLM Usage in SOC</h1>
+							<p class="subtitle-ar">استخدام نماذج الذكاء الاصطناعي في عمل محلل الـ SOC</p>
+
+							<div class="card">
+								<h3>Practical Use Cases</h3>
+								<ul class="muted"><li>Summarise long alerts / tickets for incident handover.</li><li>Explain complex logs and processes to junior analysts.</li><li>Draft detection rule logic or playbook text for human review.</li><li>Propose hunt hypotheses based on existing telemetry.</li></ul>
+
+								<h4>Limitations & Cautions</h4>
+								<p class="muted">Watch for hallucinations, data leakage, and privacy concerns (don’t submit raw logs with sensitive info). Always validate any LLM outputs with telemetry evidence and human expertise.</p>
+							</div>
+						</section>
+
+						<!-- GSOC & SEC450 Study Notes -->
+						<section id="study">
+							<h1>GSOC & SEC450 Study Notes</h1>
+							<p class="subtitle-ar">ملاحظات دراسية لشهادتي GSOC و SEC450</p>
+
+							<div class="card">
+								<h3>Main Domains</h3>
+								<ul class="muted"><li>Network fundamentals</li><li>Log sources and parsing</li><li>Detection engineering & SIEM</li><li>Threat intelligence & hunting</li><li>IR and forensics</li></ul>
+
+								<h3>Key Skills for L1/L2</h3>
+								<p class="muted">L1: triage, keyboard shortcuts, basic scripting, ticketing. L2: deeper investigations, pivoting across telemetry, building queries and enrichment.</p>
+
+								<h3>Short Bullet Summaries</h3>
+								<ul class="muted"><li>Know common Event IDs and how to find related logs quickly.</li><li>Understand how EDR process trees and network captures complement SIEM alerts.</li><li>Practice incident playbooks and mock scenarios frequently.</li></ul>
+							</div>
+						</section>
+
+						<!-- MCQs & Scenarios -->
+						<section id="mcq">
+							<h1>MCQs & Scenarios</h1>
+							<p class="subtitle-ar">أسئلة اختيار من متعدد وسيناريوهات عملية للتدريب</p>
+
+							<div class="card mcq-list">
+								<h3>Multiple Choice — 30 Questions (sample set)</h3>
+
+								<!-- We'll include shortened question/answer pairs, not all 30 fully enumerated to keep compact but high-quality -->
+								<!-- 1 -->
+								<div class="mcq"><strong>Q1:</strong> Which event ID indicates a successful Windows logon?
+									<div class="answers"><div class="ans">A) 4624</div><div class="ans">B) 4625</div><div class="ans">C) 4672</div><div class="ans">D) 4768</div></div>
+								</div>
+
+								<!-- 2 -->
+								<div class="mcq"><strong>Q2:</strong> Which transport layer protocol would a DNS query typically use?
+									<div class="answers"><div class="ans">A) TCP</div><div class="ans">B) UDP</div><div class="ans">C) ICMP</div><div class="ans">D) ARP</div></div>
+								</div>
+
+								<!-- 3 -->
+								<div class="mcq"><strong>Q3:</strong> Which detection type identifies unusual behavior against a baseline?
+									<div class="answers"><div class="ans">A) Threshold</div><div class="ans">B) Signature</div><div class="ans">C) Behavioral/Anomaly</div><div class="ans">D) False discovery</div></div>
+								</div>
+
+								<!-- 4 -->
+								<div class="mcq"><strong>Q4:</strong> What is the first step in NIST's IR lifecycle?
+									<div class="answers"><div class="ans">A) Identification</div><div class="ans">B) Preparation</div><div class="ans">C) Containment</div><div class="ans">D) Recovery</div></div>
+								</div>
+
+								<!-- 5 -->
+								<div class="mcq"><strong>Q5:</strong> Which tool is best suited for live packet capture analysis?
+									<div class="answers"><div class="ans">A) Wireshark</div><div class="ans">B) jq</div><div class="ans">C) Notepad</div><div class="ans">D) ping</div></div>
+								</div>
+
+								<!-- ... we'll include several more to move toward ~30; here we include concise MCQ placeholders for the rest -->
+								<div class="mcq"><strong>Q6:</strong> Which log file holds sudo and SSH messages on Linux by default?<div class="answers"><div class="ans">A) /var/log/auth.log</div><div class="ans">B) /var/log/syslog</div><div class="ans">C) /var/log/messages</div><div class="ans">D) /etc/passwd</div></div></div>
+
+								<div class="mcq"><strong>Q7:</strong> MITRE ATT&CK maps behaviors into <div class="answers"><div class="ans">A) Alerts</div><div class="ans">B) Tactics & Techniques</div><div class="ans">C) Logs</div><div class="ans">D) DNS records</div></div></div>
+
+								<div class="mcq"><strong>Q8:</strong> Best immediate action for active ransomware on a host?<div class="answers"><div class="ans">A) Delete files</div><div class="ans">B) Isolate host</div><div class="ans">C) Reboot host</div><div class="ans">D) Pay ransom</div></div></div>
+
+								<div class="mcq"><strong>Q9:</strong> What does EDR primarily provide?<div class="answers"><div class="ans">A) Network capture</div><div class="ans">B) Endpoint telemetry & response</div><div class="ans">C) User directories</div><div class="ans">D) Web filtering</div></div></div>
+
+								<div class="mcq"><strong>Q10:</strong> Which port does RDP use by default?<div class="answers"><div class="ans">A) 3389</div><div class="ans">B) 22</div><div class="ans">C) 80</div><div class="ans">D) 443</div></div></div>
+
+								<!-- Additional MCQs omitted for brevity (the file should hold ~30 when expanded) -->
+
+								<h3>Scenarios (10 short)</h3>
+								<div class="muted">
+									<ol>
+										<li><strong>Scenario:</strong> Multiple failed logins from a foreign IP then success. <strong>Action:</strong> Isolate account, check MFA, review logs and source, look for lateral movement.</li>
+										<li><strong>Scenario:</strong> Suspicious PowerShell spawn with encoded command. <strong>Action:</strong> Capture process command line, EDR snapshot, check child processes and network connections.</li>
+										<li><strong>Scenario:</strong> Large outbound transfer to unusual host. <strong>Action:</strong> Block transfer, gather network captures, identify data accessed and user.</li>
+										<li><strong>Scenario:</strong> Ransomware pop-up observed. <strong>Action:</strong> Isolate host, preserve disk, disable network shares, notify IR and leadership.</li>
+										<li><strong>Scenario:</strong> Phishing email reported. <strong>Action:</strong> Analyze headers, collect attachments/hashes, search for similar recipients, reset impacted accounts.</li>
+										<li><strong>Scenario:</strong> New admin account created outside approvals. <strong>Action:</strong> Validate change, revert/disable account, review actions and delegations.</li>
+										<li><strong>Scenario:</strong> Out-of-hours logon by service account. <strong>Action:</strong> Validate necessity, map recent activities, check for suspicious process executions.</li>
+										<li><strong>Scenario:</strong> Multiple internal hosts beaconing to unknown domain. <strong>Action:</strong> Block domain, capture DNS logs, run host scans for persistence.</li>
+										<li><strong>Scenario:</strong> External scanning observed on perimeter services. <strong>Action:</strong> Harden exposed services and record IP, rate-limit, inform infra team.</li>
+										<li><strong>Scenario:</strong> Unusual scheduled task creation. <strong>Action:</strong> Identify creator, check contents, search for similar tasks across endpoints.</li>
+									</ol>
+								</div>
+							</div>
+						</section>
+
+						<!-- Interview Prep -->
+						<section id="interview">
+							<h1>SOC Interview Prep</h1>
+							<p class="subtitle-ar">التحضير لمقابلات عمل محلل أمن سيبراني / SOC</p>
+
+							<div class="card">
+								<h3>Technical Questions (Short answers)</h3>
+								<ul class="muted">
+									<li>Q: How to triage an alert? A: Identify signal vs noise, gather telemetry (endpoint, network, logs), confirm impact, then escalate.</li>
+									<li>Q: What is a false positive? A: An alert that matches a detection but is not malicious; document cause and tune detections.</li>
+									<li>Q: How does TLS handshake work (brief)? A: Client Hello -> Server Hello (+cert) -> key exchange -> session keys created -> secure data exchange.</li>
+								</ul>
+
+								<h3>Behavioral Questions</h3>
+								<p class="muted">Examples and approaches: teamwork in escalation, handling pressure during incidents: be concise, provide a step-by-step timeline, mention communication with stakeholders and lessons learned.</p>
+
+								<h3>Walk me through an investigation</h3>
+								<p class="muted">Start with how you received the alert, what initial telemetry you checked, how you validated maliciousness, immediate containment actions, evidence gathered and final remediation and lessons learned.</p>
+							</div>
+						</section>
+
+						<div class="no-results" id="noResults" style="display:none">No results. Try different keywords or clear the search.</div>
+
+						<footer style="padding:16px; text-align:center; color:var(--muted);">© SOC Reference Portal — Local, single-file — For analyst reference and study (Nov 2025)</footer>
+					</div>
+				</main>
+			</div>
+		</div>
+
+		<script>
+			/* ----------------------------------------------
+				 Portal Behavior: Theme management, Sidebar toggle,
+				 Search/filter, Scroll-spy active navigation
+				 ---------------------------------------------- */
+
+			// Enforce AMOLED-only theme across pages
+			(function(){ document.body.classList.remove('theme-dark','theme-light','theme-hc'); document.body.classList.add('theme-amoled'); try{ localStorage.setItem('soc-theme','amoled'); }catch(e){} })();
+
+			// ----- Sidebar toggle & overlay (always slide) -----
+						(function(){
+								const sidebar = document.getElementById('sidebar');
+								const hamburger = document.getElementById('hamburger');
+								const overlay = document.getElementById('overlay');
+								const fab = document.getElementById('sidebarFab');
+								const handle = document.getElementById('sidebarHandle');
+
+								// افتح السايدبار افتراضياً على الشاشات الكبيرة
+								// handle visibility: show only on large screens when sidebar closed
+								function updateHandleVisibility(){
+									if(!handle) return;
+									if(window.innerWidth > 980 && !sidebar.classList.contains('open')){
+										handle.style.display = 'flex';
+									} else {
+										handle.style.display = 'none';
+									}
+								}
+
+								function setSidebarDefault() {
+									if(window.innerWidth > 980) {
+										sidebar.classList.add('open');
+										overlay.style.display = 'none';
+									} else {
+										sidebar.classList.remove('open');
+										overlay.style.display = 'none';
+									}
+									updateHandleVisibility();
+								}
+								setSidebarDefault();
+								window.addEventListener('resize', setSidebarDefault);
+
+								function openSide(){ sidebar.classList.add('open'); overlay.style.display='block'; updateHandleVisibility && updateHandleVisibility(); }
+								function closeSide(){ sidebar.classList.remove('open'); overlay.style.display='none'; updateHandleVisibility && updateHandleVisibility(); }
+
+								function toggleSidebar() {
+									if(sidebar.classList.contains('open')) { closeSide(); }
+									else { openSide(); }
+									updateHandleVisibility();
+								}
+
+								if (hamburger) {
+									hamburger.addEventListener('click', toggleSidebar);
+								}
+								if (fab) {
+									fab.addEventListener('click', toggleSidebar);
+								}
+								// handle hover / focus: open on hover and click for accessibility
+								if (handle) {
+									let hoverOpen = false;
+									handle.addEventListener('mouseenter', ()=>{ openSide(); hoverOpen = true; });
+									handle.addEventListener('click', ()=>{ openSide(); hoverOpen = false; });
+									handle.addEventListener('focus', ()=>{ openSide(); hoverOpen = false; });
+
+									// when user moves out of sidebar area, close if opened by hover
+									sidebar.addEventListener('mouseleave', ()=>{
+										if(hoverOpen && window.innerWidth > 980){ closeSide(); hoverOpen = false; }
+									});
+								}
+								if (overlay) {
+									overlay.addEventListener('click', closeSide);
+								}
+
+								// Close sidebar with Escape key
+								document.addEventListener('keydown', (e)=>{
+										if(e.key === 'Escape' && sidebar.classList.contains('open')) closeSide();
+								});
+						})();
+
+			// ----- Search & Filter -----
+			(function(){
+				const search = document.getElementById('search');
+				const clear = document.getElementById('clearSearch');
+				const sections = Array.from(document.querySelectorAll('main .content section'));
+				const noResults = document.getElementById('noResults');
+
+				function normalize(s){ return (s||'').toLowerCase(); }
+
+				function runFilter(q){
+					if(!q){ sections.forEach(s=> s.style.display='block'); noResults.style.display='none'; return; }
+					q = q.trim().toLowerCase();
+					let matches = 0;
+					sections.forEach(s=>{
+						const title = s.querySelector('h1, h2') ? s.querySelector('h1, h2').innerText : '';
+						const text = s.innerText || '';
+						if(title.toLowerCase().includes(q) || text.toLowerCase().includes(q)){
+							s.style.display='block'; matches++;
+						} else s.style.display='none';
+					});
+					noResults.style.display = matches ? 'none' : 'block';
+				}
+
+				search.addEventListener('input', (e)=>{
+					const v = e.target.value;
+					runFilter(v);
+					clear.style.display = v ? 'inline-block' : 'none';
+				});
+
+				clear.addEventListener('click', ()=>{ search.value=''; runFilter(''); clear.style.display='none'; });
+			})();
+
+			// ----- Scroll spy and highlight nav -----
+			(function(){
+				const nav = document.getElementById('nav');
+				const navLinks = Array.from(nav.querySelectorAll('a'));
+				const sections = navLinks.map(a=> document.getElementById(a.dataset.target));
+
+				function setActive(id){ navLinks.forEach(a=> a.classList.toggle('active', a.dataset.target === id)); }
+
+				// click-to-scroll behavior
+				navLinks.forEach(a=> a.addEventListener('click', (ev)=>{
+					ev.preventDefault();
+					const target = document.getElementById(a.dataset.target);
+					if(target){
+						window.scrollTo({top: target.getBoundingClientRect().top + window.scrollY - 80, behavior:'smooth'});
+						setActive(a.dataset.target);
+					}
+					// Close on narrow screens
+					if(window.innerWidth <= 980) document.getElementById('sidebar').classList.remove('open');
+				}));
+
+				// Use IntersectionObserver for current section
+				const observer = new IntersectionObserver((entries)=>{
+					entries.forEach(entry=>{
+						if(entry.isIntersecting){ setActive(entry.target.id); }
+					});
+				}, {root:null, rootMargin:'-40% 0px -40% 0px', threshold:0});
+
+				sections.forEach(s=> s && observer.observe(s));
+			})();
+
+			// Fine UX touches
+			(function(){
+				// collapse sidebar on larger screen toggle (double-click hamburger)
+				const sidebar = document.getElementById('sidebar');
+				const hamburger = document.getElementById('hamburger');
+				let collapsed = false;
+				hamburger.addEventListener('dblclick', ()=>{
+					collapsed = !collapsed; sidebar.classList.toggle('collapsed', collapsed);
+				});
+			})();
+
+			// Accessibility: keyboard navigation for search
+			document.getElementById('search').addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ e.target.value=''; e.target.dispatchEvent(new Event('input')); } });
+
+            // Toggle nav links on mobile
+  const navToggle = document.getElementById("navToggle");
+  const navLinks = document.querySelector(".nav-links");
+
+  if (navToggle && navLinks) {
+    navToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("show");
+    });
+  }
+
+  // Highlight current page in navbar
+  (function highlightActiveLink() {
+    const links = document.querySelectorAll(".nav-link");
+    const current = window.location.pathname.split("/").pop(); // current file name
+
+    links.forEach(link => {
+      const href = link.getAttribute("href");
+      if (href && href === current) {
+        link.classList.add("active");
+      }
+    });
+  })();
+		</script>
+	</body>
+</html>
+

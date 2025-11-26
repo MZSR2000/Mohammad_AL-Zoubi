@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <title>SOC Practical Scenario Exam – Junior Cybersecurity Analyst</title>
+  <!-- Google Fonts & Font Awesome for consistent portal styling -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{ --bg:#0f1720; --panel:#0b1220; --muted:#9aa5b1; --text:#e7eef6; --accent:#31c5be; --accent-2:#4da6ff; --maxw:1100px }
+    body.theme-light{ --bg:#f4f7fb; --panel:#fff; --muted:#475569; --text:#0f1720; --accent:#0b7285; --accent-2:#2563eb }
+    body.theme-amoled{ --bg:#000; --panel:#040404; --muted:#8ad7ff; --text:#e6fff7; --accent:#00f5d4; --accent-2:#66fcff }
+    body.theme-hc{ --bg:#000; --panel:#fff100; --muted:#000; --text:#000; --accent:#000; --accent-2:#fff }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter, Poppins, system-ui, -apple-system, 'Segoe UI', Roboto; background:var(--bg); color:var(--text); transition:background .25s ease, color .25s ease}
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #dde3f0;
+      padding-bottom: 12px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .exam-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .field-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    .field-group input[type="number"] {
+      width: 70px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid #c2c8dd;
+      font-size: 0.9rem;
+    }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+    .btn-primary {
+      background: #3366ff;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(51, 102, 255, 0.25);
+    }
+    .btn-primary:disabled {
+      background: #9bb0ff;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #1d3a72;
+      border: 1px solid #c2c8dd;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(15, 35, 75, 0.18);
+    }
+    .timer-badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #101826;
+      color: #fff;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      min-width: 72px;
+      text-align: center;
+    }
+    .timer-label {
+      font-size: 0.85rem;
+      color: #444;
+    }
+    .questions-wrapper {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .section-title {
+      margin-top: 18px;
+      font-weight: 700;
+      color: #1d3a72;
+      border-left: 4px solid #3366ff;
+      padding-left: 8px;
+      font-size: 1rem;
+    }
+    .question {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      border: 1px solid #dde3f0;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .q-header {
+      font-size: 0.85rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .q-body p {
+      margin: 4px 0 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 0.9rem;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: background 0.1s ease;
+    }
+    .options label:hover {
+      background: #f3f4ff;
+    }
+    .options input[type="radio"] {
+      accent-color: #3366ff;
+    }
+    .question.correct {
+      border-color: #16a34a;
+      background: #ecfdf3;
+    }
+    .question.incorrect {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+    .question.unanswered {
+      border-color: #f97316;
+      background: #fff7ed;
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #cbd5f5;
+      background: #eef2ff;
+      font-size: 0.9rem;
+    }
+    .result-box strong {
+      font-size: 1rem;
+    }
+    .result-line {
+      margin-top: 4px;
+    }
+    .note {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+    @media (max-width: 600px) {
+      .exam-controls {
+        align-items: flex-start;
+      }
+      header h1 {
+        font-size: 1.35rem;
+      }
+    }
+    /* ===== Top Navigation Bar ===== */
+.top-nav { background: #0f172a; color: #f9fafb; border-bottom: 1px solid #1f2937; height:64px; }
+.nav-container { max-width: 1100px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 16px; height:100%; direction: ltr; }
+
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.nav-logo .logo{height:44px; width:44px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center; justify-content:center; color:#021019; font-weight:700}
+
+.nav-logo-title {
+  font-weight: 700;
+  font-size:15px;
+}
+
+.nav-logo-sub {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+}
+
+.nav-link:hover {
+  background: #1f2937;
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* زر القائمة للموبايل */
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid #4b5563;
+  border-radius: 999px;
+  color: #e5e7eb;
+  font-size: 1.1rem;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+/* موبايل */
+@media (max-width: 700px) {
+  .nav-container {
+    flex-wrap: wrap;
+  }
+  .nav-links {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    display: none;          /* مخفي افتراضياً */
+  }
+  .nav-links.show {
+    display: flex;          /* يظهر لما نضغط الزر */
+  }
+  .nav-toggle {
+    display: inline-flex;
+  }
+}
+
+  </style>
+</head>
+<body class="theme-amoled">
+<!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <div class="nav-logo" style="display:flex;align-items:center;gap:10px">
+        <div style="display:flex;flex-direction:column">
+          <span class="nav-logo-title">SOC Reference Portal</span>
+          <span class="nav-logo-sub">Practical Scenarios — Lab</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <!-- عدّل الروابط حسب أسماء ملفاتك -->
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="exam.html" class="nav-link">Main Exam</a>
+        <a href="soc_scenarios_exam.html" class="nav-link">SOC Scenarios (AR)</a>
+        <a href="soc_scenarios_exam En.html" class="nav-link active">SOC Scenarios (EN)</a>
+        
+      </nav>
+      <!-- زر القائمة للموبايل -->
+      <div style="display:flex;align-items:center;gap:8px;margin-left:12px">
+        <!-- AMOLED-only: selector removed -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="page">
+    <header>
+      <h1>SOC Practical Scenario Exam — Junior Analyst (EN)</h1>
+      <p>This practical exam contains real-world SOC scenarios for alert triage, log analysis, SIEM investigations, cloud and network incidents, and basic IR steps.</p>
+      <div class="exam-controls">
+        <div class="field-group"><span>Duration (minutes):</span><input type="number" id="durationInput" value="60" min="10" max="180" /></div>
+        <button id="startBtn" class="btn btn-primary"><i class="fa-solid fa-play"></i> Start Exam</button>
+        <button id="submitBtn" class="btn btn-secondary" disabled><i class="fa-solid fa-upload"></i> Submit</button>
+        <div style="display:flex;flex-direction:column;gap:2px;margin-right:auto;align-items:flex-end;"><span class="timer-label">Time left:</span><span id="timer" class="timer-badge">--:--</span></div>
+      </div>
+    </header>
+    <div class="questions-wrapper">
+
+      <!-- SECTION 1: Phishing & Email Scenarios -->
+      <div class="section-title">Section 1: Phishing & Email Scenarios</div>
+
+      <div class="question" data-q="1">
+        <div class="q-header"><span>Question 1</span></div>
+        <div class="q-body">
+          <p>
+            An employee opened a ticket to the SOC with a screenshot of an email asking them to “reset password”.
+            The link looks like the official login page, but the domain is slightly different. They have NOT clicked the link yet.
+            As a SOC analyst, what is the best immediate action?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q1" value="A"> A) Ignore the email since the link was not clicked</label>
+            <label><input type="radio" name="q1" value="B"> B) Ask the user to test the link in their browser to be sure</label>
+            <label><input type="radio" name="q1" value="C"> C) Ask the user to reboot the machine only</label>
+            <label><input type="radio" name="q1" value="D"> D) Instruct the user not to click, submit the sample to the email gateway/sandbox, analyze the URL, and update rules if it is malicious</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="2">
+        <div class="q-header"><span>Question 2</span></div>
+        <div class="q-body">
+          <p>
+            In Microsoft 365 Defender, you see several alerts about phishing emails delivered to different users in the last hour.
+            What is the best email-level response?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q2" value="A"> A) Dismiss the alerts and leave the messages</label>
+            <label><input type="radio" name="q2" value="B"> B) Use Message Trace & Search and Purge to remove the emails from affected mailboxes</label>
+            <label><input type="radio" name="q2" value="C"> C) Lock all accounts in the entire organization</label>
+            <label><input type="radio" name="q2" value="D"> D) Temporarily disable the mail service</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="3">
+        <div class="q-header"><span>Question 3</span></div>
+        <div class="q-body">
+          <p>
+            You confirm that a user entered their credentials into a phishing page.
+            Sign-in logs show suspicious logins from another country. After securing the account, what is the most important next step?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q3" value="A"> A) Delete all of the user's old emails</label>
+            <label><input type="radio" name="q3" value="B"> B) Review mailbox settings (Inbox rules, forwarding) and OAuth applications linked to the account</label>
+            <label><input type="radio" name="q3" value="C"> C) Change only the username</label>
+            <label><input type="radio" name="q3" value="D"> D) Shut down the user’s device permanently</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="4">
+        <div class="q-header"><span>Question 4</span></div>
+        <div class="q-body">
+          <p>
+            HR asks you to check a strange email with a job offer. It has an attached Excel file containing macros.
+            What is the best initial way to analyze this file?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q4" value="A"> A) Open the file directly on your corporate workstation</label>
+            <label><input type="radio" name="q4" value="B"> B) Download it to your personal laptop and test it there</label>
+            <label><input type="radio" name="q4" value="C"> C) Upload the file to a sandbox/detonation environment and analyze the behavior</label>
+            <label><input type="radio" name="q4" value="D"> D) Delete the file from the mailbox without any analysis</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="5">
+        <div class="q-header"><span>Question 5</span></div>
+        <div class="q-body">
+          <p>
+            You discover that a compromised internal user account sent a phishing campaign to other employees.
+            After disabling the account, what additional action is important?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q5" value="A"> A) Ignore it because the sender is internal</label>
+            <label><input type="radio" name="q5" value="B"> B) Send an awareness message to impacted users with clear guidance not to click on the malicious links</label>
+            <label><input type="radio" name="q5" value="C"> C) Delete all user mailboxes</label>
+            <label><input type="radio" name="q5" value="D"> D) Disconnect the entire organization from the internet for a day</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Endpoint & Malware -->
+      <div class="section-title">Section 2: Endpoint & Malware Scenarios</div>
+
+      <div class="question" data-q="6">
+        <div class="q-header"><span>Question 6</span></div>
+        <div class="q-body">
+          <p>
+            The EDR reports a suspicious executable running on a user endpoint and a new Scheduled Task created to persist on each logon.
+            What is the best initial technical action?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q6" value="A"> A) Ignore the alert because the EDR blocked it</label>
+            <label><input type="radio" name="q6" value="B"> B) Isolate the endpoint from the network via the EDR, then collect more details (processes, autoruns, scheduled tasks)</label>
+            <label><input type="radio" name="q6" value="C"> C) Ask the user to manually delete the file only</label>
+            <label><input type="radio" name="q6" value="D"> D) Reboot the endpoint and just monitor it</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="7">
+        <div class="q-header"><span>Question 7</span></div>
+        <div class="q-body">
+          <p>
+            During an investigation, you find a suspicious process on a host reaching out to an IP in a high-risk country on an unusual port.
+            Which logs will help you understand what the process is sending?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q7" value="A"> A) Printer logs</label>
+            <label><input type="radio" name="q7" value="B"> B) Firewall logs and, if possible, packet captures</label>
+            <label><input type="radio" name="q7" value="C"> C) Screen brightness logs</label>
+            <label><input type="radio" name="q7" value="D"> D) Battery usage logs</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="8">
+        <div class="q-header"><span>Question 8</span></div>
+        <div class="q-body">
+          <p>
+            A user machine shows a ransomware note on the desktop, but not all files are encrypted yet.
+            What is the first technical step you should take to minimize damage?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q8" value="A"> A) Power off immediately with no documentation</label>
+            <label><input type="radio" name="q8" value="B"> B) Disconnect the machine from the network (LAN/Wi-Fi) to prevent spread and collect basic evidence before any reboot</label>
+            <label><input type="radio" name="q8" value="C"> C) Delete the ransom note and assume everything is fine</label>
+            <label><input type="radio" name="q8" value="D"> D) Grant the user local admin rights so they can delete suspicious files</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="9">
+        <div class="q-header"><span>Question 9</span></div>
+        <div class="q-body">
+          <p>
+            During a malware investigation on Windows, you need to know when a malicious file was created and which process created it.
+            Which source/tool is most useful?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q9" value="A"> A) Event Viewer only</label>
+            <label><input type="radio" name="q9" value="B"> B) Sysmon (Event IDs 1 and 11) plus EDR logs</label>
+            <label><input type="radio" name="q9" value="C"> C) Task Manager only</label>
+            <label><input type="radio" name="q9" value="D"> D) Printer logs</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="10">
+        <div class="q-header"><span>Question 10</span></div>
+        <div class="q-body">
+          <p>
+            Your EDR raises an alert about a suspicious PowerShell script using DownloadString to fetch code from the internet and run it in memory.
+            What is the best EDR response?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q10" value="A"> A) Add the alert to the ignore list</label>
+            <label><input type="radio" name="q10" value="B"> B) Isolate the machine, kill the process, and block the hash and URL globally</label>
+            <label><input type="radio" name="q10" value="C"> C) Uninstall the EDR because it is “too sensitive”</label>
+            <label><input type="radio" name="q10" value="D"> D) Ask the user if the script is important to them</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: Network & Firewall -->
+      <div class="section-title">Section 3: Network & Firewall Scenarios</div>
+
+      <div class="question" data-q="11">
+        <div class="q-header"><span>Question 11</span></div>
+        <div class="q-body">
+          <p>
+            Firewall logs show a sudden spike in failed RDP connection attempts from many IP addresses around the world.
+            How would you initially classify this scenario?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q11" value="A"> A) Normal background noise</label>
+            <label><input type="radio" name="q11" value="B"> B) Likely brute-force or credential stuffing against RDP</label>
+            <label><input type="radio" name="q11" value="C"> C) Internal user behavior</label>
+            <label><input type="radio" name="q11" value="D"> D) Power issue</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="12">
+        <div class="q-header"><span>Question 12</span></div>
+        <div class="q-body">
+          <p>
+            You see a host generating frequent DNS requests every few seconds to a random-looking domain.
+            What is the strongest suspicion here?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q12" value="A"> A) Possible DNS tunneling</label>
+            <label><input type="radio" name="q12" value="B"> B) Printer problem</label>
+            <label><input type="radio" name="q12" value="C"> C) DHCP issue</label>
+            <label><input type="radio" name="q12" value="D"> D) 100% normal behavior</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="13">
+        <div class="q-header"><span>Question 13</span></div>
+        <div class="q-body">
+          <p>
+            VPN logs show a successful login for a user from a foreign country at the same time that the same user is connected
+            from a local IP inside your country. What best describes this situation?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q13" value="A"> A) Impossible travel / concurrent session</label>
+            <label><input type="radio" name="q13" value="B"> B) Time and date error</label>
+            <label><input type="radio" name="q13" value="C"> C) Wrong username</label>
+            <label><input type="radio" name="q13" value="D"> D) “Try before block” feature</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="14">
+        <div class="q-header"><span>Question 14</span></div>
+        <div class="q-body">
+          <p>
+            The network team requests a new firewall rule allowing direct RDP (port 3389) from the internet to an internal server.
+            What is the most appropriate security recommendation?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q14" value="A"> A) Approve immediately because RDP is needed</label>
+            <label><input type="radio" name="q14" value="B"> B) Reject this design and propose VPN + just-in-time access or a bastion host</label>
+            <label><input type="radio" name="q14" value="C"> C) Open all ports to the server to simplify work</label>
+            <label><input type="radio" name="q14" value="D"> D) Rely only on strong RDP password</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="15">
+        <div class="q-header"><span>Question 15</span></div>
+        <div class="q-body">
+          <p>
+            The WAF raises repeated alerts about SQL injection attempts against a critical web app,
+            but all attempts are blocked successfully. What is a good additional action?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q15" value="A"> A) No action needed because WAF blocked everything</label>
+            <label><input type="radio" name="q15" value="B"> B) Review the app code for prepared statements/input validation and monitor attacking IPs in SIEM</label>
+            <label><input type="radio" name="q15" value="C"> C) Disable the WAF because it causes noise</label>
+            <label><input type="radio" name="q15" value="D"> D) Shut down the application permanently</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: SIEM & Investigation -->
+      <div class="section-title">Section 4: SIEM & Investigation Scenarios</div>
+
+      <div class="question" data-q="16">
+        <div class="q-header"><span>Question 16</span></div>
+        <div class="q-body">
+          <p>
+            In your SIEM you see a sequence of events: multiple failed logins, then a successful login,
+            then a new local admin account created on the same server within minutes.
+            How would you best describe this chain?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q16" value="A"> A) Normal maintenance by sysadmin</label>
+            <label><input type="radio" name="q16" value="B"> B) Likely brute force success followed by privilege escalation</label>
+            <label><input type="radio" name="q16" value="C"> C) SIEM time synchronization issue</label>
+            <label><input type="radio" name="q16" value="D"> D) Hardware issue</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="17">
+        <div class="q-header"><span>Question 17</span></div>
+        <div class="q-body">
+          <p>
+            You need to create a SIEM use case to detect suspicious PowerShell usage on endpoints.
+            Which event type should you focus on in your correlation rule?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q17" value="A"> A) Printer events</label>
+            <label><input type="radio" name="q17" value="B"> B) Process creation events with command lines containing flags like <code>-EncodedCommand</code> or <code>IEX</code></label>
+            <label><input type="radio" name="q17" value="C"> C) Monitor screen-off events</label>
+            <label><input type="radio" name="q17" value="D"> D) Wallpaper change events</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="18">
+        <div class="q-header"><span>Question 18</span></div>
+        <div class="q-body">
+          <p>
+            The SIEM triggers an alert: a service account logs into more than 20 servers in one minute,
+            but normally it only connects to one server.
+            What is the most logical first investigation step?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q18" value="A"> A) Ask the user if they visited all servers</label>
+            <label><input type="radio" name="q18" value="B"> B) Check if the account was used from a new/unusual IP and if its privileges were recently changed</label>
+            <label><input type="radio" name="q18" value="C"> C) Immediately shut down all servers</label>
+            <label><input type="radio" name="q18" value="D"> D) Delete the service account without review</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="19">
+        <div class="q-header"><span>Question 19</span></div>
+        <div class="q-body">
+          <p>
+            A customer asks for a weekly report of the "Top 10 external IPs" being blocked by the firewall.
+            What is the best technical method to collect this data?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q19" value="A"> A) Manually browsing the firewall GUI every day</label>
+            <label><input type="radio" name="q19" value="B"> B) Run a SIEM query on firewall logs, grouping by source IP with counts</label>
+            <label><input type="radio" name="q19" value="C"> C) Ask users to send IPs each day</label>
+            <label><input type="radio" name="q19" value="D"> D) Use an Excel sheet with no logs</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="20">
+        <div class="q-header"><span>Question 20</span></div>
+        <div class="q-body">
+          <p>
+            Your SIEM dashboard shows that log volume from one of the domain controllers suddenly dropped to zero.
+            What is the most dangerous possibility here?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q20" value="A"> A) Everything is perfect, no issues</label>
+            <label><input type="radio" name="q20" value="B"> B) The agent/forwarder is broken or someone stopped logging intentionally to hide activity</label>
+            <label><input type="radio" name="q20" value="C"> C) The SIEM is full</label>
+            <label><input type="radio" name="q20" value="D"> D) Not related to security at all</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: Incident Response Process -->
+      <div class="section-title">Section 5: Incident Response Process Scenarios</div>
+
+      <div class="question" data-q="21">
+        <div class="q-header"><span>Question 21</span></div>
+        <div class="q-body">
+          <p>
+            You are notified about suspicious activity on a critical production server.
+            Before taking any technical actions, what should be clear from the Incident Response plan?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q21" value="A"> A) The color of the server room walls</label>
+            <label><input type="radio" name="q21" value="B"> B) Roles and responsibilities (who approves isolation, who coordinates with business, who writes the report)</label>
+            <label><input type="radio" name="q21" value="C"> C) Type of network cables used</label>
+            <label><input type="radio" name="q21" value="D"> D) Model of the nearest printer</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="22">
+        <div class="q-header"><span>Question 22</span></div>
+        <div class="q-body">
+          <p>
+            After containing an incident on a user endpoint, you decide to wipe and rebuild the system.
+            This step usually belongs to which IR phase?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q22" value="A"> A) Preparation</label>
+            <label><input type="radio" name="q22" value="B"> B) Eradication & Recovery</label>
+            <label><input type="radio" name="q22" value="C"> C) Lessons Learned</label>
+            <label><input type="radio" name="q22" value="D"> D) Identification only</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="23">
+        <div class="q-header"><span>Question 23</span></div>
+        <div class="q-body">
+          <p>
+            When writing the final incident report, management asks for an Executive Summary for non-technical stakeholders.
+            What should this summary focus on?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q23" value="A"> A) Every single technical command you ran</label>
+            <label><input type="radio" name="q23" value="B"> B) Business impact, root cause in simple terms, main actions taken, and key recommendations</label>
+            <label><input type="radio" name="q23" value="C"> C) Full code dumps</label>
+            <label><input type="radio" name="q23" value="D"> D) Raw log exports</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="24">
+        <div class="q-header"><span>Question 24</span></div>
+        <div class="q-body">
+          <p>
+            During the Lessons Learned meeting, you discover that the root cause was the lack of MFA on sensitive accounts.
+            What is the best practical outcome from this meeting?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q24" value="A"> A) Just document the issue with no further action</label>
+            <label><input type="radio" name="q24" value="B"> B) Define a clear timeline to enforce MFA on critical accounts and update related policies</label>
+            <label><input type="radio" name="q24" value="C"> C) Shut down the team responsible</label>
+            <label><input type="radio" name="q24" value="D"> D) Delete all accounts</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="25">
+        <div class="q-header"><span>Question 25</span></div>
+        <div class="q-body">
+          <p>
+            You discover an insider incident where an employee copied a large number of sensitive files to a USB drive.
+            Which internal departments should be involved in addition to the security team?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q25" value="A"> A) Marketing only</label>
+            <label><input type="radio" name="q25" value="B"> B) HR and Legal</label>
+            <label><input type="radio" name="q25" value="C"> C) Design team</label>
+            <label><input type="radio" name="q25" value="D"> D) Procurement</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6: Cloud & M365 -->
+      <div class="section-title">Section 6: Cloud & Microsoft 365 Scenarios</div>
+
+      <div class="question" data-q="26">
+        <div class="q-header"><span>Question 26</span></div>
+        <div class="q-body">
+          <p>
+            In Azure AD sign-in logs, you see a suspicious third-party OAuth app granted “Read mail” permissions
+            to several accounts without centralized admin approval.
+            What is the most appropriate investigation action?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q26" value="A"> A) Delete all user accounts immediately</label>
+            <label><input type="radio" name="q26" value="B"> B) Review consent logs, revoke the app permissions, and check impacted mailboxes for abnormal activity</label>
+            <label><input type="radio" name="q26" value="C"> C) Ignore it because the app “may be useful”</label>
+            <label><input type="radio" name="q26" value="D"> D) Shut down Azure entirely</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="27">
+        <div class="q-header"><span>Question 27</span></div>
+        <div class="q-body">
+          <p>
+            AWS CloudTrail shows that a new Access Key was created for an IAM user and then used from an unusual country
+            to access multiple S3 buckets. What is the best immediate response?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q27" value="A"> A) Do nothing, this is normal</label>
+            <label><input type="radio" name="q27" value="B"> B) Disable/delete the keys immediately, review the user’s permissions, and investigate S3 access logs</label>
+            <label><input type="radio" name="q27" value="C"> C) Only rename the S3 buckets</label>
+            <label><input type="radio" name="q27" value="D"> D) Delete all buckets</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="28">
+        <div class="q-header"><span>Question 28</span></div>
+        <div class="q-body">
+          <p>
+            In an M365 incident, you discover that the attacker created an inbox rule to delete all emails coming from the security team.
+            This information fits best into which IOC category?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q28" value="A"> A) Network IOC</label>
+            <label><input type="radio" name="q28" value="B"> B) Host IOC</label>
+            <label><input type="radio" name="q28" value="C"> C) Application / account configuration IOC</label>
+            <label><input type="radio" name="q28" value="D"> D) Hardware IOC</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="29">
+        <div class="q-header"><span>Question 29</span></div>
+        <div class="q-body">
+          <p>
+            In Azure, you find a public IP attached to a VM hosting a sensitive database, with no restrictive Network Security Group (NSG).
+            What is the best quick recommendation?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q29" value="A"> A) Leave it; nobody knows the IP</label>
+            <label><input type="radio" name="q29" value="B"> B) Restrict access via NSG/VNet, remove public IP if possible, and use VPN/private endpoints</label>
+            <label><input type="radio" name="q29" value="C"> C) Only change the VM name</label>
+            <label><input type="radio" name="q29" value="D"> D) Rely solely on a strong DB password</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="30">
+        <div class="q-header"><span>Question 30</span></div>
+        <div class="q-body">
+          <p>
+            A user reports that external recipients are replying to spam emails “they never sent”.
+            In their Sent Items, no suspicious emails appear.
+            What is the most likely explanation?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q30" value="A"> A) Outlook bug</label>
+            <label><input type="radio" name="q30" value="B"> B) A forwarding rule or SMTP Auth/token from another app sending from their account</label>
+            <label><input type="radio" name="q30" value="C"> C) Slow internet</label>
+            <label><input type="radio" name="q30" value="D"> D) Printer issue</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 7: Threat Intel & Hunting -->
+      <div class="section-title">Section 7: Threat Intelligence & Threat Hunting</div>
+
+      <div class="question" data-q="31">
+        <div class="q-header"><span>Question 31</span></div>
+        <div class="q-body">
+          <p>
+            During an investigation, you get an IP from firewall logs that is repeatedly attacking your perimeter.
+            How can you best leverage Threat Intelligence for this IP?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q31" value="A"> A) Block it immediately without checking anything</label>
+            <label><input type="radio" name="q31" value="B"> B) Check it on platforms like VirusTotal / AbuseIPDB / OTX to see its reputation and known campaigns</label>
+            <label><input type="radio" name="q31" value="C"> C) Email the IP to all employees</label>
+            <label><input type="radio" name="q31" value="D"> D) Configure it as a DNS server</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="32">
+        <div class="q-header"><span>Question 32</span></div>
+        <div class="q-body">
+          <p>
+            Your team receives an IOC list from the national CERT (IPs, domains, hashes) tied to an active ransomware campaign.
+            What is the most practical way to use this list?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q32" value="A"> A) Keep it in an Excel file only</label>
+            <label><input type="radio" name="q32" value="B"> B) Load it into SIEM/EDR/firewall as block/detect lists and run threat-hunting queries against historical data</label>
+            <label><input type="radio" name="q32" value="C"> C) Email it to all employees</label>
+            <label><input type="radio" name="q32" value="D"> D) Ignore it because it is “external”</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="33">
+        <div class="q-header"><span>Question 33</span></div>
+        <div class="q-body">
+          <p>
+            While threat hunting, you notice a process with a legitimate name (like <code>svchost.exe</code>)
+            but running from a non-standard path on multiple endpoints.
+            What is the best response?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q33" value="A"> A) Ignore it because the name is legitimate</label>
+            <label><input type="radio" name="q33" value="B"> B) Check its hash in threat intel, compare with the official path, and collect more evidence from these endpoints</label>
+            <label><input type="radio" name="q33" value="C"> C) Delete Windows</label>
+            <label><input type="radio" name="q33" value="D"> D) Power off all machines without preserving data</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 8: Mixed Practical Scenarios -->
+      <div class="section-title">Section 8: Mixed Practical Scenarios</div>
+
+      <div class="question" data-q="34">
+        <div class="q-header"><span>Question 34</span></div>
+        <div class="q-body">
+          <p>
+            Your SOC manager asks you to write a simple runbook for VPN brute-force alerts.
+            Which key element should this runbook include?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q34" value="A"> A) Names of all employees</label>
+            <label><input type="radio" name="q34" value="B"> B) Verification steps (number of attempts, source IP, account sensitivity) and response actions (temporarily lock account, block IP, contact user)</label>
+            <label><input type="radio" name="q34" value="C"> C) SIEM color scheme</label>
+            <label><input type="radio" name="q34" value="D"> D) Amount of coffee required per analyst</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="35">
+        <div class="q-header"><span>Question 35</span></div>
+        <div class="q-body">
+          <p>
+            During a night shift, you see a spike in alerts, all from the same use case,
+            which appears to be false positives due to a new project in the network.
+            What is the most professional response?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q35" value="A"> A) Disable the use case completely</label>
+            <label><input type="radio" name="q35" value="B"> B) Document the observation, tune thresholds/conditions with the relevant team, ensuring you still detect real attacks</label>
+            <label><input type="radio" name="q35" value="C"> C) Ignore the alerts with no note</label>
+            <label><input type="radio" name="q35" value="D"> D) Mute alerts only in your own account</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="36">
+        <div class="q-header"><span>Question 36</span></div>
+        <div class="q-body">
+          <p>
+            In a real incident, you are tasked with collecting evidence from an affected machine (logs, memory image, key files).
+            What is the most important principle during evidence collection?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q36" value="A"> A) Modify files to make them look “better”</label>
+            <label><input type="radio" name="q36" value="B"> B) Preserve evidence integrity and document chain of custody as much as possible</label>
+            <label><input type="radio" name="q36" value="C"> C) Use any random USB without scanning it</label>
+            <label><input type="radio" name="q36" value="D"> D) Send evidence via WhatsApp</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="37">
+        <div class="q-header"><span>Question 37</span></div>
+        <div class="q-body">
+          <p>
+            Investigating a Windows server, you want to know whether new admin accounts were created in the last 24 hours.
+            What is the best starting point?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q37" value="A"> A) Ask all users one by one</label>
+            <label><input type="radio" name="q37" value="B"> B) Review Windows Event Logs (4720, 4728, 4732, etc.) or run a PowerShell script to check recent changes in admin groups</label>
+            <label><input type="radio" name="q37" value="C"> C) Just reboot the server</label>
+            <label><input type="radio" name="q37" value="D"> D) Delete all admin accounts</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="38">
+        <div class="q-header"><span>Question 38</span></div>
+        <div class="q-body">
+          <p>
+            The SIEM alerts you that a user endpoint is making repeated access attempts to a shared folder with financial data,
+            and this user normally never uses that share. What is your first logical step?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q38" value="A"> A) Immediately delete the shared folder</label>
+            <label><input type="radio" name="q38" value="B"> B) Review access logs, confirm the user identity, and check the endpoint for possible compromise</label>
+            <label><input type="radio" name="q38" value="C"> C) Only rename the folder</label>
+            <label><input type="radio" name="q38" value="D"> D) Permanently shut down the file server</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="39">
+        <div class="q-header"><span>Question 39</span></div>
+        <div class="q-body">
+          <p>
+            As part of SOC training, you are asked to create a simple playbook for
+            “Phishing leading to M365 account compromise”.
+            Which sequence best represents a proper high-level playbook?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q39" value="A"> A) Shut down the company, then analyze</label>
+            <label><input type="radio" name="q39" value="B"> B) Confirm incident → secure account (reset + MFA) → review inbox rules & sign-in logs → clean affected endpoints → user awareness → policy updates</label>
+            <label><input type="radio" name="q39" value="C"> C) Ignore the incident because phishing is “common”</label>
+            <label><input type="radio" name="q39" value="D"> D) Only delete the user’s account</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-q="40">
+        <div class="q-header"><span>Question 40</span></div>
+        <div class="q-body">
+          <p>
+            Management wants to measure SOC maturity and determine whether current use cases cover the most important risks.
+            What is the best professional way to link use cases to real threats?
+          </p>
+          <div class="options">
+            <label><input type="radio" name="q40" value="A"> A) Create random use cases</label>
+            <label><input type="radio" name="q40" value="B"> B) Map use cases to specific MITRE ATT&amp;CK techniques and your critical assets/risk scenarios (threat modeling)</label>
+            <label><input type="radio" name="q40" value="C"> C) Only count the number of alerts</label>
+            <label><input type="radio" name="q40" value="D"> D) Rely on default vendor content without review</label>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- /questions-wrapper -->
+  </div>
+
+  <script>
+    // Answer key for scenario questions (1–40)
+    const answerKey = {
+      1: "D",
+      2: "B",
+      3: "B",
+      4: "C",
+      5: "B",
+      6: "B",
+      7: "B",
+      8: "B",
+      9: "B",
+      10: "B",
+      11: "B",
+      12: "A",
+      13: "A",
+      14: "B",
+      15: "B",
+      16: "B",
+      17: "B",
+      18: "B",
+      19: "B",
+      20: "B",
+      21: "B",
+      22: "B",
+      23: "B",
+      24: "B",
+      25: "B",
+      26: "B",
+      27: "B",
+      28: "C",
+      29: "B",
+      30: "B",
+      31: "B",
+      32: "B",
+      33: "B",
+      34: "B",
+      35: "B",
+      36: "B",
+      37: "B",
+      38: "B",
+      39: "B",
+      40: "B"
+    };
+
+    let examStarted = false;
+    let examFinished = false;
+    let remainingSeconds = 0;
+    let timerInterval = null;
+    const totalQuestions = 40;
+
+    const startBtn = document.getElementById("startBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const timerEl = document.getElementById("timer");
+    const resultEl = document.getElementById("result");
+
+    function updateTimer() {
+      const m = Math.floor(remainingSeconds / 60);
+      const s = remainingSeconds % 60;
+      timerEl.textContent =
+        String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerEl.textContent = "Time is up";
+        if (!examFinished) {
+          gradeExam(true);
+        }
+      }
+      remainingSeconds--;
+    }
+
+    function startExam() {
+      if (examStarted) return;
+      let minutes = parseInt(document.getElementById("durationInput").value, 10);
+      if (isNaN(minutes) || minutes < 10 || minutes > 180) {
+        minutes = 60;
+      }
+      remainingSeconds = minutes * 60;
+
+      examStarted = true;
+      examFinished = false;
+
+      startBtn.disabled = true;
+      submitBtn.disabled = false;
+
+      // reset colors & selections
+      document.querySelectorAll(".question").forEach(q => {
+        q.classList.remove("correct", "incorrect", "unanswered");
+      });
+      document.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.disabled = false;
+        r.checked = false;
+      });
+      resultEl.style.display = "none";
+
+      timerInterval = setInterval(updateTimer, 1000);
+      updateTimer();
+    }
+
+    function gradeExam(auto = false) {
+      examFinished = true;
+      submitBtn.disabled = true;
+      clearInterval(timerInterval);
+
+      let score = 0;
+      let unanswered = [];
+
+      for (let i = 1; i <= totalQuestions; i++) {
+        const qDiv = document.querySelector(`.question[data-q="${i}"]`);
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const correct = answerKey[i];
+
+        qDiv.classList.remove("correct", "incorrect", "unanswered");
+
+        if (!selected) {
+          qDiv.classList.add("unanswered");
+          unanswered.push(i);
+        } else if (selected.value === correct) {
+          qDiv.classList.add("correct");
+          score++;
+        } else {
+          qDiv.classList.add("incorrect");
+        }
+      }
+
+      document.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.disabled = true;
+      });
+
+      const percentage = ((score / totalQuestions) * 100).toFixed(1);
+      let html = `<strong>Final score:</strong> ${score} / ${totalQuestions} (${percentage}%)`;
+      html += `<div class="result-line">Unanswered questions: ${unanswered.length}</div>`;
+      if (unanswered.length > 0) {
+        html += `<div class="result-line">Question numbers: ${unanswered.join(", ")}</div>`;
+      }
+      if (auto) {
+        html += `<div class="note">The exam was submitted automatically because time ran out.</div>`;
+      } else {
+        html += `<div class="note">The exam was graded after you clicked "Submit &amp; Grade".</div>`;
+      }
+
+      resultEl.innerHTML = html;
+      resultEl.style.display = "block";
+    }
+
+    startBtn.addEventListener("click", startExam);
+    submitBtn.addEventListener("click", () => gradeExam(false));
+// Toggle nav links on mobile
+  const navToggle = document.getElementById("navToggle");
+  const navLinks = document.querySelector(".nav-links");
+
+  if (navToggle && navLinks) {
+    navToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("show");
+    });
+  }
+
+  // Highlight current page in navbar
+  (function highlightActiveLink() {
+    const links = document.querySelectorAll(".nav-link");
+    const current = window.location.pathname.split("/").pop(); // current file name
+
+    links.forEach(link => {
+      const href = link.getAttribute("href");
+      if (href && href === current) {
+        link.classList.add("active");
+      }
+    });
+  })();
+
+  </script>
+</body>
+</html>
