@@ -1,0 +1,117 @@
+/* styles.css — Visual refresh overrides (safe / non-functional)
+   - Loaded after inline styles in index.html so these rules override selectively
+   - Focus on typography, spacing, subtle shadows, form focus, and button polish
+*/
+:root{
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.06);
+  --shadow-strong: 0 18px 45px rgba(15,23,42,0.12);
+  --focus-ring: rgba(37,99,235,0.14);
+}
+
+/* Brand palette (override these with your HEX choices) */
+:root{
+  --brand-primary: #0d9488; /* teal */
+  --brand-accent: #0ea5e9; /* sky */
+  --brand-bg: #f8fafc; /* very light */
+  --brand-surface: #ffffff;
+  --brand-muted: #6b7280;
+}
+
+html,body{height:100%;}
+body{
+  font-family: 'Cairo', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.45;
+}
+
+/* Top bar tighter and cleaner */
+.top-bar{padding:0.6rem 0 0.6rem}
+.logo-text .title{font-family:'Inter', 'Cairo', sans-serif; font-weight:700; letter-spacing:0.03em;}
+.logo-text .subtitle{font-family:'Cairo', sans-serif;}
+.logo-badge{font-weight:700; box-shadow:var(--shadow-soft);}
+
+/* Actions */
+.top-actions{gap:0.6rem}
+.chip-btn, .theme-toggle{opacity:0.98}
+
+/* Buttons polish */
+.btn{border-radius:12px; padding:0.48rem 0.9rem; font-weight:600}
+.btn-primary{box-shadow:var(--shadow-strong)}
+.btn-outline{background:transparent}
+.btn:active{transform:translateY(0)}
+.btn:hover{transform:translateY(-2px)}
+
+/* SVG icons */
+.icon{width:22px;height:22px;display:inline-block;vertical-align:middle;fill:currentColor}
+.icon use{pointer-events:none}
+.nav-btn .icon{width:26px;height:26px}
+
+/* Icon containers used in headers/cards */
+.section-header h1 .icon,
+.card-header h2 .icon,
+.nav-btn span.icon,
+.logo-badge .icon{
+  display:inline-flex;align-items:center;justify-content:center;border-radius:8px;padding:4px;width:28px;height:28px;background:rgba(14,165,233,0.06);color:var(--brand-primary);margin-inline-start:0.35rem
+}
+
+/* Micro interactions */
+.btn{transition:transform .14s ease, box-shadow .14s ease, background-color .14s ease}
+.card{transition:transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease}
+.nav-btn{transition:background-color .12s ease, box-shadow .12s ease, transform .12s ease}
+
+/* subtle hover scale for cards */
+.card:hover{transform:translateY(-6px)}
+
+/* small icon color accents */
+.logo-badge{background:linear-gradient(135deg,var(--brand-primary),var(--brand-accent));}
+.btn-primary{background:linear-gradient(135deg,var(--brand-primary),#075985);}
+
+
+/* Cards and sections */
+.section{border-radius:var(--radius-xl); transition:transform .16s ease, box-shadow .16s ease}
+.section.section-active{transform:none}
+.card{border-radius:var(--radius-lg); box-shadow:var(--shadow-soft); transition:box-shadow .18s ease, transform .16s ease}
+.card:hover{box-shadow:var(--shadow-strong); transform:translateY(-4px)}
+
+/* Inputs and selects */
+.meta-field input, .meta-field textarea, .meta-field select, input[type="text"], textarea{border-radius:10px; background:rgba(255,255,255,0.95);} 
+.meta-field input:focus, .meta-field textarea:focus, .meta-field select:focus{outline:none; box-shadow:0 8px 20px var(--focus-ring); border-color:var(--primary)}
+
+/* Improve table header contrast */
+thead th{background:rgba(37,99,235,0.04);}
+
+/* Checklist items */
+.check-item{border-radius:12px; border:1px solid rgba(15,23,42,0.03);}
+.check-item:hover{background:rgba(15,23,42,0.02)}
+.check-item.done{background:rgba(34,197,94,0.06); border-color:rgba(34,197,94,0.14)}
+
+/* Sidebar refinements */
+.sidebar{padding:1rem; border-radius:18px}
+.nav-btn{padding:0.5rem; border-radius:12px}
+.nav-btn.active{box-shadow:0 8px 20px rgba(37,99,235,0.06);}
+
+/* Chips and badges */
+.chip{font-weight:600}
+.badge{font-weight:700}
+
+/* Focus visibility for keyboard users */
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--focus-ring); outline-offset:3px}
+
+/* Responsive tweaks */
+@media (max-width:900px){
+  .sidebar{position:relative; box-shadow:none}
+  .logo-badge{width:40px;height:40px}
+}
+
+/* Small utility adjustments */
+.progress-bar{height:8px}
+.progress-label{font-size:0.78rem}
+
+/* Ensure print still works and remains legible */
+@media print{
+  body{font-family:serif}
+}

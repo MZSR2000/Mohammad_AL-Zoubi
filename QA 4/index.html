@@ -1,0 +1,3474 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>QA Report – Mohammad Alzoubi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --white: #ffffff;
+      --primary: #2563eb;
+      --primary-soft: #eff6ff;
+      --accent: #0ea5e9;
+      --dark: #0f172a;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --danger: #ef4444;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow-strong: 0 18px 45px rgba(15, 23, 42, 0.16);
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-pill: 999px;
+      --chip-bg: rgba(37, 99, 235, 0.08);
+      --chip-border: rgba(37, 99, 235, 0.22);
+      --scrollbar-bg: rgba(148, 163, 184, 0.35);
+      --scrollbar-thumb: rgba(37, 99, 235, 0.8);
+    }
+
+    body.theme-dark {
+      --bg: #020617;
+      --white: #020617;
+      --primary: #60a5fa;
+      --primary-soft: rgba(37, 99, 235, 0.12);
+      --accent: #38bdf8;
+      --dark: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2933;
+      --danger: #f97373;
+      --success: #22c55e;
+      --warning: #fbbf24;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.85);
+      --shadow-strong: 0 18px 45px rgba(15, 23, 42, 0.96);
+      --chip-bg: rgba(37, 99, 235, 0.18);
+      --chip-border: rgba(129, 140, 248, 0.5);
+      --scrollbar-bg: rgba(30, 64, 175, 0.6);
+      --scrollbar-thumb: rgba(56, 189, 248, 0.9);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(
+          circle at top right,
+          rgba(56, 189, 248, 0.12),
+          transparent 50%
+        ),
+        radial-gradient(
+          circle at bottom left,
+          rgba(37, 99, 235, 0.18),
+          transparent 55%
+        ),
+        var(--bg);
+      color: var(--dark);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(37, 99, 235, 1);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      gap: 1.25rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .app-shell {
+        padding: 1rem;
+      }
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #1d4ed8, #38bdf8);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5f2ff;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .logo-text .title {
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--dark);
+    }
+
+    .logo-text .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    body.theme-dark .logo-text .title {
+      color: #e5e7eb;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chip-btn {
+      background: rgba(15, 23, 42, 0.7);
+      color: #e2e8f0;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 0.3rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: 0.15s;
+    }
+
+    .chip-btn:hover {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .chip-btn span.circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      background: linear-gradient(135deg, #38bdf8, #1d4ed8);
+      color: #e5f2ff;
+    }
+
+    .theme-toggle {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 0.35rem 0.75rem;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      font-size: 0.78rem;
+      box-shadow: 0 12px 25px rgba(15, 23, 42, 0.7);
+      transition: 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.9);
+    }
+
+    /* Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: radial-gradient(
+          circle at top,
+          rgba(37, 99, 235, 0.28),
+          transparent 60%
+        ),
+        linear-gradient(145deg, #020617, #020617 55%, #020617);
+      border-radius: 24px;
+      padding: 1.1rem;
+      color: #e5e7eb;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.85);
+      position: sticky;
+      top: 1rem;
+    }
+
+    .sidebar .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 0.7rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .nav-btn {
+      border-radius: 999px;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #cbd5f5;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: 0.15s;
+      text-align: right;
+    }
+
+    .nav-btn span.icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.7);
+      font-size: 1rem;
+    }
+
+    .nav-btn span.label {
+      flex: 1;
+    }
+
+    .nav-btn small {
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
+
+    .nav-btn:hover {
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .nav-btn.active {
+      background: rgba(37, 99, 235, 0.16);
+      border-color: rgba(129, 140, 248, 0.8);
+      box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.7);
+      color: #e5e7eb;
+    }
+
+    .sidebar-footer {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(148, 163, 184, 0.5);
+      font-size: 0.75rem;
+      color: #9ca3af;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .sidebar-footer strong {
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .sidebar-footer .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      font-size: 0.7rem;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    /* Main content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .section {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 1.3rem 1.4rem 1.4rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      display: none;
+    }
+
+    .section-active {
+      display: block;
+    }
+
+    body.theme-dark .section {
+      border-color: rgba(148, 163, 184, 0.25);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .section-header h1 {
+      margin: 0;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--dark);
+    }
+
+    .section-header h1 span.icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .section-header .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    body.theme-dark .section-header .subtitle {
+      color: #9ca3af;
+    }
+
+    .section-tools {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .metrics {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .metric-pill {
+      border-radius: 999px;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(15, 23, 42, 0.02);
+    }
+
+    body.theme-dark .metric-pill {
+      background: rgba(15, 23, 42, 0.7);
+      border-color: rgba(148, 163, 184, 0.5);
+      color: #e5e7eb;
+    }
+
+    .metric-pill span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4);
+    }
+
+    .metric-pill span.value {
+      font-weight: 600;
+    }
+
+    /* Buttons */
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #e5f2ff;
+      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.55);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--dark);
+    }
+
+    body.theme-dark .btn-outline {
+      color: #e5e7eb;
+      border-color: rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+    }
+
+    /* Meta grid */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .meta-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font-size: 0.8rem;
+    }
+
+    .meta-field label {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    body.theme-dark .meta-field label {
+      color: #e5e7eb;
+    }
+
+    .meta-field input,
+    .meta-field textarea {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.5rem;
+      font-size: 0.8rem;
+      font-family: inherit;
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .meta-field select {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.5rem;
+      font-size: 0.8rem;
+      font-family: inherit;
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    body.theme-dark .meta-field input,
+    body.theme-dark .meta-field textarea,
+    body.theme-dark .meta-field select {
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    .meta-field textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    /* Columns inside sections */
+    .section-body {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1.2rem;
+      margin-top: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+      .section-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      border-radius: 18px;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    body.theme-dark .card {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(148, 163, 184, 0.6);
+      color: #e5e7eb;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .card-header h2 span.icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .card-header small {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    body.theme-dark .card-header small {
+      color: #9ca3af;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 0.16rem 0.55rem;
+      border: 1px solid var(--chip-border);
+      background: var(--chip-bg);
+      color: #0f172a;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    body.theme-dark .chip {
+      color: #e5e7eb;
+    }
+
+    .chip span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
+    }
+
+    /* Checklist */
+    .pill-tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .pill-tab {
+      border-radius: 999px;
+      padding: 0.18rem 0.65rem;
+      background: rgba(15, 23, 42, 0.025);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: 0.15s;
+    }
+
+    .pill-tab span.count {
+      background: rgba(15, 23, 42, 0.06);
+      padding: 0.05rem 0.4rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+    }
+
+    .pill-tab.active {
+      background: rgba(37, 99, 235, 0.12);
+      border-color: rgba(37, 99, 235, 0.8);
+      color: #1d4ed8;
+    }
+
+    body.theme-dark .pill-tab {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.7);
+      color: #9ca3af;
+    }
+
+    body.theme-dark .pill-tab span.count {
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+    }
+
+    body.theme-dark .pill-tab.active {
+      background: rgba(37, 99, 235, 0.35);
+      border-color: rgba(96, 165, 250, 0.9);
+      color: #e5e7eb;
+    }
+
+    .checklist {
+      margin-top: 0.2rem;
+      max-height: 300px;
+      overflow: auto;
+      padding-right: 0.25rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.4rem;
+      padding: 0.45rem 0.4rem;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      position: relative;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .check-item:hover {
+      background: rgba(15, 23, 42, 0.02);
+    }
+
+    body.theme-dark .check-item:hover {
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .check-item.done {
+      background: rgba(22, 163, 74, 0.06);
+      border-color: rgba(22, 163, 74, 0.4);
+    }
+
+    body.theme-dark .check-item.done {
+      background: rgba(22, 163, 74, 0.2);
+      border-color: rgba(74, 222, 128, 0.7);
+    }
+
+    .check-item input {
+      margin-top: 0.1rem;
+      cursor: pointer;
+      accent-color: #16a34a;
+    }
+
+    .check-item-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .check-item-title {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    body.theme-dark .check-item-title {
+      color: #e5e7eb;
+    }
+
+    .check-item-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    body.theme-dark .check-item-desc {
+      color: #9ca3af;
+    }
+
+    .check-item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-top: 0.1rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.03);
+      border: 1px solid var(--border);
+    }
+
+    body.theme-dark .tag {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+    }
+
+    .tag.critical {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: rgba(248, 113, 113, 0.06);
+    }
+
+    .tag.high {
+      border-color: var(--warning);
+      color: var(--warning);
+      background: rgba(251, 191, 36, 0.06);
+    }
+
+    .tag.medium {
+      border-color: #38bdf8;
+      color: #0284c7;
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    .tag.low {
+      border-color: #a1a1aa;
+      color: #6b7280;
+      background: rgba(229, 231, 235, 0.4);
+    }
+
+    /* Guides */
+    .guide-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .guide-item {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+      padding: 0.55rem 0.6rem;
+      border-radius: 14px;
+      border: 1px dashed var(--border);
+      background: rgba(15, 23, 42, 0.01);
+    }
+
+    body.theme-dark .guide-item {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    .guide-item-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    .guide-item-body {
+      flex: 1;
+    }
+
+    .guide-item-body h3 {
+      margin: 0 0 0.2rem;
+      font-size: 0.83rem;
+      color: var(--dark);
+    }
+
+    body.theme-dark .guide-item-body h3 {
+      color: #e5e7eb;
+    }
+
+    .guide-item-body ul {
+      margin: 0.15rem 0 0;
+      padding-left: 1rem;
+    }
+
+    .guide-item-body li {
+      margin-bottom: 0.15rem;
+      color: var(--muted);
+    }
+
+    body.theme-dark .guide-item-body li {
+      color: #9ca3af;
+    }
+
+    /* Tables */
+    .table-card {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-top: 0.6rem;
+    }
+
+    body.theme-dark .table-card {
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    th,
+    td {
+      padding: 0.45rem 0.55rem;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+    }
+
+    thead th {
+      background: rgba(15, 23, 42, 0.02);
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+
+    body.theme-dark thead th {
+      background: rgba(15, 23, 42, 0.92);
+      color: #e5e7eb;
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    tbody tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.01);
+    }
+
+    body.theme-dark tbody tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      width: 150px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    body.theme-dark .progress-bar {
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #22c55e, #facc15, #ef4444);
+      width: 0%;
+      transition: width 0.25s ease-out;
+    }
+
+    .progress-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    body.theme-dark .progress-label {
+      color: #9ca3af;
+    }
+
+    /* Report preview */
+    .report-preview {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.6rem;
+      padding: 0.5rem 0.55rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.02);
+      border: 1px dashed var(--border);
+    }
+
+    body.theme-dark .report-preview {
+      background: rgba(15, 23, 42, 0.9);
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    .report-preview strong {
+      color: var(--dark);
+    }
+
+    body.theme-dark .report-preview strong {
+      color: #e5e7eb;
+    }
+
+    /* Report document (print) */
+    .report-doc {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #0f172a;
+    }
+
+    .report-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 0.65rem;
+    }
+
+    .report-header h1 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #111827;
+    }
+
+    .report-header p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .report-section-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin: 0 0 0.35rem;
+      color: #111827;
+    }
+
+    .report-sub {
+      margin: 0 0 0.4rem;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    .report-table th,
+    .report-table td {
+      border: 1px solid #e5e7eb;
+      padding: 0.35rem 0.4rem;
+      text-align: right;
+    }
+
+    .report-table thead th {
+      background: #f9fafb;
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 999px;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      font-size: 0.75rem;
+      color: #1d4ed8;
+      background: #eff6ff;
+    }
+
+    .badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.45);
+    }
+
+    .report-footer {
+      margin-top: 1.5rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid #e5e7eb;
+      font-size: 0.75rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+      .app-shell {
+        padding: 0;
+      }
+      .sidebar,
+      .theme-toggle,
+      .btn,
+      .chip-btn {
+        display: none !important;
+      }
+      .grid {
+        display: block;
+      }
+      .section {
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- SVG icon sprite (used by UI) -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="icon-overview" viewBox="0 0 24 24">
+      <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zM13 21h8V11h-8v10zm0-18v6h8V3h-8z" />
+    </symbol>
+    <symbol id="icon-checklist" viewBox="0 0 24 24">
+      <path d="M9 11l-3 3 1.5 1.5L9 14l6 6L19.5 20 9 9.5 9 11zM3 5h18v2H3V5zM3 9h12v2H3V9z" />
+    </symbol>
+    <symbol id="icon-bug" viewBox="0 0 24 24">
+      <path d="M13 7h-2v2H8.5l.5-1.5L9 7H7l-.5 1.5L6 9H4v2h2l.5-1.5L7 9h2v2h2v2H9v2h6v-2h-2v-2h2v-2h-2l.5-1.5L15 9h2l.5-1.5L18 7h-2l-.5 1.5L15 10h-1V7z" />
+    </symbol>
+    <symbol id="icon-report" viewBox="0 0 24 24">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16l4-2 4 2 6-3V4a2 2 0 0 0-2-2h-2zM8 8h6v2H8V8zm0 4h6v2H8v-2z" />
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <path d="M19.14 12.936a7.007 7.007 0 0 0 0-1.872l2.036-1.58a.5.5 0 0 0 .12-.637l-1.928-3.337a.5.5 0 0 0-.607-.22l-2.396.96a7.016 7.016 0 0 0-1.62-.936l-.36-2.54A.5.5 0 0 0 14.5 2h-4a.5.5 0 0 0-.494.424l-.36 2.54a7.016 7.016 0 0 0-1.62.936l-2.396-.96a.5.5 0 0 0-.607.22L2.704 8.65a.5.5 0 0 0 .12.637l2.036 1.58a7.007 7.007 0 0 0 0 1.872l-2.036 1.58a.5.5 0 0 0-.12.637l1.928 3.337c.14.243.44.344.707.26l2.396-.96c.5.34 1.05.62 1.62.936l.36 2.54A.5.5 0 0 0 10.5 22h4a.5.5 0 0 0 .494-.424l.36-2.54c.57-.316 1.12-.596 1.62-.936l2.396.96c.267.084.567-.017.707-.26l1.928-3.337a.5.5 0 0 0-.12-.637l-2.036-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z" />
+    </symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24">
+      <path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/>
+    </symbol>
+    <symbol id="icon-lab" viewBox="0 0 24 24">
+      <path d="M19 20H5v-2l4-4V7h6v7l4 4v2zM6 2h12v2H6V2z"/>
+    </symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24">
+      <path d="M3 3v18h18v-2H5V3H3zm6 12h2V8H9v7zm4 0h2V5h-2v10z"/>
+    </symbol>
+  </svg>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="logo">
+        <div class="logo-badge">QA</div>
+        <div class="logo-text">
+          <div class="title">QA CONTROL PANEL</div>
+          <div class="subtitle">
+            منصة لإدارة فحوصات الجودة وإصدار تقارير احترافية
+          </div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="aiHintsBtn" class="chip-btn" type="button">
+          <span class="circle">AI</span>
+          <span>اقتراحات تحسين للتقرير</span>
+        </button>
+        <button id="themeToggle" class="theme-toggle" type="button">
+          <span>🌓</span>
+          <span>Light / Dark</span>
+        </button>
+      </div>
+    </header>
+
+      
+
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="section-title">SECTIONS</div>
+        <div class="nav">
+          <button class="nav-btn active" data-section="overview">
+            <svg class="icon" aria-hidden="true"><use href="#icon-overview"></use></svg>
+            <span class="label">
+              نظرة عامة
+              <br />
+              <small>Meta & Summary</small>
+            </span>
+          </button>
+          <button class="nav-btn" data-section="checklists">
+            <svg class="icon" aria-hidden="true"><use href="#icon-checklist"></use></svg>
+            <span class="label">
+              Checklists
+              <br />
+              <small>Website, Admin, Mobile…</small>
+            </span>
+          </button>
+          <button class="nav-btn" data-section="bugs">
+            <svg class="icon" aria-hidden="true"><use href="#icon-bug"></use></svg>
+            <span class="label">
+              Bugs & Template
+              <br />
+              <small>Reporting Structure</small>
+            </span>
+          </button>
+          <button class="nav-btn" data-section="report">
+            <svg class="icon" aria-hidden="true"><use href="#icon-report"></use></svg>
+            <span class="label">
+              Report Settings
+              <br />
+              <small>Meta + Generate</small>
+            </span>
+          </button>
+              <button class="nav-btn" data-section="settings">
+                <svg class="icon" aria-hidden="true"><use href="#icon-settings"></use></svg>
+                <span class="label">
+                  Settings
+                  <br />
+                  <small>Platform content (UI-only)</small>
+                </span>
+              </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <div>
+            <strong>Mohammad Alzoubi</strong> <br />
+            QA, Cybersecurity Specialist
+          </div>
+          <div class="tag">
+            <span>🛡</span>
+            <span>Security Mindset in Testing</span>
+          </div>
+          <div class="tag">
+            <span>📝</span>
+            <span>Professional Bug Reports</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="main-content">
+        <!-- OVERVIEW -->
+        <section class="section section-active" id="overview">
+          <div class="section-header">
+            <div>
+                <h1>
+                  <svg class="icon" aria-hidden="true"><use href="#icon-overview"></use></svg>
+                  نظرة عامة على الـ QA
+                </h1>
+              <p class="subtitle">
+                أدخل معلومات عامة عن المشروع ثم اختر ما تم اختباره فعليًا من
+                الـ Checklists.
+              </p>
+            </div>
+                              <h2 style="margin:0;font-size:1rem;">QA Methodology & Platform Overview</h2>
+            <div class="section-tools">
+              <div class="metrics">
+                <div class="metric-pill">
+                  <span class="dot"></span>
+                  <span class="label">Checklist Progress</span>
+                  <span class="value" id="overallProgress">0%</span>
+                </div>
+                <div class="metric-pill">
+                  <span class="dot" style="background:#22c55e;"></span>
+                  <span class="label">Completed Items</span>
+                  <span class="value" id="completedCount">0</span>
+                </div>
+              </div>
+              <!-- Generate report button moved to Report Settings (removed from Overview) -->
+            </div>
+          </div>
+
+          <!-- Meta fields removed from Overview per user request.
+               Project/Client/Environment/Build/Test Date/Browsers inputs were moved out of Overview.
+               If you want them restored in another location (Report Settings), tell me and I will add them there. -->
+
+          <!-- Executive Summary (removed from Overview per user request) -->
+
+          <div style="margin-top:1.2rem;border-top:1px dashed var(--border);padding-top:1rem;">
+            <h2 style="margin:0 0 0.8rem;font-size:1rem;">QA Methodology & Platform Overview</h2>
+            <div id="overviewGuides" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0.8rem;"></div>
+          </div>
+        </section>
+        <!-- SETTINGS (UI-only) -->
+        <section class="section" id="settings">
+          <div class="section-header">
+            <div>
+              <h1>
+                <span class="icon">⚙️</span>
+                Settings (Platform Content)
+              </h1>
+              <p class="subtitle">
+                عناصر واجهة المنصة: عناوين، أسماء التصنيفات (Checklists) وإضافة أقسام جديدة. هذه الإعدادات تخص واجهة التطبيق فقط ولا تتعلق بخيارات الطباعة.
+              </p>
+            </div>
+          </div>
+
+          <div class="meta-grid">
+            <div class="meta-field">
+              <label>UI Title</label>
+              <input id="uiTitle" type="text" placeholder="QA CONTROL PANEL" />
+            </div>
+            <div class="meta-field">
+              <label>UI Subtitle</label>
+              <input id="uiSubtitle" type="text" placeholder="منصة لإدارة فحوصات الجودة وإصدار تقارير احترافية" />
+            </div>
+          </div>
+
+          <div style="margin-top:0.9rem;">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>
+                    <svg class="icon" aria-hidden="true"><use href="#icon-folder"></use></svg>
+                    Checklist Categories (edit labels / add / delete)
+                  </h2>
+                  <small>قم بتعديل أسماء التصنيفات لتظهر في Tabs والتقرير (المحتوى نفسه يظل ضمن state.checklists).</small>
+                </div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:0.6rem;padding:0.6rem;">
+                <div id="settingsCategories"></div>
+
+                <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.4rem;">
+                  <input id="newCatKey" type="text" placeholder="key (e.g. docs)" style="padding:0.45rem;border-radius:8px;border:1px solid var(--border);flex:0 0 160px;" />
+                  <input id="newCatLabel" type="text" placeholder="Label (e.g. Docs)" style="padding:0.45rem;border-radius:8px;border:1px solid var(--border);flex:1;" />
+                  <button class="btn btn-primary" type="button" onclick="addCategoryFromInputs()">➕ Add Category</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:0.8rem;">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2><svg class="icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Overview Cards (edit)</h2>
+                  <small>Edit Overview cards that appear on the Overview page</small>
+                </div>
+              </div>
+              <div style="padding:0.6rem;">
+                <div id="guideSettings"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHECKLISTS -->
+        <section class="section" id="checklists">
+          <div class="section-header">
+            <div>
+              <h1>
+                <svg class="icon" aria-hidden="true"><use href="#icon-checklist"></use></svg>
+                QA Checklists – Web, Admin, Mobile, API
+              </h1>
+              <p class="subtitle">
+                علّم فقط على ما تم تنفيذه فعليًا في هذا الـ Test Cycle. هذه
+                التشيك ليست لإدارة التست كيس، بل لتوثيق التغطية في التقرير.
+              </p>
+            </div>
+            <div class="section-tools">
+              <div class="pill-tabs" id="checklistTabs"></div>
+              <button class="btn btn-outline" type="button" onclick="clearAllChecks()">
+                🧹 Reset All
+              </button>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>
+                    <svg class="icon" aria-hidden="true"><use href="#icon-lab"></use></svg>
+                    عناصر الفحص حسب التصنيف
+                  </h2>
+                  <small>Website, Platform, E-commerce, Mobile, API, Performance</small>
+                </div>
+                  <div style="display:flex;gap:0.5rem;align-items:center;">
+                    <button class="btn btn-outline" type="button" onclick="addChecklistItem()" style="font-size:0.75rem;">
+                      ➕ New Item
+                    </button>
+                    <button class="btn btn-outline" type="button" onclick="openBulkImport()" style="font-size:0.75rem;">📥 Bulk Import</button>
+                    <button class="btn btn-outline" type="button" onclick="toggleShowOrderHelp()" style="font-size:0.75rem;">⇅ Reorder</button>
+                  </div>
+              </div>
+              <div class="checklist" id="checklistContainer"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>
+                    <svg class="icon" aria-hidden="true"><use href="#icon-chart"></use></svg>
+                    ملخص سريع للتغطية
+                  </h2>
+                  <small>تحديث تلقائي بناءً على التشيك الموجود في اليسار</small>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.7rem;">
+                <div>
+                  <div class="progress-bar">
+                    <div class="progress-bar-inner" id="progressBar"></div>
+                  </div>
+                  <div class="progress-label">
+                    Coverage: <span id="coverageLabel">0%</span>
+                  </div>
+                </div>
+                <div class="chip-row" id="coverageChips"></div>
+                <div class="report-preview" id="coverageNotes">
+                  سيتم عرض ملخص نصي قصير هنا يوضح ما هي المناطق التي تم تغطيتها
+                  (مثال: Website + Admin فقط، أو Web + Mobile + API...).
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BUGS & TEMPLATE -->
+        <section class="section" id="bugs">
+          <div class="section-header">
+            <div>
+              <h1>
+                <svg class="icon" aria-hidden="true"><use href="#icon-bug"></use></svg>
+                Bug Reporting Framework
+              </h1>
+              <p class="subtitle">
+                هنا الإطار الذي ستستخدمه لتوثيق الـ Bugs: Template جاهز + Matrix
+                للـ Severity / Priority + دورة حياة الـ Bug + تسجيل Bugs حقيقية.
+              </p>
+            </div>
+          </div>
+
+          <div class="section-body">
+            <!-- Template + Checklist -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>
+                    <span class="icon">📄</span>
+                    Standard Bug Report Template
+                  </h2>
+                  <small>الصيغة التي سترسل بها Bugs للعميل أو فريق التطوير</small>
+                </div>
+              </div>
+              <div>
+                <h3 style="margin:0 0 0.3rem;">Fields</h3>
+                <div class="table-card">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Field</th>
+                        <th>Example</th>
+                        <th>شرح</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bugTemplate"></tbody>
+                  </table>
+                </div>
+                <div style="margin-top:0.6rem;">
+                  <label style="font-weight:600;">Edit Template (one per line: field|example|desc)</label>
+                  <textarea id="bugTemplateEditor" style="width:100%;min-height:80px;padding:0.5rem;border-radius:8px;border:1px solid var(--border);"></textarea>
+                  <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.4rem;">
+                    <button class="btn btn-outline" type="button" onclick="applyBugTemplateEditor()">Save Template</button>
+                    <button class="btn btn-outline" type="button" onclick="resetBugTemplateToDefault()">Reset Default</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top:1rem;">
+                <h3>✅ Bug Report Checklist (تحقق قبل الإرسال)</h3>
+                <div class="table-card">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bugChecklist"></tbody>
+                  </table>
+                </div>
+                <div style="margin-top:0.6rem;">
+                  <label style="font-weight:600;">Edit Bug Checklist (one item per line)</label>
+                  <textarea id="bugChecklistEditor" style="width:100%;min-height:80px;padding:0.5rem;border-radius:8px;border:1px solid var(--border);"></textarea>
+                  <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.4rem;">
+                    <button class="btn btn-outline" type="button" onclick="applyBugChecklistEditor()">Save Checklist</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real Bugs + Severity / Life Cycle / Tips -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>
+                    <span class="icon">🐛</span>
+                    Real Bugs – Current Cycle
+                  </h2>
+                  <small>سجّل هنا المشاكل الفعلية ليتم سحبها تلقائياً في التقرير النهائي.</small>
+                </div>
+              </div>
+
+              <!-- Form إدخال Bug جديد -->
+              <div>
+                <div class="meta-grid">
+                  <div class="meta-field">
+                    <label>Area / Screen</label>
+                    <input id="bugArea" type="text" placeholder="مثال: Website – Booking page" />
+                  </div>
+                  <div class="meta-field">
+                    <label>Severity</label>
+                    <select id="bugSeverity">
+                      <option value="Critical">Critical</option>
+                      <option value="Major" selected>Major</option>
+                      <option value="Minor">Minor</option>
+                    </select>
+                  </div>
+                  <div class="meta-field">
+                    <label>Priority</label>
+                    <select id="bugPriority">
+                      <option value="P1">P1</option>
+                      <option value="P2" selected>P2</option>
+                      <option value="P3">P3</option>
+                    </select>
+                  </div>
+                  <div class="meta-field">
+                    <label>Status</label>
+                    <select id="bugStatus">
+                      <option value="Open" selected>Open</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Closed">Closed</option>
+                    </select>
+                  </div>
+                  <div class="meta-field">
+                    <label>Short title</label>
+                    <input id="bugTitle" type="text" placeholder="مثال: Booking fails with valid data" />
+                  </div>
+                  <div class="meta-field">
+                    <label>Notes / Suggested fix</label>
+                    <input id="bugNotes" type="text" placeholder="Optional notes for developer..." />
+                  </div>
+                </div>
+
+                <div style="margin-top:0.6rem;display:flex;justify-content:flex-end;">
+                  <button class="btn btn-primary" type="button" onclick="addBug()">
+                    ➕ Add Bug
+                  </button>
+                  <button id="exportBugsBtn" class="btn btn-outline" type="button" style="margin-inline-start:0.6rem;">⬇ Export CSV</button>
+                </div>
+
+                <!-- جدول عرض البجز -->
+                <div class="table-card" style="margin-top:0.6rem;max-height:210px;overflow:auto;">
+                  <table class="report-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Area</th>
+                        <th>Severity</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Title</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bugsTableBody">
+                      <!-- filled by JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Reference -->
+              <div style="margin-top:1rem;border-top:1px dashed var(--border);padding-top:0.7rem;">
+                <h3 style="margin:0 0 0.3rem;">Severity → Priority Matrix</h3>
+                <div class="table-card">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Severity</th>
+                          <th>Priority</th>
+                          <th>Recommended SLA</th>
+                          <th>شرح</th>
+                      </tr>
+                    </thead>
+                      <tbody id="sevMatrix"></tbody>
+                  </table>
+                </div>
+                  <div style="margin-top:0.6rem;display:flex;gap:0.5rem;align-items:center;">
+                    <input id="newSevName" placeholder="Severity name (e.g. Critical)" style="padding:0.4rem;border-radius:8px;border:1px solid var(--border);flex:1;" />
+                    <input id="newSevPriority" placeholder="Priority (P1)" style="padding:0.4rem;border-radius:8px;border:1px solid var(--border);width:120px;" />
+                    <input id="newSevSla" placeholder="SLA (e.g. 24h)" style="padding:0.4rem;border-radius:8px;border:1px solid var(--border);width:120px;" />
+                    <button class="btn btn-primary" type="button" onclick="addSeverityEntry()">➕ Add Severity</button>
+                  </div>
+
+                <div style="margin-top:1rem;">
+                  <h3>Bug Life Cycle</h3>
+                  <div class="table-card">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Status</th>
+                          <th>شرح</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bugLife"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div style="margin-top:1rem;">
+                  <h3>Pro Tips (نصائح لكتابة تقارير احترافية)</h3>
+                  <div class="table-card">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Tip</th>
+                        </tr>
+                      </thead>
+                      <tbody id="proTips"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- REPORT SETTINGS -->
+        <section class="section" id="report">
+          <div class="section-header">
+            <div>
+              <h1>
+                <svg class="icon" aria-hidden="true"><use href="#icon-report"></use></svg>
+                Report Settings & Meta
+              </h1>
+              <p class="subtitle">
+                البيانات التي ستظهر في التقرير الإنجليزي (Header + Summary Table). احفظها مرة ثم
+                استخدم Generate EN Report.
+              </p>
+            </div>
+            <div class="section-tools">
+              <button class="btn btn-primary" type="button" onclick="generateEnReport()">
+                <span>📄</span>
+                <span>Generate EN Report</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="meta-grid">
+              <div class="meta-field">
+                <label>Report Author</label>
+                <input id="reportAuthor" type="text" placeholder="Name that will appear in the report" />
+              </div>
+              <div class="meta-field">
+                <label>Project Code</label>
+                <input id="projectCode" type="text" placeholder="Project code / ID" />
+              </div>
+              <div class="meta-field">
+                <label>Scope</label>
+                <input id="scope" type="text" placeholder="Short scope description" />
+              </div>
+            <div class="meta-field">
+              <label>Project / Product Name</label>
+              <input id="projectName2" type="text" placeholder="Same as Arabic project name" />
+            </div>
+            <div class="meta-field">
+              <label>Client / Company</label>
+              <input id="clientName2" type="text" placeholder="Client name in English" />
+            </div>
+            <div class="meta-field">
+              <label>Environment</label>
+              <input id="env2" type="text" value="Staging" />
+            </div>
+            <div class="meta-field">
+              <label>Build / Version</label>
+              <input id="build2" type="text" placeholder="Release-2025.11.13" />
+            </div>
+            <div class="meta-field">
+              <label>Test Date</label>
+              <input id="testDate2" type="date" />
+            </div>
+            <div class="meta-field">
+              <label>Browsers / Devices</label>
+              <input
+                id="browsers2"
+                type="text"
+                placeholder="Chrome, Firefox, Edge, Android, iOS..."
+              />
+            </div>
+          </div>
+
+          <div style="margin-top:0.8rem;">
+            <div class="meta-field">
+              <label>Executive Summary (English)</label>
+              <textarea
+                id="summaryNotes2"
+                placeholder="Short English summary that will appear at the top of the generated report."
+              ></textarea>
+            </div>
+            <div style="margin-top:0.6rem;">
+              <label style="font-weight:600;">Default Executive Summary (editable template)</label>
+              <textarea id="defaultExecSummary" placeholder="Default template used when no summary provided..." style="width:100%;min-height:80px;margin-top:0.4rem;padding:0.5rem;border-radius:8px;border:1px solid var(--border);"></textarea>
+            </div>
+
+            <div style="margin-top:0.6rem;display:flex;gap:0.6rem;align-items:center;">
+              <label style="display:flex;align-items:center;gap:0.5rem;">
+                <input id="includeAllChecklistItems" type="checkbox" style="transform:scale(1.1);" />
+                <span>Include all checklist items in report (show status for each)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="report-preview" id="execSummaryPreviewEn">
+            <strong>Preview:</strong> If you leave the summary empty, a generic
+            executive summary will be generated using the checklists coverage
+            and meta information.
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_STATE = {
+      meta: {
+        projectName: "",
+        clientName: "",
+        reportAuthor: "",
+        projectCode: "",
+        scope: "",
+        env: "Staging",
+        build: "",
+        testDate: "",
+        browsers: "",
+        summaryNotes: "",
+        summaryNotesEn: ""
+      },
+        // Settings are UI-only controls (do NOT affect print options directly)
+        settings: {
+          uiTitle: "QA CONTROL PANEL",
+          uiSubtitle: "منصة لإدارة فحوصات الجودة وإصدار تقارير احترافية",
+          // labels for checklist categories (used in tabs and report headings)
+          checklistLabels: {
+            website: 'Website – واجهة المستخدم',
+            platform: 'Platform / Admin – لوحة التحكم',
+            ecom: 'E-Commerce',
+            mobile: 'Mobile App – تطبيق الموبايل',
+            api: 'API',
+            perf: 'Performance'
+          }
+        },
+      checklists: {
+        website: [
+          {
+            id: "w1",
+            title: "الصفحة الرئيسية تعرض بدون أخطاء",
+            desc: "جميع العناصر (الهيدر، السلايدر، الأقسام الرئيسية) تظهر بشكل صحيح على الشاشات المختلفة.",
+            done: false
+          },
+          {
+            id: "w2",
+            title: "الروابط الأساسية تعمل",
+            desc: "الروابط في الهيدر والفوتر لا تعطي 404، وتذهب إلى الوجهة الصحيحة.",
+            done: false
+          },
+          {
+            id: "w3",
+            title: "النماذج (Contact / Booking)",
+            desc: "يمكن إرسال النموذج، ويتم التحقق من الحقول المطلوبة والـ Email والـ Phone.",
+            done: false
+          },
+          {
+            id: "w4",
+            title: "الدعم للّغتين (إن وجد)",
+            desc: "التبديل بين العربية والإنجليزية لا يكسر التصميم، وكل المحتوى مترجم.",
+            done: false
+          },
+          {
+            id: "w5",
+            title: "التجاوب مع الموبايل",
+            desc: "الموقع يظهر بشكل جيد على شاشات مختلفة، بدون Scroll أفقي أو عناصر مكسورة.",
+            done: false
+          },
+          {
+            id: "w6",
+            title: "الهيدر Header",
+            desc: "هل الشعار Logo واضح ويأخذك للـ Home؟",
+            done: false
+          },
+          {
+            id: "w7",
+            title: "القائمة الرئيسية",
+            desc: "جميع الروابط في المنيو تفتح صفحات صحيحة؟",
+            done: false
+          },
+          {
+            id: "w8",
+            title: "الـ Active State",
+            desc: "هل الصفحة الحالية مميزة (لون مختلف في المنيو)؟",
+            done: false
+          },
+          {
+            id: "w9",
+            title: "الـ Hero Section",
+            desc: "العنوان الرئيسي واضح ويشرح الخدمة؟",
+            done: false
+          },
+          {
+            id: "w10",
+            title: "زر الـ CTA الرئيسي",
+            desc: "زر مثل 'احجز الآن' / 'تواصل معنا' واضح وبارز؟",
+            done: false
+          },
+          {
+            id: "w11",
+            title: "الأزرار الثانوية",
+            desc: "أزرار مثل 'اقرأ المزيد' تعمل وتفتح المكان الصحيح؟",
+            done: false
+          },
+          {
+            id: "w12",
+            title: "النصوص",
+            desc: "لا يوجد أخطاء إملائية / تكرار / ترجمة ناقصة؟",
+            done: false
+          },
+          {
+            id: "w13",
+            title: "الصور",
+            desc: "الصور واضحة وغير مكسّرة (لا تظهر مقصوصة أو مشوشة)؟",
+            done: false
+          },
+          {
+            id: "w14",
+            title: "الأقسام (Sections)",
+            desc: "ترتيب الأقسام منطقي (مقدمة → شرح → فوائد → CTA)؟",
+            done: false
+          },
+          {
+            id: "w15",
+            title: "الفوتر Footer",
+            desc: "معلومات التواصل صحيحة + روابط السوشال تعمل؟",
+            done: false
+          },
+          {
+            id: "w16",
+            title: "الـ Forms – الحقول المطلوبة",
+            desc: "الحقول المطلوبة Required لا تسمح بالإرسال الفارغ؟",
+            done: false
+          },
+          {
+            id: "w17",
+            title: "رسائل الخطأ",
+            desc: "عند إدخال بيانات خاطئة، هل تظهر رسالة مفهومة؟",
+            done: false
+          },
+          {
+            id: "w18",
+            title: "رسائل النجاح",
+            desc: "بعد إرسال النموذج، هل يظهر تأكيد واضح للمستخدم؟",
+            done: false
+          },
+          {
+            id: "w19",
+            title: "تعدد اللغات",
+            desc: "لو في عربي/إنجليزي، هل كل النصوص مترجمة؟",
+            done: false
+          },
+          {
+            id: "w20",
+            title: "الوضوح البصري والتباين",
+            desc: "النص واضح فوق الخلفية والمسافات منطقية؟",
+            done: false
+          }
+        ],
+        platform: [
+          {
+            id: "p1",
+            title: "تسجيل الدخول والصلاحيات",
+            desc: "لا يمكن دخول لوحة التحكم بدون Login، وحسب الـ Role تظهر القوائم الصحيحة.",
+            done: false
+          },
+          {
+            id: "p2",
+            title: "إدارة المحتوى / البيانات",
+            desc: "العمليات الأساسية (إضافة، تعديل، حذف) تعمل بدون أخطاء.",
+            done: false
+          },
+          {
+            id: "p3",
+            title: "العمليات الحرجة",
+            desc: "إضافة/تعديل/حذف بيانات (CRUD) تعمل من A إلى Z مع رسائل تأكيد.",
+            done: false
+          },
+          {
+            id: "p4",
+            title: "الجداول والفلترة والتصدير",
+            desc: "جدولة البيانات تدعم البحث، الترتيب، والـ export (Excel / PDF) إن وجد.",
+            done: false
+          },
+          {
+            id: "p5",
+            title: "تسجيل الدخول – معالجة الأخطاء",
+            desc: "إدخال بيانات خاطئة يعطي رسالة واضحة.",
+            done: false
+          },
+          {
+            id: "p6",
+            title: "حماية الصفحات",
+            desc: "هل يمكن فتح صفحة Admin بدون Login؟",
+            done: false
+          },
+          {
+            id: "p7",
+            title: "إدارة الصلاحيات Roles",
+            desc: "المستخدم ذو صلاحية أقل لا يرى خيارات حساسة (Users, Settings).",
+            done: false
+          },
+          {
+            id: "p8",
+            title: "لوحة المعلومات Dashboard",
+            desc: "الأرقام الظاهرة منطقية ومحدثة؟",
+            done: false
+          },
+          {
+            id: "p9",
+            title: "الروابط داخل Dashboard",
+            desc: "أزرار مثل View All / Details تنقلك للصفحة الصحيحة.",
+            done: false
+          },
+          {
+            id: "p10",
+            title: "قائمة المستخدمين",
+            desc: "البحث عن مستخدم يعمل بشكل صحيح.",
+            done: false
+          },
+          {
+            id: "p11",
+            title: "الفرز / Sorting",
+            desc: "لو في ترتيب حسب التاريخ/الاسم، هل يعمل صح؟",
+            done: false
+          },
+          {
+            id: "p12",
+            title: "Pagination",
+            desc: "التنقل بين الصفحات 1, 2, 3… يعمل بدون أخطاء.",
+            done: false
+          },
+          {
+            id: "p13",
+            title: "إضافة عنصر جديد",
+            desc: "عند Create (User/Service/Booking)، هل التحقق من الحقول صحيح؟",
+            done: false
+          },
+          {
+            id: "p14",
+            title: "تعديل عنصر",
+            desc: "Edit يحفظ التعديلات وينعكس في الجدول والواجهة الأمامية.",
+            done: false
+          },
+          {
+            id: "p15",
+            title: "حذف / Archive",
+            desc: "عند Delete يظهر تأكيد قبل الحذف.",
+            done: false
+          },
+          {
+            id: "p16",
+            title: "حالات العناصر",
+            desc: "تغيّر حالة (Active / Inactive / Pending) ينعكس في الواجهة.",
+            done: false
+          },
+          {
+            id: "p17",
+            title: "فلترة البيانات",
+            desc: "فلاتر مثل (Status, Date Range) تعمل كما يجب.",
+            done: false
+          },
+          {
+            id: "p18",
+            title: "Settings – بيانات الموقع",
+            desc: "تعديل رقم الهاتف/الإيميل يظهر في الموقع.",
+            done: false
+          },
+          {
+            id: "p19",
+            title: "Settings – روابط السوشال",
+            desc: "تعديل روابط السوشال ينعكس في الأيقونات الأمامية.",
+            done: false
+          },
+          {
+            id: "p20",
+            title: "تسجيل الخروج",
+            desc: "زر تسجيل الخروج يعمل فعلاً ويمسح Session.",
+            done: false
+          }
+        ],
+        ecom: [
+          {
+            id: "e1",
+            title: "سلة المشتريات",
+            desc: "إضافة/حذف المنتجات من السلة يعمل بشكل صحيح.",
+            done: false
+          },
+          {
+            id: "e2",
+            title: "إتمام الطلب (Checkout)",
+            desc: "من اختيار المنتج وحتى الدفع/تأكيد الطلب بدون أخطاء.",
+            done: false
+          },
+          {
+            id: "e3",
+            title: "تجربة Guest Checkout",
+            desc: "الشراء بدون إنشاء حساب (إن كان مدعوم) يعمل بلا مشاكل.",
+            done: false
+          },
+          {
+            id: "e4",
+            title: "إشعارات الطلب",
+            desc: "رسائل الـ Email / SMS / WhatsApp عن الطلب تصل بالبيانات الصحيحة.",
+            done: false
+          }
+        ],
+        mobile: [
+          {
+            id: "m1",
+            title: "شاشة الدخول",
+            desc: "إدخال بيانات خاطئة يعطي رسالة واضحة.",
+            done: false
+          },
+          {
+            id: "m2",
+            title: "تجربة أول دخول",
+            desc: "هل المستخدم يفهم ماذا يفعل أول ما يفتح التطبيق؟",
+            done: false
+          },
+          {
+            id: "m3",
+            title: "حجم العناصر",
+            desc: "الأزرار والنصوص قابلة للقراءة والضغط بسهولة.",
+            done: false
+          },
+          {
+            id: "m4",
+            title: "التنقل Navigation",
+            desc: "الأيقونات (Bottom Menu / Drawer) تنقلك للشاشات الصحيحة.",
+            done: false
+          },
+          {
+            id: "m5",
+            title: "العودة Back",
+            desc: "زر Back يرجعك خطوة منطقية وليس يخرج من التطبيق فجأة.",
+            done: false
+          },
+          {
+            id: "m6",
+            title: "الشاشات الفارغة",
+            desc: "لو ما في بيانات (لا حجوزات مثلاً)، هل يظهر 'لا توجد بيانات'؟",
+            done: false
+          },
+          {
+            id: "m7",
+            title: "النماذج Forms",
+            desc: "الحقول المطلوبة لا تسمح بالإرسال الفارغ.",
+            done: false
+          },
+          {
+            id: "m8",
+            title: "رسائل الخطأ",
+            desc: "النص واضح ومفهوم (بدون رسائل تقنية غريبة).",
+            done: false
+          },
+          {
+            id: "m9",
+            title: "رسائل النجاح",
+            desc: "عند إتمام حجز/طلب، هل يظهر تأكيد مريح للمستخدم؟",
+            done: false
+          },
+          {
+            id: "m10",
+            title: "تحميل البيانات",
+            desc: "هل تظهر Loading Indicator عند جلب البيانات؟",
+            done: false
+          },
+          {
+            id: "m11",
+            title: "الأخطاء من السيرفر",
+            desc: "في حال فشل الاتصال (No Internet)، هل تظهر رسالة واضحة؟",
+            done: false
+          },
+          {
+            id: "m12",
+            title: "الأداء",
+            desc: "هل التنقل بين الشاشات سلس أو في تهنيج؟",
+            done: false
+          },
+          {
+            id: "m13",
+            title: "الاتساق مع الموقع",
+            desc: "هل الألوان، الشعار، اللغة متوافقة مع الموقع؟",
+            done: false
+          },
+          {
+            id: "m14",
+            title: "الوصولية (اختياري)",
+            desc: "النصوص لا تعتمد فقط على اللون (مثلاً الحالة: Pending بلون + كلمة).",
+            done: false
+          },
+          {
+            id: "m15",
+            title: "الإشعارات (لو موجودة)",
+            desc: "الضغط على Notification يفتح الشاشة الصحيحة داخل التطبيق.",
+            done: false
+          }
+        ],
+        api: [
+          {
+            id: "a1",
+            title: "الـ Endpoints الرئيسية",
+            desc: "الـ APIs المستخدمة في العمليات الحرجة ترجع Status Codes صحيحة.",
+            done: false
+          },
+          {
+            id: "a2",
+            title: "التحقق من المدخلات (Validation)",
+            desc: "طلبات ناقصة أو خاطئة ترجع Messages واضحة و 4xx مناسب.",
+            done: false
+          },
+          {
+            id: "a3",
+            title: "الأمان الأساسي",
+            desc: "الـ Auth Tokens / API Keys محمية ولا تظهر في الـ Logs بشكل خام.",
+            done: false
+          },
+          {
+            id: "a4",
+            title: "التحمل (Rate limiting)",
+            desc: "إرسال عدة طلبات متتالية لا يكسر الخدمة، ويوجد حماية من الـ Abuse إن أمكن.",
+            done: false
+          }
+        ],
+        perf: [
+          {
+            id: "pf1",
+            title: "سرعة تحميل الصفحات",
+            desc: "الصفحات الأساسية تُحمّل في وقت مقبول على 3G / 4G.",
+            done: false
+          },
+          {
+            id: "pf2",
+            title: "حجم الصور والملفات",
+            desc: "استخدام صور مضغوطة وملفات Static ليست ضخمة.",
+            done: false
+          },
+          {
+            id: "pf3",
+            title: "عدم وجود Errors في الـ Console",
+            desc: "مراجعة متصفح Chrome DevTools / Console أثناء التصفح.",
+            done: false
+          },
+          {
+            id: "pf4",
+            title: "ثبات الخدمة",
+            desc: "عدم وجود Crash أو توقف كامل أثناء التجربة.",
+            done: false
+          }
+        ]
+      },
+      // Report-specific settings (affect printed report)
+      reportSettings: {
+        includeAllChecklistItems: false,
+        defaultExecutiveSummary: ""
+      },
+      guide: [
+        {
+          id: "g1",
+          icon: "📍",
+          title: "STLC – دورة حياة اختبار البرمجيات",
+          bullets: [
+            "Requirement Analysis: فهم متطلبات العميل وتحديد ما يمكن وما لا يمكن اختباره.",
+            "Test Planning: تحديد Scope, Types of testing, Tools, وTimeline.",
+            "Test Case Design: كتابة سيناريوهات واضحة مع Expected Result.",
+            "Test Execution & Defect Logging: تنفيذ التستات وتوثيق أي خلل.",
+            "Closure & Lessons Learned: ملخص تغطية الاختبارات والدروس المستفادة."
+          ]
+        },
+        {
+          id: "g2",
+          icon: "🧪",
+          title: "أنواع الاختبارات الأساسية",
+          bullets: [
+            "Functional Testing: التحقق من أن النظام يعمل حسب المتطلبات.",
+            "UI / UX Testing: وضوح الواجهة وسهولة الاستخدام وتناسق العناصر.",
+            "Regression Testing: التأكد أن التعديلات الجديدة لم تكسر شيء قديم.",
+            "Integration / API Testing: التأكد من تكامل الخدمات والـ microservices.",
+            "Non-Functional: الأداء، الأمان، قابلية الاستخدام، الاستقرارية."
+          ]
+        },
+        {
+          id: "g3",
+          icon: "📊",
+          title: "عقلية الـ QA المحترف",
+          bullets: [
+            "التفكير كسيناريوهات حقيقية للمستخدم وليس فقط كنصوص Requirements.",
+            "الموازنة بين سرعة التسليم وجودة المخرجات.",
+            "معرفة أساسيات الـ Dev، الـ DB، والـ Infrastructure تعطيك قوة في التحليل.",
+            "كتابة تقارير واضحة يوفر وقت الفريق بالكامل."
+          ]
+        }
+      ],
+      bugTemplate: [
+        {
+          field: "Summary / Title",
+          example: "Login – error when using valid credentials",
+          desc: "عنوان قصير يصف المشكلة بوضوح."
+        },
+        {
+          field: "Environment",
+          example: "Staging – https://stg.example.com",
+          desc: "المكان الذي حدث فيه الـ bug (Staging / UAT / Prod)."
+        },
+        {
+          field: "Pre-conditions",
+          example: "User already registered and activated",
+          desc: "ما الذي يجب أن يكون موجودًا قبل بدء الخطوات."
+        },
+        {
+          field: "Steps to Reproduce",
+          example: "1) Go to login page 2) Enter valid email/password 3) Click Login",
+          desc: "خطوات مفصلة يمكن لأي شخص اتباعها لإعادة المشكلة."
+        },
+        {
+          field: "Expected result",
+          example: "User should be redirected to dashboard",
+          desc: "ما هو السلوك المتوقع."
+        },
+        {
+          field: "Actual result",
+          example: "System shows 'Invalid credentials' error",
+          desc: "ما الذي حدث فعليًا."
+        },
+        {
+          field: "Attachments",
+          example: "Screenshot, video, console log, network log",
+          desc: "أي شيء يساعد الفريق على فهم المشكلة أسرع."
+        }
+      ],
+      bugChecklist: [
+        "هل الخطوات واضحة ويمكن لأي شخص إعادة المشكلة؟",
+        "هل أوضحت البيئة (Staging / Prod) والمتصفح / الجهاز؟",
+        "هل أرفقت Screenshot / Video إن أمكن؟",
+        "هل فرّقت بين Expected و Actual Result بوضوح؟",
+        "هل حدّدت Severity منطقية بناءً على تأثير المشكلة؟",
+        "هل ربطت الـ bug بـ Module أو Feature واضحة؟"
+      ],
+      sevMatrix: [
+        {
+          sev: "Blocker",
+          desc: "يمنع استخدام النظام أو مسار رئيسي بالكامل.",
+          priority: "P0 – يُعالَج فورًا قبل أي شيء آخر."
+        },
+        {
+          sev: "Critical",
+          desc: "يعطل وظيفة مهمة، لكن يوجد Workaround محدود.",
+          priority: "P1 – يُعالَج بأسرع وقت ممكن."
+        },
+        {
+          sev: "Major",
+          desc: "مشكلة مؤثرة لكنها لا توقف العمل بالكامل.",
+          priority: "P2 – يُجدول في Sprint قريب."
+        },
+        {
+          sev: "Minor",
+          desc: "مشاكل شكلية أو بسيطة لا تؤثر على العمل.",
+          priority: "P3 – تحسينات لاحقة / UI polish."
+        }
+      ],
+      bugLife: [
+        { status: "New", desc: "تم تسجيل الـ bug حديثًا ولم يتم مراجعته بعد." },
+        { status: "Triaged", desc: "تم تقييمه وتحديد Severity / Priority وAssigned To." },
+        { status: "In Progress", desc: "المطور يعمل حاليًا على إصلاحه." },
+        { status: "Ready for Test", desc: "تم الإصلاح وينتظر إعادة الاختبار من QA." },
+        { status: "Verified / Closed", desc: "تم التحقق من الإصلاح ولم تعد المشكلة تظهر." },
+        { status: "Rejected / Won't Fix", desc: "لن يتم الإصلاح (سلوك مقبول أو خارج الـ Scope)." }
+      ],
+      proTips: [
+        "استخدم لغة هادئة وموضوعية في تقارير الـ bugs (بدون اتهام أو لوم).",
+        "ضمّن بيانات واضحة في عنوان الـ bug: Module – Short description.",
+        "اربط الـ bug بمتطلب أو User Story إن وجد.",
+        "كلما كان التقرير أوضح، كان الوقت أقل في النقاشات والاجتماعات."
+      ],
+      // 🔹 Bugs الحقيقية لهذا التست سايكل
+      bugs: []
+    };
+
+    const STORAGE_KEY = "qa_report_v2_state";
+    const THEME_KEY = "qa_report_theme";
+
+    function deepClone(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    function loadState() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return deepClone(DEFAULT_STATE);
+        const parsed = JSON.parse(stored);
+        return {
+          ...deepClone(DEFAULT_STATE),
+          ...parsed,
+          meta: { ...deepClone(DEFAULT_STATE.meta), ...(parsed.meta || {}) },
+            checklists: {
+              ...deepClone(DEFAULT_STATE.checklists),
+              ...(parsed.checklists || {})
+            },
+            settings: { ...deepClone(DEFAULT_STATE.settings), ...(parsed.settings || {}) }
+        };
+      } catch {
+        return deepClone(DEFAULT_STATE);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+
+    function renderChecklistTabs() {
+      const container = document.getElementById("checklistTabs");
+      if (!container) return;
+      // preserve currently active tab if any
+      const prevActive = document.querySelector(".pill-tab.active");
+      const prevKey = prevActive ? prevActive.dataset.key : null;
+      container.innerHTML = "";
+      const iconsMap = {
+        website: '<svg class="icon" aria-hidden="true"><use href="#icon-overview"></use></svg>',
+        platform: '<svg class="icon" aria-hidden="true"><use href="#icon-checklist"></use></svg>',
+        ecom: '<svg class="icon" aria-hidden="true"><use href="#icon-folder"></use></svg>',
+        mobile: '<svg class="icon" aria-hidden="true"><use href="#icon-lab"></use></svg>',
+        api: '<svg class="icon" aria-hidden="true"><use href="#icon-chart"></use></svg>',
+        perf: '<svg class="icon" aria-hidden="true"><use href="#icon-chart"></use></svg>'
+      };
+
+      const keys = Object.keys(state.checklists || {});
+      keys.forEach((k, idx) => {
+        const list = state.checklists[k] || [];
+        const doneCount = list.filter(i => i.done).length;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const makeActive = prevKey ? (k === prevKey) : (idx === 0);
+        btn.className = "pill-tab" + (makeActive ? " active" : "");
+        btn.dataset.key = k;
+        const labelMap = (state.settings && state.settings.checklistLabels) || {};
+        const label = labelMap[k] || k;
+        const icon = iconsMap[k] || '📁';
+        btn.innerHTML = `
+          <span class="icon">${icon}</span>
+          <span>${label}</span>
+          <span class="count">${doneCount}/${list.length}</span>
+        `;
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".pill-tab")
+            .forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          renderChecklist(k);
+        });
+        container.appendChild(btn);
+      });
+
+      // render the tab that is active (either preserved one or first)
+      const activeBtn = container.querySelector('.pill-tab.active');
+      const keyToRender = activeBtn ? activeBtn.dataset.key : (sections[0] && sections[0].key);
+      if (keyToRender) renderChecklist(keyToRender);
+    }
+
+    function renderChecklist(key) {
+      const container = document.getElementById("checklistContainer");
+      if (!container) return;
+      const list = state.checklists[key] || [];
+      container.innerHTML = "";
+      // enable drag & drop reordering
+      container.dataset.activeKey = key;
+      list.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.className = "check-item" + (item.done ? " done" : "");
+        div.draggable = true;
+        div.dataset.idx = idx;
+        div.addEventListener('dragstart', (e)=>{ e.dataTransfer.setData('text/plain', idx); div.classList.add('dragging'); });
+        div.addEventListener('dragend', ()=>{ div.classList.remove('dragging'); });
+        div.addEventListener('dragover', (e)=>{ e.preventDefault(); const dragging = document.querySelector('.dragging'); if(!dragging) return; const over = e.currentTarget; const rect = over.getBoundingClientRect(); const after = (e.clientY - rect.top) > rect.height/2; if(after) over.parentNode.insertBefore(dragging, over.nextSibling); else over.parentNode.insertBefore(dragging, over); });
+        div.addEventListener('drop', (e)=>{ e.preventDefault(); const from = parseInt(e.dataTransfer.getData('text/plain'),10); const to = Array.from(container.children).indexOf(div); if(isNaN(from) || to<0) return; const arr = state.checklists[key]; const [moved] = arr.splice(from,1); arr.splice(to,0,moved); saveState(); renderChecklist(key); renderChecklistTabs(); updateChecklistStats(); });
+        div.innerHTML = `
+          <input type="checkbox" ${item.done ? "checked" : ""} />
+          <div class="check-item-main">
+            <div class="check-item-title">${item.title}</div>
+            <div class="check-item-desc">${item.desc}</div>
+            <div class="check-item-tags">
+              <span class="tag medium">Area: ${key}</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.3rem;margin-inline-start:0.5rem;">
+            <button type="button" class="btn btn-outline" style="padding:0.2rem 0.4rem;font-size:0.7rem;" onclick="editChecklistItem('${key}', ${idx})">✎</button>
+            <button type="button" class="btn btn-outline" style="padding:0.2rem 0.4rem;font-size:0.7rem;" onclick="deleteChecklistItem('${key}', ${idx})">✕</button>
+          </div>
+        `;
+        const checkbox = div.querySelector("input");
+        checkbox.addEventListener("change", () => {
+          item.done = checkbox.checked;
+          if (item.done) {
+            div.classList.add("done");
+          } else {
+            div.classList.remove("done");
+          }
+          saveState();
+          updateChecklistStats();
+          renderChecklistTabs();
+        });
+        container.appendChild(div);
+      });
+    }
+
+    function editChecklistItem(key, idx) {
+      const list = state.checklists[key] || [];
+      const item = list[idx];
+      if (!item) return;
+
+      const newTitle = prompt("Item title:", item.title || "");
+      if (newTitle === null) return;
+
+      const newDesc = prompt("Item description:", item.desc || "");
+      if (newDesc === null) return;
+
+      item.title = newTitle.trim();
+      item.desc = newDesc.trim();
+      saveState();
+      renderChecklist(key);
+      renderChecklistTabs();
+    }
+
+    function deleteChecklistItem(key, idx) {
+      if (!confirm("Delete this checklist item?")) return;
+      const list = state.checklists[key] || [];
+      list.splice(idx, 1);
+      saveState();
+      renderChecklist(key);
+      renderChecklistTabs();
+      updateChecklistStats();
+    }
+
+    function addChecklistItem() {
+      const activeTab = document.querySelector(".pill-tab.active");
+      if (!activeTab) {
+        alert("Please select a category first.");
+        return;
+      }
+      const key = activeTab.dataset.key;
+      const title = prompt("New item title:");
+      if (title === null) return;
+
+      const desc = prompt("Item description:");
+      if (desc === null) return;
+
+      const list = state.checklists[key] || [];
+      const id = key.substring(0, 1).toLowerCase() + Math.floor(Math.random() * 1000);
+      list.push({
+        id,
+        title: title.trim(),
+        desc: desc.trim(),
+        done: false
+      });
+      saveState();
+      renderChecklist(key);
+      renderChecklistTabs();
+      updateChecklistStats();
+    }
+
+    function openBulkImport() {
+      const activeTab = document.querySelector('.pill-tab.active');
+      if (!activeTab) { alert('Select a category first'); return; }
+      const key = activeTab.dataset.key;
+      const payload = prompt('Paste items to import, one per line. Use "Title|Description" per line.');
+      if (payload === null) return;
+      const lines = payload.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      if (!lines.length) return;
+      const list = state.checklists[key] || [];
+      lines.forEach(l=>{
+        const parts = l.split('|');
+        list.push({ id: key + Math.floor(Math.random()*10000), title: (parts[0]||'').trim(), desc: (parts[1]||'').trim(), done:false });
+      });
+      state.checklists[key] = list;
+      saveState();
+      renderChecklist(key);
+      renderChecklistTabs();
+      updateChecklistStats();
+    }
+
+    function toggleShowOrderHelp() {
+      alert('To reorder items: drag an item up or down within the list. Changes are saved automatically.');
+    }
+
+    function updateChecklistStats() {
+      const allLists = Object.values(state.checklists);
+      const total = allLists.reduce((acc, list) => acc + list.length, 0);
+      const done = allLists.reduce(
+        (acc, list) => acc + list.filter(i => i.done).length,
+        0
+      );
+      const percent = total ? Math.round((done / total) * 100) : 0;
+
+      const progressBar = document.getElementById("progressBar");
+      const coverageLabel = document.getElementById("coverageLabel");
+      const completedCount = document.getElementById("completedCount");
+      const overallProgress = document.getElementById("overallProgress");
+      const coverageChips = document.getElementById("coverageChips");
+      const coverageNotes = document.getElementById("coverageNotes");
+
+      if (progressBar) progressBar.style.width = percent + "%";
+      if (coverageLabel) coverageLabel.textContent = percent + "%";
+      if (overallProgress) overallProgress.textContent = percent + "%";
+      if (completedCount) completedCount.textContent = done;
+
+      const activeAreas = [];
+      Object.entries(state.checklists).forEach(([key, list]) => {
+        if (list.some(i => i.done)) activeAreas.push(key);
+      });
+
+      if (coverageChips) {
+        coverageChips.innerHTML = "";
+        activeAreas.forEach(area => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `
+            <span class="dot"></span>
+            <span>${area}</span>
+          `;
+          coverageChips.appendChild(chip);
+        });
+      }
+
+      if (coverageNotes) {
+        if (!activeAreas.length) {
+          coverageNotes.innerHTML =
+            "لم يتم اختيار أي عناصر بعد. يمكنك البدء بتعليم ما تم اختباره من Website أو Admin أو Mobile...";
+        } else {
+          coverageNotes.innerHTML =
+            "تم تغطية المناطق التالية في هذا الـ Test Cycle: " +
+            activeAreas.join("، ") +
+            ". يمكنك توسيع التغطية في دورات لاحقة ثم توليد تقرير جديد.";
+        }
+      }
+    }
+
+    function renderBugTables() {
+      const bugTemplateBody = document.getElementById("bugTemplate");
+      const bugChecklistBody = document.getElementById("bugChecklist");
+      const sevMatrixBody = document.getElementById("sevMatrix");
+      const bugLifeBody = document.getElementById("bugLife");
+      const proTipsBody = document.getElementById("proTips");
+      const bugTemplateEditor = document.getElementById('bugTemplateEditor');
+      const bugChecklistEditor = document.getElementById('bugChecklistEditor');
+      const exportBugsBtn = document.getElementById('exportBugsBtn');
+
+      if (bugTemplateBody) {
+        bugTemplateBody.innerHTML = "";
+        state.bugTemplate.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.field}</td>
+            <td>${row.example}</td>
+            <td>${row.desc}</td>
+          `;
+          bugTemplateBody.appendChild(tr);
+        });
+      }
+
+      if (bugTemplateEditor) {
+        bugTemplateEditor.value = (state.bugTemplate || []).map(r => `${r.field}|${r.example}|${r.desc}`).join('\n');
+      }
+
+      if (bugChecklistBody) {
+        bugChecklistBody.innerHTML = "";
+        state.bugChecklist.forEach((item, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${item}</td>
+          `;
+          bugChecklistBody.appendChild(tr);
+        });
+      }
+
+      if (bugChecklistEditor) {
+        bugChecklistEditor.value = (state.bugChecklist || []).join('\n');
+      }
+
+      if (sevMatrixBody) {
+        sevMatrixBody.innerHTML = "";
+        state.sevMatrix.forEach((row, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${escapeHtml(row.sev)}</td>
+            <td>${escapeHtml(row.priority)}</td>
+            <td>${escapeHtml(row.sla || '')}</td>
+            <td>${escapeHtml(row.desc || '')}</td>
+          `;
+          const del = document.createElement('td');
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-outline'; btn.style.padding='0.15rem 0.45rem'; btn.textContent='Delete';
+          btn.addEventListener('click', ()=>{ if(confirm('Delete severity entry?')){ state.sevMatrix.splice(idx,1); saveState(); renderBugTables(); } });
+          del.appendChild(btn);
+          tr.appendChild(del);
+          sevMatrixBody.appendChild(tr);
+        });
+      }
+
+      if (bugLifeBody) {
+        bugLifeBody.innerHTML = "";
+        state.bugLife.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.status}</td>
+            <td>${row.desc}</td>
+          `;
+          bugLifeBody.appendChild(tr);
+        });
+      }
+
+      // hook apply/save buttons for editors
+      window.applyBugTemplateEditor = function() {
+        const el = document.getElementById('bugTemplateEditor');
+        if (!el) return;
+        const lines = el.value.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+        const parsed = lines.map(l => {
+          const parts = l.split('|');
+          return { field: (parts[0]||'').trim(), example: (parts[1]||'').trim(), desc: (parts[2]||'').trim() };
+        }).filter(r => r.field);
+        if (!parsed.length) { if(!confirm('Template seems empty. Clear existing template?')) return; }
+        state.bugTemplate = parsed;
+        saveState();
+        renderBugTables();
+      };
+
+      window.resetBugTemplateToDefault = function() {
+        if (!confirm('Reset bug template to defaults?')) return;
+        state.bugTemplate = deepClone(DEFAULT_STATE.bugTemplate || []);
+        saveState();
+        renderBugTables();
+      };
+
+      window.applyBugChecklistEditor = function() {
+        const el = document.getElementById('bugChecklistEditor');
+        if (!el) return;
+        const lines = el.value.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+        state.bugChecklist = lines;
+        saveState();
+        renderBugTables();
+      };
+
+      window.addSeverityEntry = function() {
+        const name = (document.getElementById('newSevName')?.value||'').trim();
+        const pri = (document.getElementById('newSevPriority')?.value||'').trim();
+        const sla = (document.getElementById('newSevSla')?.value||'').trim();
+        if (!name) { alert('Enter severity name'); return; }
+        state.sevMatrix = state.sevMatrix || [];
+        state.sevMatrix.push({sev:name, priority: pri || '', sla: sla || '', desc: ''});
+        saveState();
+        renderBugTables();
+        document.getElementById('newSevName').value=''; document.getElementById('newSevPriority').value=''; document.getElementById('newSevSla').value='';
+      };
+
+      if (proTipsBody) {
+        proTipsBody.innerHTML = "";
+        state.proTips.forEach((tip, idx) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${tip}</td>
+          `;
+          proTipsBody.appendChild(tr);
+        });
+      }
+
+      if (exportBugsBtn) {
+        exportBugsBtn.addEventListener('click', () => {
+          const rows = state.bugs || [];
+          if (!rows.length) { alert('No bugs to export.'); return; }
+          const header = ['ID','Area','Severity','Priority','Status','Title','Notes'];
+          const csv = [header.join(',')].concat(rows.map(b => [b.id||'', b.area||'', b.severity||'', b.priority||'', b.status||'', '"'+(String(b.title||'').replace(/"/g,'""'))+'"', '"'+(String(b.notes||'').replace(/"/g,'""'))+'"'].join(','))).join('\n');
+          const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = 'bugs-export.csv'; a.style.display='none';
+          document.body.appendChild(a); a.click(); setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
+        });
+      }
+    }
+
+    function renderGuides() {
+      const container = document.getElementById('overviewGuides');
+      if (!container) return;
+      container.innerHTML = '';
+      const list = state.guide || [];
+      const guideIconMap = {
+        '📍': '#icon-overview',
+        '🧪': '#icon-lab',
+        '📊': '#icon-chart'
+      };
+      list.forEach((g, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.marginBottom = '0.5rem';
+        const header = document.createElement('div');
+        header.className = 'card-header';
+        const iconHtml = (guideIconMap[g.icon] ? `<svg class="icon" aria-hidden="true"><use href="${guideIconMap[g.icon]}"></use></svg>` : (g.icon || ''));
+        header.innerHTML = `<h3 style="margin:0;font-size:0.9rem;">${iconHtml} ${escapeHtml(g.title)}</h3>`;
+        const body = document.createElement('div');
+        body.style.padding = '0.6rem 0';
+        const ul = document.createElement('ul');
+        ul.style.margin = '0.5rem 0 0'; ul.style.paddingLeft='1.1rem'; ul.style.fontSize='0.75rem'; ul.style.lineHeight='1.5';
+        (g.bullets||[]).forEach(b => { const li = document.createElement('li'); li.textContent = b; ul.appendChild(li); });
+        body.appendChild(ul);
+        card.appendChild(header);
+        card.appendChild(body);
+        container.appendChild(card);
+      });
+    }
+
+    function renderRealBugs() {
+      const tbody = document.getElementById("bugsTableBody");
+      if (!tbody) return;
+
+      const list = state.bugs || [];
+      tbody.innerHTML = "";
+
+      if (!list.length) {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+          '<td colspan="8" style="text-align:center;color:#6b7280;font-size:0.78rem;">No bugs recorded yet for this cycle.</td>';
+        tbody.appendChild(tr);
+        return;
+      }
+
+      list.forEach((bug, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(bug.id || ("BUG-" + (index + 1).toString().padStart(3, "0")))}</td>
+          <td>${escapeHtml(bug.area || "")}</td>
+          <td>${escapeHtml(bug.severity || "")}</td>
+          <td>${escapeHtml(bug.priority || "")}</td>
+          <td>${escapeHtml(bug.status || "")}</td>
+          <td>${escapeHtml(bug.title || "")}</td>
+          <td>${escapeHtml(bug.notes || "")}</td>
+          <td>
+            <button type="button"
+              class="btn btn-outline"
+              style="padding:0.2rem 0.55rem;font-size:0.7rem;margin-inline:0.1rem;"
+              onclick="editBug(${index})">Edit</button>
+            <button type="button"
+              class="btn btn-outline"
+              style="padding:0.2rem 0.55rem;font-size:0.7rem;margin-inline:0.1rem;"
+              onclick="deleteBug(${index})">✕</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* Settings (UI-only) helpers */
+    function applySettingsToUI() {
+      const s = state.settings || {};
+      const titleEl = document.querySelector('.logo-text .title');
+      const subEl = document.querySelector('.logo-text .subtitle');
+      if (titleEl) titleEl.textContent = s.uiTitle || 'QA CONTROL PANEL';
+      if (subEl) subEl.textContent = s.uiSubtitle || 'منصة لإدارة فحوصات الجودة وإصدار تقارير احترافية';
+      // ensure tabs re-render with updated labels
+      renderChecklistTabs();
+    }
+
+    function renderSettingsCategories() {
+      const container = document.getElementById('settingsCategories');
+      if (!container) return;
+      container.innerHTML = '';
+      const labels = (state.settings && state.settings.checklistLabels) || {};
+      Object.keys(state.checklists || {}).forEach(key => {
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.gap = '0.5rem';
+        row.style.alignItems = 'center';
+        row.style.marginBottom = '0.45rem';
+
+        const keyBox = document.createElement('div');
+        keyBox.textContent = key;
+        keyBox.style.minWidth = '90px';
+        keyBox.style.opacity = '0.85';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = labels[key] || key;
+        input.style.flex = '1';
+        input.style.padding = '0.45rem';
+        input.style.borderRadius = '8px';
+        input.style.border = '1px solid var(--border)';
+        input.addEventListener('change', () => {
+          state.settings = state.settings || {};
+          state.settings.checklistLabels = state.settings.checklistLabels || {};
+          state.settings.checklistLabels[key] = input.value.trim() || key;
+          saveState();
+          renderChecklistTabs();
+        });
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-outline';
+        delBtn.style.padding = '0.28rem 0.45rem';
+        delBtn.style.fontSize = '0.75rem';
+        delBtn.textContent = 'Delete';
+        const renameBtn = document.createElement('button');
+        renameBtn.className = 'btn btn-outline'; renameBtn.style.padding='0.28rem 0.45rem'; renameBtn.style.fontSize='0.75rem'; renameBtn.textContent='Rename Key';
+        renameBtn.addEventListener('click', ()=>{
+          const newKey = prompt('Enter new key for category (no spaces):', key);
+          if (!newKey) return;
+          if (newKey === key) return;
+          if (state.checklists[newKey]) { alert('Key already exists.'); return; }
+          // move items
+          state.checklists[newKey] = state.checklists[key] || [];
+          delete state.checklists[key];
+          // move label if existed
+          if (state.settings && state.settings.checklistLabels) {
+            state.settings.checklistLabels[newKey] = state.settings.checklistLabels[key] || key;
+            delete state.settings.checklistLabels[key];
+          }
+          saveState();
+          renderSettingsCategories();
+          renderChecklistTabs();
+        });
+        delBtn.addEventListener('click', () => {
+          const list = state.checklists[key] || [];
+          if (list.length) {
+            alert('Cannot delete a category that still has items. Move or remove items first.');
+            return;
+          }
+          if (!confirm('Delete category "' + key + '"?')) return;
+          delete state.checklists[key];
+          if (state.settings && state.settings.checklistLabels) delete state.settings.checklistLabels[key];
+          saveState();
+          renderSettingsCategories();
+          renderChecklistTabs();
+        });
+
+        row.appendChild(keyBox);
+        row.appendChild(input);
+        row.appendChild(renameBtn);
+        row.appendChild(delBtn);
+        container.appendChild(row);
+      });
+    }
+
+    // Overview guides editor in Settings
+    function renderGuideSettings() {
+      const container = document.getElementById('guideSettings');
+      if (!container) return;
+      container.innerHTML = '';
+      (state.guide || []).forEach((g, idx) => {
+        const box = document.createElement('div'); box.style.display='flex'; box.style.flexDirection='column'; box.style.gap='0.35rem'; box.style.borderBottom='1px dashed var(--border)'; box.style.padding='0.45rem 0';
+        const title = document.createElement('input'); title.value = g.title || ''; title.style.padding='0.4rem'; title.addEventListener('change', ()=>{ state.guide[idx].title = title.value; saveState(); renderGuides(); });
+        const icon = document.createElement('input'); icon.value = g.icon || ''; icon.style.padding='0.4rem'; icon.placeholder='icon e.g. 📍'; icon.addEventListener('change', ()=>{ state.guide[idx].icon = icon.value; saveState(); renderGuides(); });
+        const bullets = document.createElement('textarea'); bullets.value = (g.bullets||[]).join('\n'); bullets.style.minHeight='80px'; bullets.addEventListener('change', ()=>{ state.guide[idx].bullets = bullets.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean); saveState(); renderGuides(); });
+        const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='0.4rem'; actions.style.justifyContent='flex-end';
+        const del = document.createElement('button'); del.className='btn btn-outline'; del.textContent='Delete'; del.addEventListener('click', ()=>{ if(!confirm('Delete guide card?')) return; state.guide.splice(idx,1); saveState(); renderGuideSettings(); renderGuides(); });
+        const up = document.createElement('button'); up.className='btn btn-outline'; up.textContent='↑'; up.addEventListener('click', ()=>{ if(idx===0) return; const a = state.guide[idx-1]; state.guide[idx-1]=state.guide[idx]; state.guide[idx]=a; saveState(); renderGuideSettings(); renderGuides(); });
+        const down = document.createElement('button'); down.className='btn btn-outline'; down.textContent='↓'; down.addEventListener('click', ()=>{ if(idx===state.guide.length-1) return; const a = state.guide[idx+1]; state.guide[idx+1]=state.guide[idx]; state.guide[idx]=a; saveState(); renderGuideSettings(); renderGuides(); });
+        actions.appendChild(up); actions.appendChild(down); actions.appendChild(del);
+        box.appendChild(icon); box.appendChild(title); box.appendChild(bullets); box.appendChild(actions);
+        container.appendChild(box);
+      });
+      const addBtn = document.createElement('button'); addBtn.className='btn btn-primary'; addBtn.textContent='➕ Add Guide Card'; addBtn.addEventListener('click', ()=>{ state.guide = state.guide || []; state.guide.push({id:'g'+Date.now(), icon:'📌', title:'New Card', bullets:['New bullet']}); saveState(); renderGuideSettings(); renderGuides(); });
+      container.appendChild(addBtn);
+    }
+
+    function addCategoryFromInputs() {
+      const keyEl = document.getElementById('newCatKey');
+      const labelEl = document.getElementById('newCatLabel');
+      if (!keyEl || !labelEl) return;
+      const key = (keyEl.value || '').trim();
+      const label = (labelEl.value || '').trim() || key;
+      if (!key) {
+        alert('Please enter a key for the category. Use simple letters/numbers (no spaces).');
+        return;
+      }
+      if (state.checklists && state.checklists[key]) {
+        alert('Category key already exists. Choose a different key.');
+        return;
+      }
+      state.checklists = state.checklists || {};
+      state.checklists[key] = [];
+      state.settings = state.settings || {};
+      state.settings.checklistLabels = state.settings.checklistLabels || {};
+      state.settings.checklistLabels[key] = label;
+      saveState();
+      keyEl.value = '';
+      labelEl.value = '';
+      renderSettingsCategories();
+      renderChecklistTabs();
+    }
+
+    function addBug() {
+      const areaEl = document.getElementById("bugArea");
+      const sevEl = document.getElementById("bugSeverity");
+      const prioEl = document.getElementById("bugPriority");
+      const statusEl = document.getElementById("bugStatus");
+      const titleEl = document.getElementById("bugTitle");
+      const notesEl = document.getElementById("bugNotes");
+
+      const area = (areaEl?.value || "").trim();
+      const severity = (sevEl?.value || "").trim();
+      const priority = (prioEl?.value || "").trim();
+      const status = (statusEl?.value || "").trim() || "Open";
+      const title = (titleEl?.value || "").trim();
+      const notes = (notesEl?.value || "").trim();
+
+      if (!title) {
+        alert("Please enter at least a short title for the bug.");
+        return;
+      }
+
+      if (!state.bugs) state.bugs = [];
+      const nextIndex = state.bugs.length + 1;
+      const id = "BUG-" + nextIndex.toString().padStart(3, "0");
+
+      state.bugs.push({
+        id,
+        area,
+        severity,
+        priority,
+        status,
+        title,
+        notes
+      });
+
+      saveState();
+      renderRealBugs();
+
+      if (titleEl) titleEl.value = "";
+      if (notesEl) notesEl.value = "";
+    }
+
+    function editBug(idx) {
+      if (!state.bugs || !state.bugs[idx]) return;
+      const bug = state.bugs[idx];
+
+      const title = prompt("Bug title:", bug.title || "");
+      if (title === null) return;
+
+      const area = prompt("Area / screen:", bug.area || "");
+      if (area === null) return;
+
+      const severity = prompt("Severity (Critical/Major/Minor):", bug.severity || "");
+      if (severity === null) return;
+
+      const priority = prompt("Priority (P1/P2/P3):", bug.priority || "");
+      if (priority === null) return;
+
+      const status = prompt("Status (Open/In Progress/Closed):", bug.status || "");
+      if (status === null) return;
+
+      const notes = prompt("Notes / suggested fix:", bug.notes || "");
+      if (notes === null) return;
+
+      Object.assign(bug, {
+        title: title.trim(),
+        area: area.trim(),
+        severity: severity.trim(),
+        priority: priority.trim(),
+        status: status.trim(),
+        notes: notes.trim()
+      });
+
+      saveState();
+      renderRealBugs();
+    }
+
+    function deleteBug(idx) {
+      if (!state.bugs || !state.bugs[idx]) return;
+      if (!confirm("Delete this bug?")) return;
+      state.bugs.splice(idx, 1);
+      saveState();
+      renderRealBugs();
+    }
+
+    function updateMetaFromFields() {
+      const m = state.meta;
+      const fieldMap = [
+        ["projectName", "projectName"],
+        ["clientName", "clientName"],
+        ["reportAuthor", "reportAuthor"],
+        ["projectCode", "projectCode"],
+        ["scope", "scope"],
+        ["env", "env"],
+        ["build", "build"],
+        ["testDate", "testDate"],
+        ["browsers", "browsers"],
+        ["summaryNotes", "summaryNotes"]
+      ];
+
+      fieldMap.forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el) m[key] = el.value;
+      });
+
+      const fieldMap2 = [
+        ["projectName", "projectName2"],
+        ["clientName", "clientName2"],
+        ["reportAuthor", "reportAuthor"],
+        ["projectCode", "projectCode"],
+        ["scope", "scope"],
+        ["env", "env2"],
+        ["build", "build2"],
+        ["testDate", "testDate2"],
+        ["browsers", "browsers2"],
+        ["summaryNotesEn", "summaryNotes2"]
+      ];
+      fieldMap2.forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el && el.value) {
+          if (key === "summaryNotesEn") {
+            m.summaryNotesEn = el.value;
+          } else {
+            m[key] = el.value;
+          }
+        }
+      });
+
+      saveState();
+      updateExecSummaryPreview();
+    }
+
+    function applyMetaToFields() {
+      const m = state.meta;
+      const fieldMap = [
+        ["projectName", "projectName"],
+        ["clientName", "clientName"],
+        ["reportAuthor", "reportAuthor"],
+        ["projectCode", "projectCode"],
+        ["scope", "scope"],
+        ["env", "env"],
+        ["build", "build"],
+        ["testDate", "testDate"],
+        ["browsers", "browsers"],
+        ["summaryNotes", "summaryNotes"],
+        ["projectName", "projectName2"],
+        ["clientName", "clientName2"],
+        ["reportAuthor", "reportAuthor"],
+        ["projectCode", "projectCode"],
+        ["scope", "scope"],
+        ["env", "env2"],
+        ["build", "build2"],
+        ["testDate", "testDate2"],
+        ["browsers", "browsers2"]
+      ];
+
+      fieldMap.forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.value = m[key] || "";
+        }
+      });
+
+      const el2 = document.getElementById("summaryNotes2");
+      if (el2) el2.value = m.summaryNotesEn || "";
+      const ra = document.getElementById('reportAuthor'); if (ra) ra.value = m.reportAuthor || '';
+      const pc = document.getElementById('projectCode'); if (pc) pc.value = m.projectCode || '';
+      const sc = document.getElementById('scope'); if (sc) sc.value = m.scope || '';
+
+      // apply reportSettings
+      const def = document.getElementById('defaultExecSummary'); if (def) def.value = (state.reportSettings && state.reportSettings.defaultExecutiveSummary) || '';
+      const inc = document.getElementById('includeAllChecklistItems'); if (inc) inc.checked = !!(state.reportSettings && state.reportSettings.includeAllChecklistItems);
+    }
+
+    function updateExecSummaryPreview() {
+      const preview = document.getElementById("execSummaryPreview");
+      const previewEn = document.getElementById("execSummaryPreviewEn");
+      const m = state.meta;
+      const total = Object.values(state.checklists).reduce(
+        (acc, list) => acc + list.length,
+        0
+      );
+      const done = Object.values(state.checklists).reduce(
+        (acc, list) => acc + list.filter(i => i.done).length,
+        0
+      );
+      const percent = total ? Math.round((done / total) * 100) : 0;
+
+      if (preview) {
+        preview.innerHTML =
+          "<strong>ملخص متوقع:</strong> سيتم ذكر أن المشروع " +
+          (m.projectName || "Current Project") +
+          " تم اختباره على بيئة " +
+          (m.env || "Staging") +
+          " بتاريخ " +
+          (m.testDate || "—") +
+          " مع تغطية تقريبية " +
+          percent +
+          "% من الـ Checklists المحددة، والتركيز على المناطق التي تم تعليمها.";
+      }
+
+      if (previewEn) {
+        const summary =
+          m.summaryNotesEn ||
+          `Main user journeys for ${
+            m.projectName || "the current project"
+          } were validated on ${
+            m.env || "Staging"
+          } environment. Around ${percent}% of the defined QA checklist items were executed in this cycle.`;
+        previewEn.innerHTML =
+          "<strong>Preview:</strong> " + summary.replace(/\n/g, "<br>");
+      }
+    }
+
+    function clearAllChecks() {
+      Object.values(state.checklists).forEach(list => {
+        list.forEach(i => (i.done = false));
+      });
+      saveState();
+      renderChecklistTabs();
+      updateChecklistStats();
+    }
+
+    function switchSection(sectionId) {
+      document
+        .querySelectorAll(".section")
+        .forEach(sec => sec.classList.remove("section-active"));
+      const target = document.getElementById(sectionId);
+      if (target) target.classList.add("section-active");
+
+      document
+        .querySelectorAll(".nav-btn")
+        .forEach(btn => btn.classList.remove("active"));
+      const btn = document.querySelector(
+        `.nav-btn[data-section="${sectionId}"]`
+      );
+      if (btn) btn.classList.add("active");
+    }
+
+    function loadTheme() {
+      const stored = localStorage.getItem(THEME_KEY);
+      if (stored === "dark") {
+        document.body.classList.add("theme-dark");
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("theme-dark");
+      localStorage.setItem(
+        THEME_KEY,
+        document.body.classList.contains("theme-dark") ? "dark" : "light"
+      );
+    }
+
+    function openAiHints() {
+      const hints = [
+        "اكتب في Executive Summary نتائج ملموسة: عدد الـ Bugs الحرجة، أهم المناطق التي تم تغطيتها، وأي مخاطر باقية.",
+        "استخدم لغة هادئة ومحايدة: لا تهاجم الكود أو الفريق، ركّز على الـ System Behavior.",
+        "اربط بين الـ Bugs والمتطلبات أو الـ User Stories، هذا يساعد الفريق في الأولويات.",
+        "في التقارير الكبيرة، أضف قسم Risks & Recommendations مع 3–5 نقاط واضحة."
+      ];
+      alert(
+        "AI Hints (أفكار يمكنك استخدامها في التقرير):\n\n- " +
+          hints.join("\n- ")
+      );
+    }
+
+    function generateEnReport() {
+      // تحديث الميتا من الحقول قبل توليد التقرير
+      updateMetaFromFields();
+
+      const total = Object.values(state.checklists)
+        .reduce((acc, list) => acc + list.length, 0);
+      const done = Object.values(state.checklists)
+        .reduce((acc, list) => acc + list.filter(i => i.done).length, 0);
+      const percent = total ? Math.round((done / total) * 100) : 0;
+
+      const win = window.open("", "_blank");
+      if (!win) {
+        alert("Please allow popups to generate the report.");
+        return;
+      }
+
+      const meta = state.meta;
+      const scope = meta.projectName || "Current Project";
+      const company = meta.clientName || "Client";
+      const env = meta.env || "Staging";
+      const build = meta.build || "-";
+      const date = meta.testDate || new Date().toISOString().slice(0, 10);
+      const browsers = meta.browsers || "Chrome, Edge, Mobile";
+      const summary =
+        meta.summaryNotesEn ||
+        meta.summaryNotes ||
+        "Main flows were tested across website, admin dashboard and mobile app. No blocking issues were found, but several usability, performance and security points require attention.";
+
+      // ===== 3. Coverage – Only badge, no detailed scenarios =====
+      let coverageSectionHtml = "";
+
+      // ===== Arabic Tables moved to Checklists, not in report =====
+      const arabicTablesHtml = "";
+
+      // ===== Insert Checklists into report =====
+      const checklistLabels = (state.settings && state.settings.checklistLabels) ? state.settings.checklistLabels : {
+        website: 'Website – واجهة المستخدم',
+        platform: 'Platform / Admin – لوحة التحكم',
+        ecom: 'E-Commerce',
+        mobile: 'Mobile App – تطبيق الموبايل',
+        api: 'API',
+        perf: 'Performance'
+      };
+
+      const checklistsData = state.checklists || {};
+      let checklistsHtml = "";
+      Object.keys(checklistsData).forEach((key) => {
+        const allItems = (checklistsData[key] || []);
+        const items = (state.reportSettings && state.reportSettings.includeAllChecklistItems) ? allItems : allItems.filter((it) => it && it.done);
+        if (!items.length) return; // skip categories with no selected items (or none to show)
+
+        const rows = items
+          .map((it, i) => `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${escapeHtml(it.title || '')}</td>
+              <td>${escapeHtml(it.desc || '')}</td>
+              <td style="text-align:center;">✔</td>
+            </tr>
+          `)
+          .join('');
+
+        checklistsHtml += `
+          <div style="margin-top:16px;">
+            <div class="report-section-title">${escapeHtml(checklistLabels[key] || key)}</div>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Item</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+        `;
+      });
+
+      // ===== 5. Issues & Bugs Summary – من الـ Bugs الحقيقية =====
+      const bugsList = state.bugs || [];
+      let issuesSectionHtml = "";
+
+      if (bugsList.length) {
+        const rows = bugsList
+          .map((b, i) => `
+            <tr>
+              <td>${escapeHtml(b.id || ("BUG-" + (i + 1).toString().padStart(3, "0")))}</td>
+              <td>${escapeHtml(b.area || "")}</td>
+              <td>${escapeHtml(b.severity || "")}</td>
+              <td>${escapeHtml(b.priority || "")}</td>
+              <td>${escapeHtml(b.status || "")}</td>
+              <td>${escapeHtml(b.title || "")}</td>
+              <td>${escapeHtml(b.notes || "")}</td>
+            </tr>
+          `)
+          .join("");
+
+        issuesSectionHtml = `
+          <div style="margin-top:16px;">
+            <div class="report-section-title">4. Issues & Bugs Summary</div>
+            <p class="report-sub">
+              The following table lists the main issues discovered during this QA cycle, as recorded inside the QA panel.
+            </p>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Area</th>
+                  <th>Severity</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Short description</th>
+                  <th>Notes / Suggested fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else {
+        issuesSectionHtml = `
+          <div style="margin-top:16px;">
+            <div class="report-section-title">4. Issues & Bugs Summary</div>
+            <p class="report-sub">
+              No issues were recorded inside the QA panel for this cycle. If bugs are found later,
+              you can add them in the Bugs section and regenerate this report.
+            </p>
+          </div>
+        `;
+      }
+
+      // ===== 6. Bug Reporting Framework (Reference) =====
+      const bugTemplateRowsHtml = (state.bugTemplate || [])
+        .map(
+          (row) => `
+          <tr>
+            <td>${escapeHtml(row.field)}</td>
+            <td>${escapeHtml(row.example)}</td>
+            <td>${escapeHtml(row.desc)}</td>
+          </tr>
+        `
+        )
+        .join("");
+
+      const sevMatrixRowsHtml = (state.sevMatrix || [])
+        .map(
+          (row) => `
+          <tr>
+            <td>${escapeHtml(row.sev || row.severity)}</td>
+            <td>${escapeHtml(row.priority)}</td>
+            <td>${escapeHtml(row.desc)}</td>
+          </tr>
+        `
+        )
+        .join("");
+
+      const bugLifeRowsHtml = (state.bugLife || [])
+        .map(
+          (row) => `
+          <tr>
+            <td>${escapeHtml(row.status)}</td>
+            <td>${escapeHtml(row.desc || row.when || "")}</td>
+          </tr>
+        `
+        )
+        .join("");
+
+      const bugChecklistItemsHtml = (state.bugChecklist || [])
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("");
+
+      const proTipsItemsHtml = (state.proTips || [])
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("");
+
+      // ===== Bug Reporting Framework removed from report =====
+      const bugFrameworkHtml = "";
+
+      const css = document.querySelector("style").textContent;
+
+      const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QA Report – ${escapeHtml(scope)}</title>
+<style>
+${css}
+</style>
+</head>
+<body>
+<div class="report-doc">
+  <div class="report-header">
+    <h1>QA Report – ${escapeHtml(scope)}</h1>
+    <p>Prepared by: Mohammad Alzoubi – Environment: ${escapeHtml(env)} – Date: ${escapeHtml(date)}</p>
+  </div>
+
+  <div>
+    <div class="report-section-title">1. Executive Summary</div>
+    <p class="report-sub">${escapeHtml(summary)}</p>
+    <div style="margin-top:4px;">
+      <span class="badge">Coverage: ${percent}% (${done}/${total} checklist items)</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="report-section-title">2. Test Meta</div>
+    <table class="report-table">
+      <thead>
+        <tr><th>Field</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Project / Product</td><td>${escapeHtml(scope)}</td></tr>
+        <tr><td>Client / Company</td><td>${escapeHtml(company)}</td></tr>
+        <tr><td>Environment</td><td>${escapeHtml(env)}</td></tr>
+        <tr><td>Build / Version</td><td>${escapeHtml(build)}</td></tr>
+        <tr><td>Test Date</td><td>${escapeHtml(date)}</td></tr>
+        <tr><td>Browsers / Devices</td><td>${escapeHtml(browsers)}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  ${coverageSectionHtml}
+  ${checklistsHtml}
+  ${issuesSectionHtml}
+  ${bugFrameworkHtml}
+
+  <div class="report-footer">
+    <span>Prepared by: Mohammad Alzoubi (QA & Cybersecurity)</span>
+    <span>Generated on: ${new Date().toLocaleString()}</span>
+  </div>
+</div>
+</body>
+</html>
+      `;
+
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
+      win.focus();
+      win.print(); // من نافذة الطباعة اختار Save as PDF
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.addEventListener("click", () => switchSection(btn.dataset.section));
+      });
+      renderChecklistTabs();
+      renderBugTables();
+      renderRealBugs();
+      updateChecklistStats();
+      updateExecSummaryPreview();
+      applyMetaToFields();
+      // Apply UI-only settings and render settings panel
+      applySettingsToUI();
+      renderSettingsCategories();
+      renderGuideSettings();
+      loadTheme();
+
+      const themeToggle = document.getElementById("themeToggle");
+      if (themeToggle) {
+        themeToggle.addEventListener("click", toggleTheme);
+      }
+
+      const aiHintsBtn = document.getElementById("aiHintsBtn");
+      if (aiHintsBtn) {
+        aiHintsBtn.addEventListener("click", openAiHints);
+      }
+
+      const metaIds = [
+        "projectName","clientName","env","build","testDate","browsers",
+        "summaryNotes","projectName2","clientName2","env2","build2",
+        "testDate2","browsers2","summaryNotes2"
+      ];
+      metaIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("change", updateMetaFromFields);
+          el.addEventListener("input", updateMetaFromFields);
+        }
+      });
+
+      // reportSettings bindings
+      const defExec = document.getElementById('defaultExecSummary');
+      const incAll = document.getElementById('includeAllChecklistItems');
+      if (defExec) {
+        defExec.addEventListener('change', () => {
+          state.reportSettings = state.reportSettings || {};
+          state.reportSettings.defaultExecutiveSummary = defExec.value || '';
+          saveState();
+        });
+      }
+      if (incAll) {
+        incAll.addEventListener('change', () => {
+          state.reportSettings = state.reportSettings || {};
+          state.reportSettings.includeAllChecklistItems = !!incAll.checked;
+          saveState();
+        });
+      }
+
+      // UI Settings inputs
+      const uiTitleEl = document.getElementById('uiTitle');
+      const uiSubEl = document.getElementById('uiSubtitle');
+      if (uiTitleEl) {
+        uiTitleEl.value = (state.settings && state.settings.uiTitle) || '';
+        uiTitleEl.addEventListener('change', () => {
+          state.settings = state.settings || {};
+          state.settings.uiTitle = uiTitleEl.value || '';
+          saveState();
+          applySettingsToUI();
+        });
+      }
+      if (uiSubEl) {
+        uiSubEl.value = (state.settings && state.settings.uiSubtitle) || '';
+        uiSubEl.addEventListener('change', () => {
+          state.settings = state.settings || {};
+          state.settings.uiSubtitle = uiSubEl.value || '';
+          saveState();
+          applySettingsToUI();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
