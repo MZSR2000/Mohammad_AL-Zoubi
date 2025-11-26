@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>دليل الهداية – منصة توجيه طالب العلم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #020617;
+      --bg-card: #020817;
+      --bg-soft: #0b1120;
+      --primary: #22c55e;
+      --primary-soft: rgba(34, 197, 94, 0.18);
+      --primary-strong: #16a34a;
+      --accent-gold: #facc15;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.9);
+      --radius-xl: 22px;
+      --radius-2xl: 32px;
+      --glass: rgba(15, 23, 42, 0.88);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Tajawal", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 60%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ====== Background Ornaments ====== */
+    .bg-orbit {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-orbit::before,
+    .bg-orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(65px);
+      opacity: 0.65;
+      animation: floatSlow 26s infinite alternate ease-in-out;
+    }
+
+    .bg-orbit::before {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.35), transparent 60%);
+      top: -80px;
+      right: -80px;
+    }
+
+    .bg-orbit::after {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.3), transparent 65%);
+      bottom: -120px;
+      left: -40px;
+      animation-delay: 2s;
+    }
+
+   /* نخلي المحتوى أعرض شوي */
+.container {
+  max-width: 1280px;          /* كانت 1160 */
+  margin: 0 auto;
+  padding: 0 1.5rem;          /* حافة أكبر شوي */
+}
+
+/* نخلي الهيرو أعلى وأعرض */
+.hero {
+  padding: 3rem 0 2.5rem;     /* تكبير المسافة فوق وتحت */
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr); /* نعطي مساحة أكبر للبوكس اليمين */
+  gap: 2.5rem;
+  align-items: center;
+  min-height: 80vh;           /* تقريبًا يعبي الشاشة */
+}
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #facc15, #16a34a 45%, #0f172a 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #022c22;
+      font-weight: 800;
+      box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, rgba(255, 255, 255, 0.4), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: 0.5;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--primary);
+    }
+
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      transition: all 0.18s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-links a::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.35), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.18s ease-out;
+    }
+
+    .nav-links a span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+      border-color: rgba(148, 163, 184, 0.35);
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .nav-links a:hover::before {
+      opacity: 1;
+    }
+
+    .nav-links a.active {
+      background: radial-gradient(circle at 10% 0, #22c55e, #16a34a 60%);
+      color: #022c22;
+      border-color: rgba(34, 197, 94, 0.8);
+      font-weight: 600;
+      box-shadow: 0 0 0 1px rgba(21, 128, 61, 0.7), 0 15px 35px rgba(21, 128, 61, 0.35);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .nav-cta-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.9);
+      color: var(--text-muted);
+    }
+
+    .nav-cta-btn {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+      color: #022c22;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(21, 128, 61, 0.55);
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+
+    .nav-cta-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(21, 128, 61, 0.7);
+    }
+
+    /* ====== Hero ====== */
+    main {
+      padding-bottom: 3rem;
+    }
+
+    .hero {
+      padding: 2rem 0 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.4fr);
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .hero-left {
+      position: relative;
+      padding-right: 0.5rem;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: radial-gradient(circle at right, rgba(34, 197, 94, 0.25), rgba(15, 23, 42, 0.9));
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      margin-bottom: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-pill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.4), transparent 55%);
+      mix-blend-mode: soft-light;
+      opacity: 0.5;
+    }
+
+    .hero-pill-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--primary);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.3);
+      animation: pulseDot 1.8s infinite;
+    }
+
+    .hero-title {
+  font-size: 2.6rem;          /* تكبير النص */
+  line-height: 1.25;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #f9fafb;
+}
+
+
+    .hero-title span.highlight {
+      background: linear-gradient(135deg, #facc15, #f97316, #22c55e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .btn-main {
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at top left, #facc15, #22c55e 50%, #16a34a 100%);
+      color: #022c22;
+      font-weight: 700;
+      font-size: 0.96rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 17px 40px rgba(21, 128, 61, 0.7);
+      transition: transform 0.14s ease-out, box-shadow 0.14s ease-out;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 20px 45px rgba(22, 163, 74, 0.9);
+    }
+
+    .btn-ghost {
+      padding: 0.7rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.85);
+      font-weight: 500;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(209, 213, 219, 0.85);
+      background: rgba(15, 23, 42, 0.95);
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .hero-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .hero-meta-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-gold);
+    }
+
+    .hero-right {
+  position: relative;
+}
+
+/* تكبير البوكس */
+.hero-panel {
+  background: linear-gradient(155deg, var(--glass), #020617);
+  border-radius: var(--radius-2xl);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  box-shadow: var(--shadow-soft);
+  padding: 1.4rem 1.5rem;   /* كانت 1rem */
+  position: relative;
+  overflow: hidden;
+  min-height: 320px;        /* ارتفاع أكبر */
+}
+
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(250, 204, 21, 0.08) 0, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.12) 0, transparent 50%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hero-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-panel-title {
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .hero-panel-title span:first-child {
+      font-weight: 700;
+    }
+
+    .hero-panel-title span:last-child {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .hero-panel-tag {
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+    }
+
+    .hero-steps {
+  position: relative;
+  z-index: 1;
+  margin-top: 1rem;
+  padding: 0.9rem 0.6rem 0.6rem;  /* تكبير المسافات الداخلية */
+  display: grid;
+  gap: 0.8rem;                    /* مسافة أكبر بين الخطوات */
+}
+
+
+    .hero-step {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.8rem 0.8rem;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      backdrop-filter: blur(10px);
+      transform-origin: right center;
+      animation: fadeInUp 0.6s ease-out backwards;
+    }
+
+    .hero-step:nth-child(1) { animation-delay: 0.1s; }
+    .hero-step:nth-child(2) { animation-delay: 0.25s; }
+    .hero-step:nth-child(3) { animation-delay: 0.4s; }
+
+    .hero-step-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #22c55e, #16a34a 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #022c22;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.6);
+    }
+
+    .hero-step-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .hero-step-body strong {
+      font-size: 0.85rem;
+    }
+
+    .hero-step-body span {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .hero-step-label {
+      font-size: 0.75rem;
+      color: #a5b4fc;
+    }
+
+    .hero-path-quick {
+      position: relative;
+      z-index: 1;
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .path-chip {
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+    }
+
+    .path-chip:hover {
+      border-color: var(--primary);
+      background: rgba(22, 163, 74, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* ====== Path Cards Section ====== */
+    section {
+      padding: 1.5rem 0 1.75rem;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .section-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .section-title h2 {
+      font-size: 1.2rem;
+      color: #f9fafb;
+    }
+
+    .section-title span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .section-badge {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .path-card {
+      position: relative;
+      background: radial-gradient(circle at 0 0, rgba(34, 197, 94, 0.16), #020617 55%);
+      border-radius: var(--radius-xl);
+      padding: 1rem;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.85);
+      transform: translateY(0) rotate3d(0, 0, 0, 0deg);
+      transform-origin: center;
+      transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out;
+      cursor: pointer;
+    }
+
+    .path-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background-image: radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.1) 0, transparent 55%);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .path-card:hover {
+      transform: translateY(-4px) rotate3d(1, -1, 0, 6deg);
+      box-shadow: 0 26px 55px rgba(15, 23, 42, 0.95);
+      border-color: rgba(34, 197, 94, 0.8);
+    }
+
+    .path-card-header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .path-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #22c55e, #0f766e 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.8);
+    }
+
+    .path-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .path-title strong {
+      font-size: 0.98rem;
+    }
+
+    .path-title span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .path-level {
+      position: relative;
+      z-index: 1;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      margin-bottom: 0.4rem;
+    }
+
+    .path-body {
+      position: relative;
+      z-index: 1;
+      font-size: 0.82rem;
+      color: #d1d5db;
+      margin-bottom: 0.7rem;
+    }
+
+    .path-bullets {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      margin-bottom: 0.7rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .path-bullets span::before {
+      content: "• ";
+      color: var(--accent-gold);
+    }
+
+    .path-footer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .path-cta {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .path-cta span.arrow {
+      transform: translateY(0);
+      transition: transform 0.15s ease-out;
+    }
+
+    .path-card:hover .path-cta span.arrow {
+      transform: translateY(-1px) translateX(-2px);
+    }
+
+    /* ====== Steps Strip ====== */
+    .steps-strip {
+      margin-top: 1rem;
+      background: linear-gradient(to left, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.99));
+      border-radius: 999px;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      padding: 0.6rem 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    .steps-label {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .steps-label-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--primary);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+
+    .steps-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .steps-pills span {
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+    }
+
+    /* ====== Modal (Path Details Preview) ====== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal {
+      max-width: 520px;
+      width: 100%;
+      background: linear-gradient(140deg, #020617, #020817);
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 1rem 1.1rem;
+      box-shadow: 0 25px 70px rgba(15, 23, 42, 0.95);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background-image:
+        radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.12) 0, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(34, 197, 94, 0.18) 0, transparent 55%);
+      opacity: 0.9;
+    }
+
+    .modal-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      gap: 0.75rem;
+    }
+
+    .modal-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .modal-title-group h3 {
+      font-size: 1rem;
+      color: #f9fafb;
+    }
+
+    .modal-title-group span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .modal-close {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+      transition: all 0.16s ease-out;
+    }
+
+    .modal-close:hover {
+      background: rgba(15, 23, 42, 1);
+      color: #e5e7eb;
+    }
+
+    .modal-body {
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .modal-body strong {
+      color: var(--accent-gold);
+    }
+
+    .modal-bullets {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: grid;
+      gap: 0.2rem;
+      margin-top: 0.35rem;
+    }
+
+    .modal-bullets span::before {
+      content: "• ";
+      color: var(--primary);
+    }
+
+    .modal-footer {
+      margin-top: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .modal-btn-main {
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at top left, #facc15, #22c55e 60%, #16a34a 100%);
+      color: #022c22;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+    }
+
+    /* ====== Footer ====== */
+    footer {
+      padding: 1.2rem 0 2rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.95);
+      margin-top: 1.5rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-inner span.highlight {
+      color: var(--primary);
+    }
+
+    /* ====== Animations ====== */
+    @keyframes pulseDot {
+      0% { transform: scale(1); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.4); }
+      50% { transform: scale(1.12); box-shadow: 0 0 0 7px rgba(34, 197, 94, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.4); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes floatSlow {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(24px, -18px, 0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* ====== Responsive ====== */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-right {
+  position: relative;
+  transform: scale(1.03);   /* تكبير بسيط */
+  transform-origin: center;
+}
+
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        flex-wrap: wrap;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-title {
+        font-size: 1.7rem;
+      }
+      .steps-strip {
+        border-radius: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbit"></div>
+
+  <header>
+    <div class="container">
+      <nav class="nav">
+        <div class="brand">
+          <div class="brand-logo">
+            ﷽
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">دليل الهداية</span>
+            <span class="brand-sub">توجيه لطالب العلم في زمن الفتن</span>
+          </div>
+        </div>
+
+        <div class="nav-links">
+          <a href="#hero" class="active"><span>الرئيسية</span></a>
+          <a href="#paths"><span>اختر مسارك</span></a>
+          <a href="#steps"><span>خطوات التعلّم</span></a>
+        </div>
+
+        <div class="nav-cta">
+          <div class="nav-cta-pill">
+            إبدأ من الأساسيات، خطوة بخطوة
+          </div>
+          <button class="nav-cta-btn" data-scroll-to="#paths">
+            ابدأ الآن
+            <span>⬇</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="hero" class="container">
+      <div class="hero">
+        <div class="hero-left">
+          <div class="hero-pill">
+            <div class="hero-pill-dot"></div>
+            <span>منصة توجيه لا مكتبة ضخمة مُربِكة</span>
+          </div>
+          <h1 class="hero-title">
+            طريق <span class="highlight">واضح</span> يرافق
+            <br />
+            طالب العلم في <span class="highlight">زمن الفتن</span>
+          </h1>
+          <p class="hero-subtitle">
+            بدل أن تتيه بين آلاف المقاطع والكتب؛ دَع الموقع يرشدك لمسار يناسب مستواك،
+            من العقيدة والعبادة إلى فهم الشبهات والفتن بأسلوب سهل وهادئ.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn-main" data-scroll-to="#paths">
+              👣 اختر مسارك الأول
+            </button>
+            <button class="btn-ghost" data-scroll-to="#steps">
+              🧭 كيف يعمل هذا الدليل؟
+            </button>
+          </div>
+
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <div class="hero-meta-dot"></div>
+              <span>مسارات مخصّصة: مبتدئ، طالب علم، فهم الفتن</span>
+            </div>
+            <div class="hero-meta-item">
+              <div class="hero-meta-dot" style="background: #22c55e;"></div>
+              <span>محتوى من مصادر موثوقة (فيديو + نص)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-panel">
+            <div class="hero-panel-header">
+              <div class="hero-panel-title">
+                <span>خريطة سريعة لطالب العلم</span>
+                <span>ثلاث مراحل تمهّد لك الطريق</span>
+              </div>
+              <div class="hero-panel-tag">تجربة مرئية</div>
+            </div>
+
+            <div class="hero-steps">
+              <div class="hero-step">
+                <div class="hero-step-icon">1</div>
+                <div class="hero-step-body">
+                  <strong>ثبِّت الأساس أولًا</strong>
+                  <span>معرفة ربك، دينك، نبيك، وأهمية الصلاة والقرآن.</span>
+                </div>
+                <div class="hero-step-label">مستوى: مبتدئ</div>
+              </div>
+
+              <div class="hero-step">
+                <div class="hero-step-icon">2</div>
+                <div class="hero-step-body">
+                  <strong>رتّب طلبك للعلم</strong>
+                  <span>تسلسل واضح في العقيدة والفقه وآداب طالب العلم.</span>
+                </div>
+                <div class="hero-step-label">مستوى: طالب علم</div>
+              </div>
+
+              <div class="hero-step">
+                <div class="hero-step-icon">3</div>
+                <div class="hero-step-body">
+                  <strong>اثبُت في زمن الشبهات</strong>
+                  <span>فهم الفتن المعاصرة والرد الهادئ على الشبهات.</span>
+                </div>
+                <div class="hero-step-label">مستوى: مواجهة الفتن</div>
+              </div>
+            </div>
+
+            <div class="hero-path-quick">
+              <div class="path-chip" data-path="beginner">أنا مبتدئ.. من أين أبدأ؟</div>
+              <div class="path-chip" data-path="student">لدي أساسيات وأريد خطة أعمق</div>
+              <div class="path-chip" data-path="fitan">أعاني من الشبهات والفتن</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Paths -->
+    <section id="paths" class="container">
+      <div class="section-heading">
+        <div class="section-title">
+          <h2>اختر مسارك في طلب العلم</h2>
+          <span>كل مسار مصمَّم ليوجّهك خطوة بخطوة بحسب حالك اليوم.</span>
+        </div>
+        <div class="section-badge">
+          🔍 لا تقلق من اختيار المسار الخاطئ.. يمكنك تغييره لاحقًا.
+        </div>
+      </div>
+
+      <div class="paths-grid">
+        <!-- Beginner Path -->
+        <article class="path-card" data-path="beginner">
+          <div class="path-card-header">
+            <div class="path-icon">🌱</div>
+            <div class="path-title">
+              <strong>مسار المبتدئ – أعرف ديني من جديد</strong>
+              <span>يناسب من يشعر أنه يريد بداية واضحة وبسيطة من الصفر.</span>
+            </div>
+          </div>
+          <div class="path-level">المستوى: من لا أساس له أو أساس ضعيف</div>
+          <p class="path-body">
+            هذا المسار يرسم لك أوّل درجات السلّم: من تعريف التوحيد، ومعنى الشهادتين،
+            إلى الصلاة والقرآن والأذكار، بلغة سهلة وهدوء دون مصطلحات معقّدة.
+          </p>
+          <div class="path-bullets">
+            <span>خطوات واضحة مرقّمة (١ → ٤) لا تتجاوزك للمرحلة التالية إلا بعد الفهم.</span>
+            <span>مقاطع قصيرة + ملخّص مكتوب يمكن حفظه أو تحميله PDF.</span>
+            <span>تطبيق عملي بسيط بعد كل خطوة (دعاء، ذكر، عمل قلبي).</span>
+          </div>
+          <div class="path-footer">
+            <button class="path-cta">
+                
+              ابدأ من الخطوة الأولى
+              <span class="arrow">↩</span>
+            </button>
+            <span>مدة المسار المقترحة: ٣–٤ أسابيع</span>
+          </div>
+        </article>
+
+        <!-- Student Path -->
+        <article class="path-card" data-path="student">
+          <div class="path-card-header">
+            <div class="path-icon">📚</div>
+            <div class="path-title">
+              <strong>مسار طالب العلم – خريطة طريق منظّمة</strong>
+              <span>لِمن لديه أساس ويريد الانتقال إلى طلب علمٍ منضبط.</span>
+            </div>
+          </div>
+          <div class="path-level">المستوى: من يعرف الأساس ويريد أن يرتّب العلم.</div>
+          <p class="path-body">
+            يركّز هذا المسار على ترتيب العلوم: عقيدة، فقه، آداب، تفسير، مصطلح،
+            مع اقتراحات لكتب وشروح موثوقة، وخطّ سير لا يحملك أكثر من طاقتك.
+          </p>
+          <div class="path-bullets">
+            <span>تقسيم إلى مراحل: مبتدئ → متوسط → متقدّم.</span>
+            <span>إشارة لكل درس: هل هو مقطع صوتي، مرئي، أو كتيّب PDF.</span>
+            <span>تنبيهات لطالب العلم: الإخلاص، التدرّج، السؤال عند الإشكال.</span>
+          </div>
+          <div class="path-footer">
+            <button class="path-cta">
+              شاهد خريطة الطريق
+              <span class="arrow">↩</span>
+            </button>
+            <span>بناء عادات علمية مستمرة</span>
+          </div>
+        </article>
+
+        <!-- Fitan / Doubts Path -->
+        <article class="path-card" data-path="fitan">
+          <div class="path-card-header">
+            <div class="path-icon">🛡</div>
+            <div class="path-title">
+              <strong>مسار الفتن والشبهات – ثبات في زمن الضوضاء</strong>
+              <span>لمن تزعزعه مقاطع السوشال ميديا والأسئلة المتكررة.</span>
+            </div>
+          </div>
+          <div class="path-level">المستوى: من يتعرّض للشبهات ويريد جوابًا هادئًا.</div>
+          <p class="path-body">
+            يجمع هذا المسار بين فهم جذور الفتنة، والجواب المختصر على الشبهات،
+            مع إرشادات لحماية القلب والعقل من التشتّت والإفراط في الاستماع لكل أحد.
+          </p>
+          <div class="path-bullets">
+            <span>قسم للأسئلة الشائعة: وجود الله، السنة، القضاء والقدر، الأحكام.</span>
+            <span>ردود موجزة مع إمكانية التوسّع لمن أراد التفاصيل.</span>
+            <span>نصائح عملية لاستخدام هادئ للسوشال ميديا وتصفية المصادر.</span>
+          </div>
+          <div class="path-footer">
+            <button class="path-cta">
+              تصفّح أسئلة الشبهات
+              <span class="arrow">↩</span>
+            </button>
+            <span>هدف المسار: الطمأنينة لا كثرة الجدال</span>
+          </div>
+        </article>
+      </div>
+
+      <div id="steps" class="steps-strip">
+        <div class="steps-label">
+          <div class="steps-label-dot"></div>
+          <span>نموذج مبسّط لمسار التعلّم داخل الموقع:</span>
+        </div>
+        <div class="steps-pills">
+          <span>١) اختر مسارك المناسب</span>
+          <span>٢) شاهد الدرس القصير</span>
+          <span>٣) اقرأ الملخص المكتوب</span>
+          <span>٤) طبّق خطوة عملية</span>
+          <span>٥) انتقل للدرس التالي</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 id="modalTitle">عنوان المسار</h3>
+            <span id="modalSubtitle">وصف مختصر للمسار.</span>
+          </div>
+          <button class="modal-close" id="modalCloseBtn" aria-label="إغلاق">
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modalIntro">
+            هنا شرح عام لما يقدّمه هذا المسار، يمكن تخصيصه لكل نوع.
+          </p>
+          <div class="modal-bullets" id="modalBullets">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <span id="modalHint">يمكنك لاحقًا تخصيص هذه الصفحة لعرض الدروس الفعلية.</span>
+          <button class="modal-btn-main" id="modalCTA">
+            انتقل للصفحة التفصيلية
+            <span>↩</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        &copy; <span id="year"></span> <span class="highlight">دليل الهداية</span> – منصة توجيه لطالب العلم.
+      </div>
+      <div>
+        "اللهم أرنا الحق حقًا وارزقنا اتباعه، وأرنا الباطل باطلًا وارزقنا اجتنابه."
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Smooth scroll
+    document.querySelectorAll("[data-scroll-to]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-scroll-to");
+        const el = document.querySelector(target);
+        if (el) {
+          window.scrollTo({
+            top: el.getBoundingClientRect().top + window.scrollY - 80,
+            behavior: "smooth"
+          });
+        }
+      });
+    });
+
+    // Modal data
+    const pathDetails = {
+      beginner: {
+        title: "مسار المبتدئ – بداية صحيحة بلا تعقيد",
+        subtitle: "خُطوات هادئة لمن يريد أن يعرف دينه من جديد.",
+        intro:
+          "إن كنت تشعر أنك تريد أن تبدأ من جديد، دون ضغط أو مصطلحات، فهذا المسار يمسك بيدك من أول تعريف التوحيد ومعنى الشهادتين، إلى الصلاة والقرآن والأذكار، بلغة سهلة ومحتوى قصير.",
+        bullets: [
+          "مقاطع قصيرة تشرح الأساسيات مع أمثلة يومية قريبة من الواقع.",
+          "ملفّات مكتوبة يمكنك تحميلها أو طباعتها للمراجعة.",
+          "أسئلة بسيطة بعد كل خطوة لتثبيت الفهم، دون امتحانات مرهقة.",
+          "اقتراحات عملية صغيرة بعد كل درس (ذكر، دعاء، موقف تعبّدي).",
+        ],
+        hint:
+          "يمكنك لاحقًا ربط هذا المسار بقائمة دروس من يوتيوب أو ملفات PDF للمبتدئين."
+      },
+      student: {
+        title: "مسار طالب العلم – خريطة طريق منظّمة",
+        subtitle: "ترتيب ما تعرفه إلى مشروع طلب علم مستمر.",
+        intro:
+          "إن كان لديك أساس جيد في الدين وتريد الانتقال لطلب العلم بشكل منضبط، فهذا المسار يقترح لك ترتيبًا للعلوم والكتب والشروح، مع تدرّج لا يرهقك ويُراعي واقعك اليومي.",
+        bullets: [
+          "تقسيم واضح إلى مراحل: مبتدئ، متوسط، متقدّم.",
+          "ترشيح كتب وشروح موثوقة مع الإشارة لمستوى كل مادة.",
+          "تنبيهات لطالب العلم: الإخلاص، الصبر، عدم الاستعجال، وعدم التشتّت.",
+          "إمكانية ربط كل مرحلة بقائمة تشغيل (Playlist) في يوتيوب أو سلاسل صوتية."
+        ],
+        hint:
+          "يمكنك بناء صفحات فرعية لكل مرحلة وربطها بمواد علمية حقيقية لاحقًا."
+      },
+      fitan: {
+        title: "مسار الفتن والشبهات – ثبات وطمأنينة",
+        subtitle: "لفهم الشبهات قبل الرد عليها، وحماية القلب من الاضطراب.",
+        intro:
+          "هذا المسار لا يكتفي بالرد على الأسئلة، بل يساعدك على فهم جذور الشبهة، وكيف تحمي قلبك وعقلك من التشتّت بكثرة ما تسمع وتشاهد في السوشال ميديا.",
+        bullets: [
+          "قسم خاص لأكثر الشبهات انتشارًا مع ملخّص جواب في أسطر معدودة.",
+          "روابط لمقاطع مطوّلة لمن أراد التفصيل بعد فهم الملخّص.",
+          "إرشادات عملية لضبط استهلاك المحتوى وعدم تتبّع كل شبهة جديدة.",
+          "تنبيه إلى آداب الحوار وعدم الانجرار للجدال العقيم في التعليقات."
+        ],
+        hint:
+          "يمكنك لاحقًا ربط كل شبهة بمقال تفصيلي أو سلسلة مرئية من قناة موثوقة."
+      }
+    };
+
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalSubtitle = document.getElementById("modalSubtitle");
+    const modalIntro = document.getElementById("modalIntro");
+    const modalBullets = document.getElementById("modalBullets");
+    const modalHint = document.getElementById("modalHint");
+    const modalCTA = document.getElementById("modalCTA");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+    function openModal(pathKey) {
+      const data = pathDetails[pathKey];
+      if (!data) return;
+
+      modalTitle.textContent = data.title;
+      modalSubtitle.textContent = data.subtitle;
+      modalIntro.textContent = data.intro;
+      modalHint.textContent = data.hint;
+      modalBullets.innerHTML = "";
+      data.bullets.forEach(text => {
+        const span = document.createElement("span");
+        span.textContent = text;
+        modalBullets.appendChild(span);
+      });
+
+        modalCTA.onclick = () => {
+    // توجيه بحسب المسار المختار
+    if (pathKey === "beginner") {
+      window.location.href = "beginner-path.html";   // صفحة مسار المبتدئ
+    } else if (pathKey === "student") {
+      // لما تعمل صفحة طالب العلم لاحقًا خليه يروح عليها
+      // window.location.href = "student-path.html";
+      modalBackdrop.classList.remove("visible"); // مؤقتًا بس يسكر
+    } else if (pathKey === "fitan") {
+      // نفس الفكرة لمسار الفتن لما تنشئه
+      // window.location.href = "fitan-path.html";
+      modalBackdrop.classList.remove("visible");
+    } else {
+      modalBackdrop.classList.remove("visible");
+    }
+  };
+
+
+      modalBackdrop.classList.add("visible");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    document.querySelectorAll(".path-card, .path-chip").forEach(el => {
+      el.addEventListener("click", () => {
+        const key = el.getAttribute("data-path");
+        openModal(key);
+      });
+    });
+
+    function closeModal() {
+      modalBackdrop.classList.remove("visible");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    modalCloseBtn.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modalBackdrop.classList.contains("visible")) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
