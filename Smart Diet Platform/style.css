@@ -1,0 +1,1593 @@
+:root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --surface-soft: rgba(255, 255, 255, 0.98);
+  --text: #18222f;
+  --muted: #6b7a87;
+  --primary: #1664c0;
+  --primary-soft: rgba(22, 100, 192, 0.08);
+  --accent: #f97316;
+  --danger: #ef4444;
+  --radius: 14px;
+  --border: rgba(12, 74, 110, 0.05);
+}
+
+:root.dark {
+  --bg: radial-gradient(circle at top, #0f172a 0%, #020617 50%, #000 100%);
+  --surface: rgba(11, 15, 23, 0.95);
+  --surface-soft: rgba(12, 17, 27, 0.9);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --primary: #38bdf8;
+  --primary-soft: rgba(56, 189, 248, 0.1);
+  --accent: #fb923c;
+  --border: rgba(148, 163, 184, 0.09);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Cairo", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: 54px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(11, 15, 23, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 14px;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.brand-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #1d77ff 0%, #0c3f8f 100%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: 0 10px 35px rgba(22, 100, 192, 0.5);
+  flex-shrink: 0;
+}
+
+:root.dark .brand-circle {
+  background: radial-gradient(circle, #38bdf8 0%, #0f94c9 100%);
+}
+
+.brand-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.4;
+}
+
+.brand-title {
+  font-size: 0.85rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.brand-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.top-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.btn {
+  background: transparent;
+  border: 1px solid rgba(22, 100, 192, 0.12);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: 0.12s ease-out;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.btn:hover {
+  background: rgba(22, 100, 192, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 100, 192, 0.2);
+}
+.btn-small {
+  padding: 6px 12px;
+  font-size: 0.7rem;
+}
+.btn.danger {
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+}
+.btn.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+:root.dark .btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+}
+
+.progress-pill {
+  background: rgba(22, 100, 192, 0.05);
+  border: 1px solid rgba(22, 100, 192, 0.12);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.app-shell {
+  display: flex;
+  min-height: calc(100vh - 54px);
+  position: relative;
+}
+
+/* sidebar */
+.sidebar {
+  position: fixed;
+  right: 0;
+  top: 54px;
+  width: 210px;
+  height: calc(100vh - 54px);
+  background: var(--surface);
+  border-left: 1px solid rgba(11, 15, 23, 0.03);
+  padding: 16px 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 50;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow-y: auto;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar:hover,
+.sidebar.active {
+  transform: translateX(0);
+}
+
+/* Hidden state */
+.sidebar.hidden {
+  display: none;
+}
+
+/* Sidebar trigger area */
+.sidebar-trigger {
+  position: fixed;
+  right: 0;
+  top: 54px;
+  width: 15px;
+  height: calc(100vh - 54px);
+  z-index: 45;
+  cursor: pointer;
+  background: transparent;
+}
+.side-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.side-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+.side-caption {
+  font-size: 0.6rem;
+  color: var(--muted);
+}
+.nav-btn {
+  background: rgba(22, 100, 192, 0.02);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 5px 8px;
+  font-size: 0.6rem;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text);
+}
+.nav-btn.active,
+.nav-btn:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: rgba(22, 100, 192, 0.2);
+}
+.side-profiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.side-profiles .profile-pill {
+  background: rgba(22, 100, 192, 0.02);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 3px 6px;
+  font-size: 0.58rem;
+  cursor: pointer;
+}
+.side-profiles .profile-pill.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: rgba(22, 100, 192, 0.2);
+}
+
+/* content */
+.content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1180px;
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+.page.hidden {
+  display: none;
+}
+
+/* dashboard */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+.dash-card {
+  background: var(--surface-soft);
+  border: 1px solid rgba(11, 15, 23, 0.02);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  line-height: 1.7;
+}
+.dash-card small {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.dash-card h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+.dash-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 20px;
+}
+.card-head h2 {
+  font-size: 0.73rem;
+  margin: 0;
+  color: var(--primary);
+}
+
+.muted {
+  font-size: 0.58rem;
+  color: var(--muted);
+}
+
+/* plan */
+.filter-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.search-input {
+  flex: 0 0 200px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(11, 15, 23, 0.04);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.6rem;
+  color: inherit;
+}
+.allow-flex {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.mini-title {
+  font-size: 0.62rem;
+  margin: 0 0 4px;
+  color: var(--primary);
+}
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tags li {
+  background: rgba(22, 100, 192, 0.05);
+  border: 1px solid rgba(22, 100, 192, 0.05);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.58rem;
+}
+.tags.danger li {
+  background: rgba(239, 68, 68, 0.14);
+  color: #b91c1c;
+}
+.tags.warn li {
+  background: rgba(251, 191, 36, 0.18);
+  color: #92400e;
+}
+
+.monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+}
+.note-box {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px dashed rgba(22, 100, 192, 0.15);
+  border-radius: 10px;
+  padding: 6px;
+  font-size: 0.58rem;
+}
+:root.dark .note-box {
+  background: rgba(15, 23, 42, 0.2);
+}
+.note-box h4 {
+  margin: 0 0 4px;
+  font-size: 0.63rem;
+  color: var(--primary);
+}
+.note-box [contenteditable] {
+  display: inline-block;
+  min-width: 40px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1px 2px;
+  border-radius: 4px;
+}
+.note-box button {
+  margin-top: 4px;
+}
+
+/* weeks */
+.month-header {
+  font-weight: 700;
+  margin: 10px 0 5px;
+  font-size: 0.68rem;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.month-header::before {
+  content: "";
+  width: 4px;
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--primary), #0d4f73);
+}
+details.week {
+  border: 1px solid rgba(11, 15, 23, 0.025);
+  border-radius: 12px;
+  background: #fff;
+  margin-bottom: 7px;
+  overflow: hidden;
+}
+:root.dark details.week {
+  background: rgba(15, 23, 42, 0.25);
+  border-color: rgba(148, 163, 184, 0.04);
+}
+details.week[open] {
+  border-color: rgba(22, 100, 192, 0.28);
+}
+details.week summary {
+  list-style: none;
+  cursor: pointer;
+  background: rgba(22, 100, 192, 0.01);
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+.week-body {
+  background: rgba(255, 255, 255, 0.55);
+  padding: 8px 8px 10px;
+}
+:root.dark .week-body {
+  background: rgba(15, 23, 42, 0.1);
+}
+.week-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.badge-done {
+  font-size: 0.55rem;
+  color: #22c55e;
+}
+.meal-variants {
+  background: rgba(243, 247, 252, 0.4);
+  border-radius: 6px;
+  padding: 5px 6px 4px;
+  margin-bottom: 6px;
+  font-size: 0.58rem;
+}
+:root.dark .meal-variants {
+  background: rgba(15, 23, 42, 0.3);
+}
+.variants-editor {
+  background: rgba(255, 253, 247, 0.8);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  border-radius: 10px;
+  padding: 6px;
+  margin-bottom: 6px;
+  display: none;
+  font-size: 0.58rem;
+}
+:root.dark .variants-editor {
+  background: rgba(250, 250, 249, 0.02);
+}
+.variants-editor textarea {
+  width: 100%;
+  min-height: 45px;
+  font-family: inherit;
+  font-size: 0.56rem;
+  margin-bottom: 4px;
+}
+.drag-palette {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+.drag-item {
+  background: rgba(22, 100, 192, 0.09);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 0.55rem;
+  cursor: grab;
+}
+table.day-planner {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.day-planner th,
+table.day-planner td {
+  border: 1px solid rgba(11, 15, 23, 0.03);
+  padding: 3px;
+  font-size: 0.58rem;
+}
+:root.dark table.day-planner th,
+:root.dark table.day-planner td {
+  border-color: rgba(148, 163, 184, 0.1);
+  background: rgba(15, 23, 42, 0.04);
+}
+.cell-meals {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cell-meals select {
+  font-size: 0.56rem;
+  border-radius: 6px;
+}
+.add-meal-btn {
+  border: 1px dashed rgba(22, 100, 192, 0.28);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  font-size: 0.55rem;
+  padding: 2px 4px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.copy-day-btn {
+  background: rgba(22, 100, 192, 0.05);
+  border: none;
+  border-radius: 999px;
+  font-size: 0.5rem;
+  padding: 1px 4px;
+  cursor: pointer;
+  margin-right: 3px;
+  color: var(--primary);
+}
+.done-label {
+  font-size: 0.55rem;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  color: #22c55e;
+}
+
+/* modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+.modal {
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid rgba(22, 100, 192, 0.08);
+  width: min(90%, 350px);
+  padding: 10px 10px 14px;
+}
+.modal h2 {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  color: var(--primary);
+}
+.form-group {
+  margin-bottom: 7px;
+}
+.form-group label {
+  font-size: 0.58rem;
+  display: block;
+  margin-bottom: 3px;
+}
+.form-group select {
+  width: 100%;
+  padding: 3px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(22, 100, 192, 0.12);
+  font-family: inherit;
+  font-size: 0.58rem;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* toast */
+.toast {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  background: rgba(24, 34, 47, 0.9);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  z-index: 80;
+  transition: 0.2s ease-out;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.simple-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.6rem;
+}
+.simple-table th,
+.simple-table td {
+  border: 1px solid rgba(11, 15, 23, 0.03);
+  padding: 3px;
+}
+
+/* responsive */
+@media (max-width: 930px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  /* Sidebar adjustments for mobile */
+  .sidebar {
+    transform: translateX(100%);
+    width: 210px;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  /* Hide trigger area on mobile */
+  .sidebar-trigger {
+    display: none;
+  }
+
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}
+@media print {
+  .topbar,
+  .sidebar,
+  .btn,
+  .modal-backdrop,
+  .filter-card {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .content {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   تحسينات التصميم: تكبير الخطوط والمسافات
+   ======================================== */
+
+/* تحسين الوضع الداكن - تباين أفضل */
+:root.dark {
+  --bg: #0a0e1a;
+  --surface: rgba(10, 14, 26, 0.98);
+  --surface-soft: rgba(12, 17, 30, 0.95);
+  --text: #f1f5f9;
+  --muted: #cbd5e1;
+}
+
+/* تكبير الخطوط الأساسية */
+body {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Dashboard Grid - مسافات أكبر */
+.dash-grid {
+  gap: 18px;
+}
+
+.dash-card {
+  padding: 18px 16px;
+  border-radius: 18px;
+  line-height: 1.7;
+}
+
+.dash-card small {
+  font-size: 0.75rem;
+}
+
+.dash-card h3 {
+  margin: 8px 0 4px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.dash-card p {
+  font-size: 0.8rem;
+}
+
+/* Cards - مسافات وحجم أكبر */
+.two-col {
+  gap: 18px;
+}
+
+.card-head {
+  margin-bottom: 14px;
+  gap: 14px;
+}
+
+.card-head h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* Text elements */
+.muted {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.mini-title {
+  font-size: 0.85rem;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+/* Buttons - تكبير وتحسين الهوفر */
+.btn {
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  font-weight: 500;
+  transition: 0.12s ease-out;
+  line-height: 1.5;
+}
+
+.btn:hover {
+  background: rgba(22, 100, 192, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 100, 192, 0.2);
+}
+
+.btn-small {
+  padding: 5px 10px;
+  font-size: 0.7rem;
+}
+
+.btn.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+:root.dark .btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Progress pill */
+.progress-pill {
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  border-radius: 999px;
+}
+
+/* Profile pills */
+.profile-list .profile-pill,
+.side-profiles .profile-pill {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: 10px;
+}
+
+/* Tags - حجم أكبر */
+.tags li {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: 999px;
+}
+
+/* Navigation buttons */
+.nav-btn {
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  border-radius: 10px;
+}
+
+/* Monthly tracking - مسافة أكبر */
+.monthly-grid {
+  gap: 14px;
+}
+
+.note-box {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.note-box h4 {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Week sections */
+.month-header {
+  margin: 16px 0 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+details.week {
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
+details.week summary {
+  padding: 10px 12px;
+  font-size: 0.8rem;
+}
+
+.week-body {
+  padding: 12px 12px 14px;
+  font-size: 0.8rem;
+}
+
+.meal-variants {
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  border-radius: 10px;
+}
+
+/* Day Planner Table - تكبير كبير */
+table.day-planner {
+  font-size: 0.85rem;
+}
+
+table.day-planner th,
+table.day-planner td {
+  padding: 12px 10px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+table.day-planner th {
+  font-weight: 700;
+  background: rgba(22, 100, 192, 0.08);
+}
+
+:root.dark table.day-planner th {
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.cell-meals {
+  gap: 6px;
+}
+
+.cell-meals select {
+  font-size: 0.75rem;
+  padding: 4px 6px;
+}
+
+.add-meal-btn {
+  font-size: 0.7rem;
+  padding: 5px 8px;
+}
+
+.drag-item {
+  padding: 4px 12px;
+  font-size: 0.7rem;
+}
+
+/* Search input */
+.search-input {
+  font-size: 0.8rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+/* Simple table */
+.simple-table {
+  font-size: 0.8rem;
+}
+
+.simple-table th,
+.simple-table td {
+  padding: 10px;
+  font-size: 0.8rem;
+}
+
+/* Modal - تحسين المسافات */
+.modal {
+  padding: 18px 16px;
+  border-radius: 16px;
+}
+
+.modal h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-group select {
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+.modal-actions {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Toast */
+.toast {
+  padding: 10px 18px;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  line-height: 1.5;
+}
+
+/* Sidebar - مسافات أفضل */
+.sidebar {
+  padding: 14px 12px 18px;
+  gap: 14px;
+}
+
+.side-group {
+  gap: 8px;
+}
+
+.side-head {
+  font-size: 0.75rem;
+}
+
+.side-caption {
+  font-size: 0.75rem;
+}
+
+/* Content padding */
+.content {
+  gap: 18px;
+  padding: 18px;
+}
+
+/* Top bar branding */
+.brand-title {
+  font-size: 0.8rem;
+}
+
+.brand-sub {
+  font-size: 0.7rem;
+}
+
+/* Line heights - تنفس أفضل */
+.card,
+.dash-card,
+.note-box,
+details.week {
+  line-height: 1.7;
+}
+
+/* Variants editor */
+.variants-editor {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+}
+
+.variants-editor textarea {
+  font-size: 0.75rem;
+  margin-bottom: 8px;
+  padding: 8px;
+}
+
+/* Filter card */
+.filter-card {
+  gap: 12px;
+}
+
+.allow-flex {
+  gap: 14px;
+}
+
+/* ========================================
+   تحسينات إضافية: تكبير أكثر للخطوط والأيقونات
+   ======================================== */
+
+/* زيادة حجم الخطوط الأساسية أكثر */
+body {
+  font-size: 16px;
+}
+
+/* تكبير الأيقونات والرموز */
+[class^="icon-"],
+[class*=" icon-"],
+svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.btn svg,
+.btn-small svg {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 4px;
+}
+
+.nav-btn svg,
+.side-btn svg {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+/* تكبير أيقونات التاب بار */
+.topbar svg,
+.top-actions svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+/* زيادة مسافات العناصر - GAP أكبر */
+.top-actions {
+  gap: 10px;
+}
+
+.brand {
+  gap: 12px;
+}
+
+/* توسيع الأزرار أكثر */
+.btn {
+  padding: 10px 16px;
+  font-size: 0.8rem;
+  gap: 6px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  gap: 4px;
+}
+
+/* تكبير البطاقات والمسافات */
+.dash-grid {
+  gap: 20px;
+}
+
+.dash-card {
+  padding: 20px 18px;
+  gap: 8px;
+}
+
+.two-col {
+  gap: 20px;
+}
+
+/* تكبير النصوص والعناوين */
+.dash-card h3 {
+  font-size: 1.3rem;
+}
+
+.mini-title {
+  font-size: 0.9rem;
+}
+
+.card-head {
+  margin-bottom: 14px;
+}
+
+/* تكبير الجداول أكثر */
+table.day-planner th,
+table.day-planner td {
+  padding: 14px 12px;
+  font-size: 0.85rem;
+}
+
+.simple-table th,
+.simple-table td {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+}
+
+/* تحسين المسافات والـ Line-Height */
+.sidebar {
+  padding: 16px 14px 20px;
+  gap: 16px;
+}
+
+.content {
+  gap: 20px;
+  padding: 20px;
+}
+
+.side-group {
+  gap: 10px;
+}
+
+/* تكبير الـ Sidebar */
+.side-head {
+  font-size: 0.8rem;
+  gap: 6px;
+}
+
+.side-caption {
+  font-size: 0.8rem;
+}
+
+.nav-btn {
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  gap: 8px;
+}
+
+/* تكبير Profile Pills */
+.profile-list .profile-pill,
+.side-profiles .profile-pill {
+  padding: 7px 13px;
+  font-size: 0.8rem;
+  gap: 4px;
+}
+
+/* تكبير Tags */
+.tags li {
+  padding: 7px 13px;
+  font-size: 0.8rem;
+}
+
+/* تكبير الـ Buttons في الـ Card Head */
+.card-head .btn,
+.card-head .btn-small {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+}
+
+/* تحسين المسافات بين العناصر في الـ Card */
+.card-head {
+  gap: 14px;
+}
+
+/* تكبير الـ Progress Pill */
+.progress-pill {
+  padding: 8px 16px;
+  font-size: 0.8rem;
+}
+
+/* تكبير النصوص الصغيرة */
+.muted {
+  font-size: 0.85rem;
+}
+
+.note-box {
+  padding: 14px;
+  font-size: 0.85rem;
+}
+
+.note-box h4 {
+  font-size: 0.9rem;
+}
+
+/* تكبير الـ Weekly Sections */
+.month-header {
+  font-size: 0.95rem;
+  margin: 18px 0 10px;
+  gap: 8px;
+}
+
+details.week summary {
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  gap: 10px;
+}
+
+.week-body {
+  padding: 14px 14px 16px;
+  font-size: 0.85rem;
+  gap: 8px;
+}
+
+.meal-variants {
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+/* تكبير الـ Modal */
+.modal {
+  padding: 20px 18px;
+}
+
+.modal h2 {
+  font-size: 1.05rem;
+  margin: 0 0 14px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.form-group select {
+  padding: 10px 12px;
+  font-size: 0.85rem;
+}
+
+.modal-actions {
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* تكبير الـ Search Input */
+.search-input {
+  font-size: 0.85rem;
+  padding: 10px 16px;
+  flex: 0 0 220px;
+}
+
+/* تكبير الـ Drag Items والـ Meal Variants */
+.drag-item {
+  padding: 5px 13px;
+  font-size: 0.75rem;
+  gap: 6px;
+}
+
+.cell-meals select {
+  font-size: 0.8rem;
+  padding: 6px 8px;
+}
+
+/* تحسين المسافات بين الـ Lists */
+.profile-list {
+  gap: 8px;
+}
+
+.tags {
+  gap: 8px;
+}
+
+/* تكبير الـ Toast */
+.toast {
+  padding: 12px 20px;
+  font-size: 0.85rem;
+}
+
+/* تكبير نصوص الـ Topbar */
+.brand-title {
+  font-size: 0.85rem;
+}
+
+.brand-sub {
+  font-size: 0.75rem;
+}
+
+/* تكبير الـ Brand Circle */
+.brand-circle {
+  width: 36px;
+  height: 36px;
+  font-size: 0.7rem;
+}
+
+/* ========================================
+   إصلاح المسافات في البطاقات - تحسين إضافي
+   ======================================== */
+
+/* تحسين المسافات الداخلية للـ Dash Cards */
+.dash-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dash-card small {
+  margin-bottom: 4px;
+}
+
+.dash-card h3 {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.dash-card p {
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+/* تحسين المسافات بين الأسطر في الكروت */
+/* ========================================
+   تحسين شامل لمسافات .card - توحيد التعريفات
+   ======================================== */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: var(--surface-soft);
+  border: 1px solid rgba(11, 15, 23, 0.02);
+  border-radius: 18px;
+  line-height: 1.7;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.015);
+  gap: 12px;
+}
+
+.card > * {
+  margin: 0;
+}
+
+.card p {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 0.85rem;
+}
+
+.card h3 {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.card ul,
+.card ol {
+  margin: 8px 0;
+  padding-left: 0;
+  line-height: 1.7;
+}
+
+.card li {
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+/* تحسين المسافات في الـ Card Head */
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  min-height: 32px;
+  gap: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(11, 15, 23, 0.04);
+}
+
+.card-head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* تحسين المسافات بين العناصر في البطاقات */
+.profile-list {
+  margin: 12px 0;
+}
+
+.tags {
+  margin: 8px 0;
+}
+
+.allow-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  margin: 12px 0;
+}
+
+.allow-flex > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mini-title {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+}
+
+/* تحسين المسافات في الـ Week Sections */
+.month-header {
+  line-height: 1.6;
+}
+
+.week-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meal-variants {
+  margin: 0;
+}
+
+/* تحسين المسافات في الـ Monthly Grid */
+.monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.note-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.note-box h4 {
+  margin: 0;
+}
+
+.note-box [contenteditable] {
+  margin: 6px 0;
+}
+
+/* تحسين المسافات في الـ List Items */
+.profile-list .profile-pill {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.tags li {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+/* تحسين المسافات في الـ Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  margin: 0;
+}
+
+.form-group select {
+  margin: 0;
+}
+
+/* تحسين المسافات بين الصفوف والعمود في الجداول */
+table.day-planner tbody tr {
+  height: auto;
+}
+
+table.day-planner td {
+  vertical-align: middle;
+}
+
+.cell-meals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+/* تحسين المسافات في الـ Drag Items */
+.drag-palette {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.drag-item {
+  margin-bottom: 4px;
+}
+
+/* تحسين المسافات في الـ Week Actions */
+.week-actions {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+
+/* تحسين المسافات في الـ Buttons */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modal-actions .btn {
+  flex: 1;
+}
+
+/* تحسين المسافات العامة */
+.card ul {
+  margin: 8px 0;
+  padding-left: 0;
+}
+
+.card ol {
+  margin: 8px 0;
+  padding-left: 16px;
+}
+
+.card li {
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+/* تحسين المسافات بين النصوص المختلفة */
+.card > p:first-child {
+  margin-top: 0;
+}
+
+.muted {
+  margin: 8px 0 0;
+}
+
+/* تحسين المسافات في الـ Toast */
+.toast {
+  line-height: 1.6;
+}
+
+/* ========================================
+   Sidebar Hover Behavior - الشريط الجانبي العائم
+   ======================================== */
+
+/* Toggle sidebar button - move to far right */
+#toggle-sidebar-btn {
+  order: 100;
+  margin-left: auto;
+}
+
+/* Responsive behavior for desktop */
+@media (min-width: 931px) {
+  .sidebar {
+    position: fixed;
+    right: 0;
+    top: 54px;
+    width: 220px;
+    height: calc(100vh - 54px);
+    transform: translateX(100%);
+    z-index: 50;
+    border-radius: 0;
+  }
+
+  .sidebar:hover {
+    transform: translateX(0);
+  }
+
+  .sidebar-trigger {
+    position: fixed;
+    right: 0;
+    top: 54px;
+    width: 15px;
+    height: calc(100vh - 54px);
+    z-index: 45;
+    cursor: pointer;
+  }
+
+  .sidebar-trigger:hover ~ .sidebar,
+  .sidebar-trigger:hover + .sidebar {
+    transform: translateX(0);
+  }
+
+  /* Hide close button on hover show */
+  #close-sidebar-btn {
+    display: none;
+  }
+}
+
